@@ -24,6 +24,8 @@
 
     @if (Request::is('modern-light-menu/*'))
         @vite(['resources/layouts/vertical-light-menu/loader.js'])
+    @elseif (Request::is('modern-light-menu'))
+        @vite(['resources/layouts/vertical-light-menu/loader.js'])
     @elseif ((Request::is('modern-dark-menu/*')))
         @vite(['resources/layouts/vertical-dark-menu/loader.js'])
     @elseif ((Request::is('collapsible-menu/*')))
@@ -58,17 +60,11 @@
     @endif
     
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    @vite(['resources/css/custom.css'])
+     @vite(['resources/css/custom.css'])
     {{$headerFiles}}
     <!-- END GLOBAL MANDATORY STYLES -->
 </head>
-<body @class([
-        // 'layout-dark' => $isDark,
-        'layout-boxed' => $isBoxed,
-        'alt-menu' => ($isAltMenu || Request::routeIs('collapsibleMenu') ? true : false),
-        'error' => (Request::routeIs('404') ? true : false),
-        'maintanence' => (Request::routeIs('maintenance') ? true : false),
-    ]) @if ($scrollspy == 1) {{ $scrollspyConfig }} @else {{''}} @endif   @if (Request::routeIs('fullWidth')) layout="full-width"  @endif >
+<body>
 
     <!-- BEGIN LOADER -->
     <x-layout-loader/>
@@ -100,68 +96,16 @@
             !Request::routeIs('login')
         )
 
-        @if (!Request::routeIs('blank'))  
-        <!--  BEGIN NAVBAR  -->
-        <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
-        <!--  END NAVBAR  -->
-        @endif
-
-        <!--  BEGIN MAIN CONTAINER  -->
-        <div class="main-container " id="container">
-            
-            <!--  BEGIN LOADER  -->
-            <x-layout-overlay/>
-            <!--  END LOADER  -->
-
-            @if (!Request::routeIs('blank')) 
-            <!--  BEGIN SIDEBAR  -->
-            <x-menu.vertical-menu/>
-            <!--  END SIDEBAR  -->   
-            @endif
-            
             <!--  BEGIN CONTENT AREA  -->
-            <div id="content" class="main-content {{(Request::routeIs('blank') ? 'ms-0 mt-0' : '')}}">
+            <div>
 
-                @if ($scrollspy == 1)
-                    <div class="container">
-                        <div class="container">
                             {{ $slot }}
-                        </div>
-                    </div>                
-                @else
-                    <div class="layout-px-spacing">
-                        <div class="middle-content {{($isBoxed ? 'container-xxl' : '')}} p-0">
-                            {{ $slot }}
-                        </div>
-                    </div>
-                @endif
 
-                <!--  BEGIN FOOTER  -->
-                <x-layout-footer/>
-                <!--  END FOOTER  -->
-                
             </div>
             <!--  END CONTENT AREA  -->
 
-        </div>
-        <!--  END MAIN CONTAINER  -->
-        
-    @else
-        {{ $slot }}
-    @endif
 
-    @if (
-            !Request::routeIs('404') &&
-            !Request::routeIs('maintenance') &&
-            !Request::routeIs('signin') &&
-            !Request::routeIs('signup') &&
-            !Request::routeIs('lockscreen') &&
-            !Request::routeIs('password-reset') &&
-            !Request::routeIs('2Step') &&
 
-            // Real Logins
-            !Request::routeIs('login')
-        )
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
         <script src="{{asset('plugins/bootstrap/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>

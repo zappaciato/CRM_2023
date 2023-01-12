@@ -8,7 +8,6 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
@@ -38,20 +37,13 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::loginView(function () {
-            Log::info('I am in login view Fortify!');
-            $title = 'Login view';
-        $breadcrumb = 'Login view';
-        return view('pages.authentication.cover.signin', compact('title', 'breadcrumb'));
+            return view('auth.login');
         });
 
-        Fortify::registerView(function() {
-            $title = 'Login view';
-            $breadcrumb = 'Login view';
-            return view('pages.authentication.cover.signup', compact('title', 'breadcrumb'));
-        });
-
+        // $title = 'Login view';
+        // $breadcrumb = 'Login view';
+        // return view('pages.authentication.boxed.signin', compact('title', 'breadcrumb'));
         
-
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;
 
