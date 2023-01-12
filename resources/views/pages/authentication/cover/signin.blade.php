@@ -23,14 +23,14 @@
                     <div class="auth-cover-bg-image"></div>
                     <div class="auth-overlay"></div>
                         
-                    <div class="auth-cover">
+                    <div class="">
     
                         <div class="position-relative">
     
-                            <img src="{{Vite::asset('resources/images/auth-cover.svg')}}" alt="auth-img">
+                            <img src="{{Vite::asset('resources/images/wykrojniki.jpg')}}" alt="auth-img">
     
-                            <h2 class="mt-5 text-white font-weight-bolder px-2">Join the community of expert developers</h2>
-                            <p class="text-white px-2">It is easy to setup with great customer experience. Start your 7-day free trial</p>
+                            <h2 class="mt-5 text-white font-weight-bolder px-2">Wycinamy jak się patrzy</h2>
+                            <p class="text-white px-2">juz od lat!</p>
                         </div>
                         
                     </div>
@@ -44,8 +44,8 @@
                             <div class="row">
                                 <div class="col-md-12 mb-3">
                                     
-                                    <h2>Sign In</h2>
-                                    <p>Enter your email and password to login</p>
+                                    <h2>Zaloguj się</h2>
+                                    <p>Wpisz swój adres email i hasło żeby się zalogować</p>
                                     
                                 </div>
                                 <div class="col-md-12">
@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <label class="form-label">Password</label>
+                                        <label class="form-label">Hasło</label>
                                         <input type="text" class="form-control">
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                                         <div class="form-check form-check-primary form-check-inline">
                                             <input class="form-check-input me-3" type="checkbox" id="form-check-default">
                                             <label class="form-check-label" for="form-check-default">
-                                                Remember me
+                                                Zapamiętaj mnie
                                             </label>
                                         </div>
                                     </div>
@@ -73,11 +73,11 @@
                                 
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <button class="btn btn-secondary w-100">SIGN IN</button>
+                                        <button class="btn btn-secondary w-100">ZALOGUJ SIĘ</button>
                                     </div>
                                 </div>
                                 
-                                <div class="col-12 mb-4">
+                                {{-- <div class="col-12 mb-4">
                                     <div class="">
                                         <div class="seperator">
                                             <hr>
@@ -102,20 +102,20 @@
                                             <span class="btn-text-inner">Github</span>
                                         </button>
                                     </div>
-                                </div>
+                                </div> --}}
     
-                                <div class="col-sm-4 col-12">
+                                {{-- <div class="col-sm-4 col-12">
                                     <div class="mb-4">
                                         <button class="btn  btn-social-login w-100">
                                             <img src="{{Vite::asset('resources/images/twitter.svg')}}" alt="" class="img-fluid">
                                             <span class="btn-text-inner">Twitter</span>
                                         </button>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-12">
                                     <div class="text-center">
-                                        <p class="mb-0">Dont't have an account ? <a href="javascript:void(0);" class="text-warning">Sign Up</a></p>
+                                        <p class="mb-0">Nie masz konta? <a href="{{route('signup')}}" class="text-warning">Zarejestruj się</a></p>
                                     </div>
                                 </div>
                                 

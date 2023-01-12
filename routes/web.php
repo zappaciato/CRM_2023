@@ -25,7 +25,7 @@ Route::get('/', function () {
  */
 
 $prefixRouters = [
-    'modern-light-menu'
+    'modern-dark-menu'
 ];
 
 foreach ($prefixRouters as $prefixRouter) {
