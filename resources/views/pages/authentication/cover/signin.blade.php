@@ -16,7 +16,8 @@
     <div class="auth-container d-flex">
 
         <div class="container mx-auto align-self-center">
-    
+    <form action="{{route('analytics')}}" method="POST">
+        @csrf
             <div class="row">
     
                 <div class="col-6 d-lg-flex d-none h-100 my-auto top-0 start-0 text-center justify-content-center flex-column">
@@ -50,14 +51,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control">
+                                        <label for="email" class="form-label" >Email</label>
+                                        <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <label class="form-label">Hasło</label>
-                                        <input type="text" class="form-control">
+                                        <label for="password" class="form-label">Hasło</label>
+                                        <input type="text" class="form-control" id="password" type="password" name="password" required autocomplete="current-password">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -70,10 +71,12 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {{-- Tutaj powinno sie znaleźć jeszcze forgot your password TODO --}}
                                 
                                 <div class="col-12">
-                                    <div class="mb-4">
-                                        <button class="btn btn-secondary w-100">ZALOGUJ SIĘ</button>
+                                    <div class="mb-4 mt-5">
+                                        <button type="submit" class="btn btn-secondary w-100">ZALOGUJ SIĘ</button>
                                     </div>
                                 </div>
                                 
@@ -126,7 +129,7 @@
                 </div>
                 
             </div>
-            
+        </form>
         </div>
 
     </div>

@@ -112,7 +112,7 @@
                         </div> --}}
                         
                         <div class="col-12">
-                            <div class="mb-4">
+                            <div class="mb-4 mt-5">
                                 <button type="submit" class="btn btn-secondary w-100">ZAREJESTRUJ SIĘ</button>
                             </div>
                         </div>
