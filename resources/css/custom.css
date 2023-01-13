@@ -1,0 +1,19 @@
+.orders-badge {
+    color: red;
+
+}
+
+.welcome-screen {
+
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-msg {
+    margin-top: -300px;
+    margin-bottom: 80px;
+}

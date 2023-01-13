@@ -15,6 +15,10 @@ export default defineConfig({
                  */
                 'resources/js/app.js',
 
+
+                 //My own custom styles-Kris
+                'resources/css/custom.css',
+
                 /**
                  * =======================
                  *      Assets Files

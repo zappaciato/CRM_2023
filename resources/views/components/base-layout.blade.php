@@ -58,7 +58,7 @@
         ])
 
     @endif
-    
+    @vite(['resources/css/custom.css'])
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     {{$headerFiles}}
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -72,8 +72,8 @@
     ]) @if ($scrollspy == 1) {{ $scrollspyConfig }} @else {{''}} @endif   @if (Request::routeIs('fullWidth')) layout="full-width"  @endif >
 
     <!-- BEGIN LOADER -->
-    {{-- <x-layout-loader/>
-    <!--  END LOADER --> --}}
+    {{-- <x-layout-loader/> --}}
+    <!--  END LOADER -->
 
     {{--
         
@@ -111,7 +111,7 @@
         <div class="main-container " id="container">
             
             <!--  BEGIN LOADER  -->
-            <x-layout-overlay/>
+            {{-- <x-layout-overlay/> --}}
             <!--  END LOADER  -->
 
             @if (!Request::routeIs('blank')) 

@@ -1,4 +1,4 @@
-<x-base-layout :scrollspy="false">
+ylgujjfj<x-base-layout :scrollspy="false">
 
     <x-slot:pageTitle>
         {{$title}} 

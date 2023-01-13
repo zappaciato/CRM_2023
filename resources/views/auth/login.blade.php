@@ -122,7 +122,7 @@
 
                                 <div class="col-12">
                                     <div class="text-center">
-                                        <p class="mb-0">Nie masz konta? <a href="{{route('signup')}}" class="text-warning">Zarejestruj się</a></p>
+                                        <p class="mb-0">Nie masz konta? <a href="{{route('register')}}" class="text-warning">Zarejestruj się</a></p>
                                     </div>
                                 </div>
                                 
