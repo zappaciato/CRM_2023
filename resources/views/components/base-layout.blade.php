@@ -10,7 +10,7 @@
 
 @php
     $isBoxed = layoutConfig()['boxed'];
-    $isAltMenu = layoutConfig()['alt-menu']; 
+    $isAltMenu = layoutConfig()['alt-menu'];
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -25,6 +25,8 @@
     @if (Request::is('modern-light-menu/*'))
         @vite(['resources/layouts/vertical-light-menu/loader.js'])
     @elseif ((Request::is('modern-dark-menu/*')))
+        @vite(['resources/layouts/vertical-dark-menu/loader.js'])
+    @elseif ((Request::is('/*')))
         @vite(['resources/layouts/vertical-dark-menu/loader.js'])
     @elseif ((Request::is('collapsible-menu/*')))
         @vite(['resources/layouts/collapsible-menu/loader.js'])
@@ -70,8 +72,8 @@
     ]) @if ($scrollspy == 1) {{ $scrollspyConfig }} @else {{''}} @endif   @if (Request::routeIs('fullWidth')) layout="full-width"  @endif >
 
     <!-- BEGIN LOADER -->
-    <x-layout-loader/>
-    <!--  END LOADER -->
+    {{-- <x-layout-loader/>
+    <!--  END LOADER --> --}}
 
     {{--
         
@@ -172,6 +174,8 @@
         @if (Request::is('modern-light-menu/*'))
             @vite(['resources/layouts/vertical-light-menu/app.js'])
         @elseif ((Request::is('modern-dark-menu/*')))
+            @vite(['resources/layouts/vertical-dark-menu/app.js'])
+            @elseif ((Request::is('/*')))
             @vite(['resources/layouts/vertical-dark-menu/app.js'])
         @elseif ((Request::is('collapsible-menu/*')))
             @vite(['resources/layouts/collapsible-menu/app.js'])

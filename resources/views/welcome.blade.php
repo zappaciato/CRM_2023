@@ -30,7 +30,7 @@
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                     @auth
-                        <a href="{{ url('/home') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
+                        <a href="{{ route('analytics') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Home</a>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
@@ -158,6 +158,44 @@
                             </a>
                         </div>
                     </div>
+
+                    @php
+
+
+if (Auth()->user() !== null) {
+
+
+$loggedUser = Auth()->user()->name;
+} else {
+
+    $loggedUser = "Zupełnie nikt!";
+}
+
+// $route = Route::current();
+// $name = Route::currentRouteName();
+// $action = Route::currentRouteAction();
+
+// echo $route;
+
+// echo Request->route()->getName();
+
+
+
+
+
+
+
+            @endphp
+
+<h1>The user who is logged in is: {{$loggedUser}}</h1>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    Logout
+</a>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST">
+    @csrf
+</form>
+
 
                     <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
                         Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})

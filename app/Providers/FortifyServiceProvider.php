@@ -11,9 +11,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    
     /**
      * Register any application services.
      *
@@ -21,7 +24,21 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse
+        {
+            public function toResponse($request)
+            {
+                return redirect('/modern-dark-menu/sss/');
+            }
+        });
+
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse
+        {
+            public function toResponse($request)
+            {
+                return redirect('/modern-dark-menu/sss/');
+            }
+        });
     }
 
     /**
@@ -31,15 +48,36 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Fortify::ignoreRoutes();
+
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::loginView(function () {
-            return view('auth.login');
+            $breadcrumb = 'Register view';
+            $title = "Signin Page";
+            return view('auth.login', compact('title'));
         });
-        
+
+        Fortify::registerView(function () {
+            $title = 'Register view';
+            $breadcrumb = 'Register view';
+            return view('auth.register', compact('title', 'breadcrumb'));
+        });
+
+
+        // Fortify::authenticateUsing(function (Request $request) {
+        //     $user = User::where('email', $request->email)->first();
+
+        //     if (
+        //         $user &&
+        //         Hash::check($request->password, $user->password)
+        //     ) {
+        //         return $user;
+        //     }
+        // });
         
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;

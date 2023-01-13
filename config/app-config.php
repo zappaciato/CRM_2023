@@ -7,7 +7,7 @@ return array(
             'layout-id' => 'vertical-light-menu',
             'name' => 'Vertical Light Menu',
             'boxed' => true,
-            // 'theme' => 'dark',
+            'theme' => 'dark',
             // 'dark' => true,
             'rtl' => false,
             'alt-menu' => false
@@ -26,7 +26,7 @@ return array(
             'layout-id' => 'collapsible-menu',
             'name' => 'Collapsible Menu',
             'boxed' => true,
-            // 'theme' => 'dark',
+            'theme' => 'dark',
             'rtl' => false,
             'alt-menu' => true
         ),

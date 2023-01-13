@@ -21,19 +21,31 @@
 //     }
 // }
 
+// use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+
+
 
 if (! function_exists('layoutConfig')) {
     function layoutConfig() {
-
+        $__getConfiguration = Config::get('app-config.layout.vdm');
+        Log::info('I am in layout config');
+        Log::debug($__getConfiguration);
         if (Request::is('modern-light-menu/*')) {
 
             $__getConfiguration = Config::get('app-config.layout.vlm');
             
         } else if (Request::is('modern-dark-menu/*')) {
-            
+            Log::info('I am in layout config dark menu');
             $__getConfiguration = Config::get('app-config.layout.vdm');
-            
-        } else if (Request::is('collapsible-menu/*')) {
+            Log::debug($__getConfiguration);
+        } else if (Request::is('/*')) {
+
+            $__getConfiguration = Config::get('app-config.layout.vdm');
+
+        }  else if (Request::is('collapsible-menu/*')) {
             
             $__getConfiguration = Config::get('app-config.layout.cm');
             
@@ -73,7 +85,7 @@ if (! function_exists('layoutConfig')) {
 
 if (!function_exists('getRouterValue')) {
     function getRouterValue() {
-        
+        $__getRoutingValue = '/modern-dark-menu';
         if (Request::is('modern-light-menu/*')) {
             
             $__getRoutingValue = '/modern-light-menu';
