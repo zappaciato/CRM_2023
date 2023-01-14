@@ -22,7 +22,7 @@
                             </a>
                         </div>
                         <div class="nav-item theme-text">
-                            <a href="{{getRouterValue();}}/dashboard/analytics" class="nav-link"> CORK </a>
+                            <a href="{{getRouterValue();}}/dashboard/analytics" class="nav-link"> PerfectCut </a>
                         </div>
                     </div>
                     <div class="nav-item sidebar-toggle">
@@ -44,8 +44,8 @@
                             </div>
                         </a>
                         <ul class="collapse submenu list-unstyled {{ Request::is('*/dashboard/*') ? "show" : "" }}" id="dashboard" data-bs-parent="#accordionExample">
-                            <li class="{{ Request::routeIs('analytics') ? 'active' : '' }}">
-                                <a href="{{getRouterValue();}}/dashboard/analytics"> Nowe Zlecenia </a>
+                            <li class="{{ Request::routeIs('new.orders') ? 'active' : '' }}">
+                                <a href="{{route('new.orders')}}"> Nowe Zlecenia </a>
                             </li>
                             <li class="{{ Request::routeIs('sales') ? 'active' : '' }}">
                                 <a href="{{getRouterValue();}}/dashboard/sales"> Zlecenia Serwisowe </a>
@@ -419,7 +419,7 @@
                         </a>
                     </li> --}}
 
-                    {{-- <li class="menu {{ Request::is('*/datatables/*') ? "active" : "" }}">
+                    <li class="menu {{ Request::is('*/datatables/*') ? "active" : "" }}">
                         <a href="#datatables" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/datatables/*') ? "true" : "false" }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
@@ -443,7 +443,7 @@
                                 <a href="{{getRouterValue();}}/datatables/miscellaneous"> Miscellaneous </a>
                             </li>
                         </ul>
-                    </li> --}}
+                    </li>
 
                     {{-- <li class="menu {{ Request::is('*/form/*') ? "active" : "" }}">
                         <a href="#forms" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/form/*') ? "true" : "false" }}" class="dropdown-toggle">

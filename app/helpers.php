@@ -51,29 +51,40 @@ if (! function_exists('layoutConfig')) {
             Log::info("I am in request '/requster");
             $__getConfiguration = Config::get('app-config.layout.vdm');
             
-        } else if (Request::is('collapsible-menu/*')) {
+        } else if (Request::is('/new-orders')) {
+
+            $__getConfiguration = Config::get('app-config.layout.vdm');
+        } 
+        
+        else if (Request::is('collapsible-menu/*')) {
             
             $__getConfiguration = Config::get('app-config.layout.cm');
             
-        } 
-        
+        }
+
         // // RTL
 
         // else if (Request::is('rtl/modern-light-menu/*')) {
 
         //     $__getConfiguration = Config::get('app-config.layout.vlm-rtl');
-            
+
         // } else if (Request::is('rtl/modern-dark-menu/*')) {
-            
+
         //     $__getConfiguration = Config::get('app-config.layout.vdm-rtl');
-            
+
         // } else if (Request::is('rtl/collapsible-menu/*')) {
-            
+
         //     $__getConfiguration = Config::get('app-config.layout.cm-rtl');
-            
+
         // }
 
 
+        //new orders 
+        else if (Request::is('/new-orders/*')) {
+
+            // $__getConfiguration = Config::get('app-config.layout.vlm');
+            $__getConfiguration = Config::get('app-config.layout.vdm');
+        }
 
         // Login
 
@@ -116,6 +127,9 @@ if (!function_exists('getRouterValue')) {
             
             $__getRoutingValue = '/collapsible-menu';
 
+        } else if (Request::is('/new-orders')) {
+
+            $__getRoutingValue = '/modern-dark-menu';
         }
 
 

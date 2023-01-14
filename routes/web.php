@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -43,6 +44,8 @@ Route::get('/welcome', function () {
     return view('welcome', ['title' => 'this is ome ', 'breadcrumb' => 'This Breadcrumb']);
 });
 
+
+
 /**
  * =======================
  *      LTR ROUTERS
@@ -74,6 +77,8 @@ foreach ($prefixRouters as $prefixRouter) {
         //         return view('pages.dashboard.sales', ['title' => 'Sales Admin | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
         //     })->name('sales');
         // });
+
+        Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
 
         /**
          * ==============================
