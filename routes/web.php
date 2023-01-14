@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -82,6 +83,8 @@ foreach ($prefixRouters as $prefixRouter) {
 
         Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
         Route::get('users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');
+
+        Route::get('companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
 
         /**
          * ==============================
