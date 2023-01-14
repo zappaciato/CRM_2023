@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
@@ -79,6 +81,7 @@ foreach ($prefixRouters as $prefixRouter) {
         // });
 
         Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
+        Route::get('users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');
 
         /**
          * ==============================
