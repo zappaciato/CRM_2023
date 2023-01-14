@@ -111,7 +111,7 @@
         <div class="main-container " id="container">
             
             <!--  BEGIN LOADER  -->
-            {{-- <x-layout-overlay/> --}}
+            <x-layout-overlay/>
             <!--  END LOADER  -->
 
             @if (!Request::routeIs('blank')) 
