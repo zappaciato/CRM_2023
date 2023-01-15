@@ -62,7 +62,7 @@
                                 <td>{{$company->email}}</td>
                                 <td>{{$company->nip}}</td>
                                 <td>{{substr(($company->www),0,18)}}</td>
-                                <td class="text-center"> <button class="btn btn-primary">Otwórz</button> </td>
+                                <td class="text-center"> <a href="{{ route('single.company', $company->id) }}"><button class="btn btn-primary">Otwórz</button></a>  </td>
                             </tr>
 
                             @endforeach
@@ -83,6 +83,8 @@
             </div>
         </div>
     </div>
+
+
 
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class CompanyController extends Controller
 {
@@ -13,9 +17,27 @@ class CompanyController extends Controller
 
         $companies = Company::all();
 
-        return view('pages.dashboard.company-list', compact('title', 'breadcrumb', 'companies'));
+        return view('pages.companies.company-list', compact('title', 'breadcrumb', 'companies'));
     }
 
+
+    protected function validator($data)
+    {
+        $validated =  Validator::make($data, [
+            'name' => 'required|max:255',
+            'phone' => 'required|in:text,image',
+            'country' => 'required',
+            'nip' => 'required',
+            'www' => 'required',
+            'notes' => 'nullable',
+            'email' => 'required',
+        ])->validate();
+
+        // $validated = Arr::add($validated, 'published', 0);
+        // $validated = Arr::add($validated, 'premium', 0);
+
+        return $validated;
+    }
 
     // public function create()
     // {
@@ -74,22 +96,90 @@ class CompanyController extends Controller
     //     return redirect(route('createCompany'));
     // }
 
-    // public function show(Company $company)
-    // {
-    //     // return response()->json([
-    //     //     'data' => [
-    //     //         'id' => $company->id,
-    //     //         'created_by' => $company->created_by,
-    //     //         'attributes' => [
-    //     //             'name' => $company->name,
-    //     //             'phone' => $company->phone,
-    //     //             'email' => $company->email,
-    //     //             ]
+    public function show($id)
+    {
+        Log::debug($id);
+        $title = "Firma";
+        $breadcrumb = "Wybrana firma";
 
-    //     //     ]
-    //     // ]);
-    //     return new CompaniesResource($company);
-    // }
+        $company = Company::where('id', $id)->firstOrFail();
+        Log::debug($company);
+        // dd($company);
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company'));
+    }
+
+    public function edit($id) {
+
+        $company = Company::findOrFail($id);
+
+        $title = 'Edycja firmy';
+        $breadcrumb = 'Eduycja firmy '.$company->name;
+
+        return view('pages.companies.company-edit', compact('title', 'breadcrumb', 'company'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $company = Company::findOrFail($id);
+
+        // $oldImage = $post->image;
+
+        $data = $this->validator($request->all());
+
+        // if (isset($data['image'])) {
+        //     $path = $request->file('image')->store('/public/photos');
+
+        //     $data['image'] = $path;
+        // }
+
+        // sprawdzamy czy sa jakie tagi dodane? 
+        // if (isset($data['tags'])) {
+        //     $tags = TagsParsingService::parse($data['tags']);
+        //     $post->tags()->sync($tags); //synchronizuje nam tagi z tymi ktore są? 
+        // }
+
+        $company->update($data);
+
+        //jak juz image uaktualniony to kasujemy stary: ale tez upewnimy sie ze ten image tam jest bo inaczej wyskoczy blad;
+        // if (isset($data['image'])) {
+        //     // dd($data['image']);
+        //     Storage::delete($oldImage);
+        // }
+
+        // session()->flash('message', 'Your have finished editing the selected post!'); tego nie potrzeba robi w ten sposob caly czas. patrz nizej;
+
+        //metoda back jest juz defaultowa
+        // return back()->with('message', 'Your have finished editing and the selected post is now updated!');
+        return redirect(route('single.company', $company->id))->with('message', 'Your have finished editing and the selected company is now updated!');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //mozna zrobic tak: 
+
+        $company = Company::findOrFail($id);
+
+        $company->delete();
+
+        //caly czas mamy dostep do instancji $post; 
+
+        // Storage::delete($company->image);//do wykasowanie palików ze storage;
+
+        //przekierowujemy na strone główną
+
+        return redirect('/')->with('message', 'The company has been deleted!');
+    }
+
+
+
+
 
     // // for the RESTful API test
     // public function showAllCompanies()

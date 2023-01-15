@@ -84,8 +84,14 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
         Route::get('users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');
 
-        Route::get('companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
+        Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
+        Route::get('companies/company/{id}', [CompanyController::class, 'show'])->middleware('auth')->name('single.company');
 
+        Route::get('companies/company/edit/{id}', [CompanyController::class, 'edit'])->middleware('auth')->name('company.edit');
+        Route::put('companies/company/update/{id}', [CompanyController::class, 'update'])->middleware('auth');
+
+        //usuwanie postów
+        Route::delete('/companies/company/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
         /**
          * ==============================
          *        @Router -  Apps
