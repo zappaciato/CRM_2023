@@ -73,6 +73,11 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-12">
+                                <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role">
+                            
+                        </div>
+
                         {{-- <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Telefon</label>
@@ -166,7 +171,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
 

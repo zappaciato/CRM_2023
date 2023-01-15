@@ -12,6 +12,7 @@ use SebastianBergmann\CodeUnit\FunctionUnit;
 class CompanyController extends Controller
 {
     public function index() {
+        Log::info('I am showing all the records.');
         $title = "Companies";
         $breadcrumb = "Companies list";
 
@@ -23,15 +24,19 @@ class CompanyController extends Controller
 
     protected function validator($data)
     {
+        Log::info('I am validating the record.');
+        Log::debug($data);
         $validated =  Validator::make($data, [
-            'name' => 'required|max:255',
-            'phone' => 'required|in:text,image',
+            'name' => 'required',
+            'phone' => 'required',
             'country' => 'required',
             'nip' => 'required',
             'www' => 'required',
-            'notes' => 'nullable',
+            'notes' => 'required',
             'email' => 'required',
         ])->validate();
+
+        Log::info('Record has been validated??');
 
         // $validated = Arr::add($validated, 'published', 0);
         // $validated = Arr::add($validated, 'premium', 0);
@@ -98,6 +103,7 @@ class CompanyController extends Controller
 
     public function show($id)
     {
+        Log::info('I am showing the record.');
         Log::debug($id);
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
@@ -109,7 +115,7 @@ class CompanyController extends Controller
     }
 
     public function edit($id) {
-
+        Log::info('I am editing the record.');
         $company = Company::findOrFail($id);
 
         $title = 'Edycja firmy';
@@ -121,6 +127,7 @@ class CompanyController extends Controller
 
     public function update(Request $request, $id)
     {
+        Log::info('I am beginning to update the record.');
         $company = Company::findOrFail($id);
 
         // $oldImage = $post->image;
@@ -140,7 +147,7 @@ class CompanyController extends Controller
         // }
 
         $company->update($data);
-
+Log::info('I am updating the record.');
         //jak juz image uaktualniony to kasujemy stary: ale tez upewnimy sie ze ten image tam jest bo inaczej wyskoczy blad;
         // if (isset($data['image'])) {
         //     // dd($data['image']);

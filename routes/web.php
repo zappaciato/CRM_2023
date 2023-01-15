@@ -82,16 +82,27 @@ foreach ($prefixRouters as $prefixRouter) {
         // });
 
         Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
-        Route::get('users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');
 
+// companies
         Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
         Route::get('companies/company/{id}', [CompanyController::class, 'show'])->middleware('auth')->name('single.company');
 
         Route::get('companies/company/edit/{id}', [CompanyController::class, 'edit'])->middleware('auth')->name('company.edit');
-        Route::put('companies/company/update/{id}', [CompanyController::class, 'update'])->middleware('auth');
+        Route::put('companies/company/edit/{id}', [CompanyController::class, 'update'])->middleware('auth');
 
-        //usuwanie postów
+        //usuwanie firmy
         Route::delete('/companies/company/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+
+//users
+        Route::get('users/users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');
+        Route::get('users/user/{id}', [UserController::class, 'show'])->middleware('auth')->name('single.user');
+
+        Route::get('users/user/edit/{id}', [UserController::class, 'edit'])->middleware('auth')->name('user.edit');
+        Route::put('users/user/edit/{id}', [UserController::class, 'update'])->middleware('auth');
+
+        //usuwanie firmy
+        Route::delete('users/user/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
+        
         /**
          * ==============================
          *        @Router -  Apps
