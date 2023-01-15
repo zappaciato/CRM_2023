@@ -13,6 +13,13 @@ class OrderController extends Controller
 
         $orders = Order::all();
 
-        return view('pages.dashboard.new-orders', compact('title', 'breadcrumb', 'orders'));
+        return view('pages.orders.orders-new-list', compact('title', 'breadcrumb', 'orders'));
+    }
+
+    public function create () {
+        $title = "Dodawanie zamówienia";
+        $breadcrumb = "Dodawanie nowego zamówienia";
+
+        return view('pages.orders.order-add', compact('title', 'breadcrumb'));
     }
 }

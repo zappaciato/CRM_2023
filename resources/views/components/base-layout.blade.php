@@ -103,13 +103,18 @@
 
         @if (!Request::routeIs('blank'))  
         <!--  BEGIN NAVBAR  -->
+
+        @php
+            $ordersCount = count(App\Models\Order::all());
+        @endphp
+        {{-- <x-navbar.style-vertical-menu :ordersCount="$ordersCount" classes="{{($isBoxed ? 'container-xxl' : '')}}"/> --}}
         <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
+        
         <!--  END NAVBAR  -->
         @endif
 
         <!--  BEGIN MAIN CONTAINER  -->
         <div class="main-container " id="container">
-            
             <!--  BEGIN LOADER  -->
             <x-layout-overlay/>
             <!--  END LOADER  -->

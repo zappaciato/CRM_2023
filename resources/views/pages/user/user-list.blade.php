@@ -61,7 +61,7 @@
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->created_at}}</td>
-                                <td>Nieprzypisany</td>
+                                <td>{{$user->role}}</td>
                                 <td class="text-center"><a href="{{route('single.user', $user->id)}}"> <button class="btn btn-primary">Otwórz</button></a> </td>
                             </tr>
 

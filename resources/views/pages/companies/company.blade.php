@@ -50,14 +50,10 @@
 
             {{-- <a href="{{route('company.list')}}"><button class="btn btn-danger">Skasuj</button></a> --}}
 
-
-            <div class="rte mt">
-            <h1>Delete company</h1>
-        </div>
         <form method="POST" action="{{ route('company.delete', $company->id) }}">
             @csrf
             {{method_field('DELETE')}} 
-            <button class="button button-danger" onclick="return confirm('Are you sure?')">Delete post</button>
+            <button class="btn btn-danger mt-5" onclick="return confirm('Are you sure?')">Delete Company</button>
         </form>
 
 

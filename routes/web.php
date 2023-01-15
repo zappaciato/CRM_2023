@@ -80,8 +80,9 @@ foreach ($prefixRouters as $prefixRouter) {
         //         return view('pages.dashboard.sales', ['title' => 'Sales Admin | CORK - Multipurpose Bootstrap Dashboard Template', 'breadcrumb' => 'This Breadcrumb']);
         //     })->name('sales');
         // });
-
-        Route::get('new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
+//orders
+        Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
+        Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
 
 // companies
         Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');

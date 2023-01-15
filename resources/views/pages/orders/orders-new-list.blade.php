@@ -31,6 +31,8 @@
 
     <div class="seperator-header">
         <h4 class="">Nowe zlecenia</h4>
+        <a href="{{route('add.order')}}"><button class="btn btn-danger">Dodaj nowe zlecenie</button></a>
+        
     </div>
     
 
