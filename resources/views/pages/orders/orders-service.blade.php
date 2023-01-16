@@ -20,8 +20,8 @@
     <div class="page-meta">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Zlecenia</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Nowe Zlecenia</li>
+                <li class="breadcrumb-item"><a href="#">Zgłoszenia</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Zgłoszenia Serwisowe</li>
             </ol>
         </nav>
     </div>
@@ -30,15 +30,10 @@
 
 
     <div class="seperator-header">
-        <h4 class="">Nowe zlecenia</h4>
-        <a href="{{route('add.order')}}"><button class="btn btn-danger">Dodaj nowe zlecenie</button></a>
-        
+        <h4 class="">Zgłoszenia Serwisowe</h4>
     </div>
     
-
-
-
-<div class="row">
+    <div class="row">
         <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
             <div class="statbox widget box box-shadow">
                 <div class="widget-content widget-content-area">
@@ -46,40 +41,50 @@
                     <table class="multi-table table dt-table-hover" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Zamawiający</th>
+                                <th>Nr</th>
                                 <th>Tytuł</th>
-                                <th > Data </th>
+
+                                <th>Typ</th>
+                                <th>Termin</th>
+                                <th>Uwagi</th>
+                                <th>Prowadzący</th>
+                                <th>Email</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center dt-no-sorting">Akcje</th>
+                                <th class="text-center dt-no-sorting">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders as $order )
-                                
-                            
+                            @foreach ($orders as $order)
                             <tr>
                                 <td>{{$order->id}}</td>
-                                <td>{{$order->company}}</td>
-                                <td>{{$order->title}}</td>
+                                <td style="max-width: 200px; overflow:hidden">{{$order->title}}</td>
+
+                                <td>inne</td>
                                 <td>{{$order->date}}</td>
+                                <td>3D, 4B</td>
+                                <td>Piotr Opęchwoski</td>
+                                <td>p.opechowski@loopus.pl</td>
                                 <td>
-                                    <div class="t-dot bg-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Normal"></div>
+                                    <span>{{$order->status}}</span>
                                 </td>
-                                <td class="text-center"> <a href="{{route('single.email')}}"><button class="btn btn-primary">Otwórz</button> </a> </td>
+                                <td class="text-center"> <a href="{{route('single.service.order', $order->id)}}"><button class="btn btn-primary">Otwórz</button></a>  </td>
                             </tr>
 
-                            @endforeach
 
+
+                            @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>Id</th>
-                                <th>Zamawiający</th>
+                                <th>Nr</th>
                                 <th>Tytuł</th>
-                                <th > Data </th>
+                                <th>Typ</th>
+                                <th>Termin</th>
+                                <th>Uwagi</th>
+                                <th>Prowadzący</th>
+                                                                <th>Email</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center dt-no-sorting">Akcje</th>
+                                <th class="text-center dt-no-sorting">Action</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -89,6 +94,7 @@
     </div>
 
 
+    
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
         <script src="{{asset('plugins/global/vendors.min.js')}}"></script>

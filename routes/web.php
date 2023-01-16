@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -84,6 +86,12 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
 
+        Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
+        Route::get('orders/order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
+
+
+
+
 // companies
         Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
         Route::get('companies/company/{id}', [CompanyController::class, 'show'])->middleware('auth')->name('single.company');
@@ -101,8 +109,12 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('users/user/edit/{id}', [UserController::class, 'edit'])->middleware('auth')->name('user.edit');
         Route::put('users/user/edit/{id}', [UserController::class, 'update'])->middleware('auth');
 
-        //usuwanie firmy
+        //usuwanie Usera
         Route::delete('users/user/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
+
+        //emails
+
+        Route::get('/mailbox/23', [EmailController::class, 'show'])->name('single.email');
         
         /**
          * ==============================

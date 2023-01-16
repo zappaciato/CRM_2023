@@ -47,8 +47,8 @@
                             <li class="{{ Request::routeIs('new.orders') ? 'active' : '' }}">
                                 <a class="notificationn" href="{{route('new.orders')}}"> Nowe Zlecenia <span class="badgee">3 </span> </a>
                             </li>
-                            <li class="{{ Request::routeIs('sales') ? 'active' : '' }}">
-                                <a class="notificationn" href="{{getRouterValue();}}/dashboard/sales"> Zlecenia Serwisowe <span class="badgee">3 </span> </a>
+                            <li class="{{ Request::routeIs('service.orders') ? 'active' : '' }}">
+                                <a class="notificationn" href="{{route('service.orders')}}"> Zlecenia Serwisowe <span class="badgee">3 </span> </a>
                             </li>
                         </ul>
                     </li>
