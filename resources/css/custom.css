@@ -1,0 +1,50 @@
+.orders-badge {
+    color: red;
+
+}
+
+.welcome-screen {
+
+    height: 90vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-msg {
+    margin-top: -300px;
+    margin-bottom: 80px;
+}
+
+.notification {
+
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notificationn .badgee {
+  position: relative;
+  top: -3px;
+  right: -10px;
+  padding: 2px 7px;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.747);
+  color: white;
+}
+
+.notificationn .badgee-sm {
+  position: relative;
+  /* top: -6px; */
+  right: -5px;
+
+  padding: 2px 7px;
+  border-radius: 50%;
+  background: rgba(255, 0, 0, 0.733);
+  color: white;
+}

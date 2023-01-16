@@ -28,7 +28,7 @@
 
             <ul class="navbar-item flex-row ms-lg-auto ms-0">
 
-                <li class="nav-item dropdown language-dropdown">
+                {{-- <li class="nav-item dropdown language-dropdown">
                     <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="language-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="{{Vite::asset('resources/images/1x1/us.svg')}}" class="flag-width" alt="flag">
                     </a>
@@ -39,7 +39,7 @@
                         <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{Vite::asset('resources/images/1x1/in.svg')}}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;Hindi</span></a>
                         <a class="dropdown-item d-flex" href="javascript:void(0);"><img src="{{Vite::asset('resources/images/1x1/de.svg')}}" class="flag-width" alt="flag"> <span class="align-self-center">&nbsp;German</span></a>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="nav-item theme-toggle-item">
                     <a href="javascript:void(0);" class="nav-link theme-toggle">
@@ -179,10 +179,15 @@
                                     &#x1F44B;
                                 </div>
                                 <div class="media-body">
-                                    <h5>Shaun Park</h5>
+                                    <h5>{{Auth::user()->name}}</h5>
                                     <p>Project Leader</p>
                                 </div>
                             </div>
+
+
+
+
+
                         </div>
                         <div class="dropdown-item">
                             <a href="user-profile.html">
@@ -200,9 +205,13 @@
                             </a>
                         </div>
                         <div class="dropdown-item">
-                            <a href="auth-boxed-signin.html">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span>Log Out</span>
+                            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span>Wyloguj się</span>
                             </a>
+{{-- form to log out --}}
+<form id="logout-form" action="{{ route('logout') }}" method="POST">
+    @csrf
+</form>
                         </div>
                     </div>
                 </li>

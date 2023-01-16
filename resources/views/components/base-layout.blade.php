@@ -58,7 +58,7 @@
         ])
 
     @endif
-    
+    @vite(['resources/css/custom.css'])
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     {{$headerFiles}}
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -72,8 +72,8 @@
     ]) @if ($scrollspy == 1) {{ $scrollspyConfig }} @else {{''}} @endif   @if (Request::routeIs('fullWidth')) layout="full-width"  @endif >
 
     <!-- BEGIN LOADER -->
-    {{-- <x-layout-loader/>
-    <!--  END LOADER --> --}}
+    {{-- <x-layout-loader/> --}}
+    <!--  END LOADER -->
 
     {{--
         
@@ -103,13 +103,18 @@
 
         @if (!Request::routeIs('blank'))  
         <!--  BEGIN NAVBAR  -->
+
+        @php
+            $ordersCount = count(App\Models\Order::all());
+        @endphp
+        {{-- <x-navbar.style-vertical-menu :ordersCount="$ordersCount" classes="{{($isBoxed ? 'container-xxl' : '')}}"/> --}}
         <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
+        
         <!--  END NAVBAR  -->
         @endif
 
         <!--  BEGIN MAIN CONTAINER  -->
         <div class="main-container " id="container">
-            
             <!--  BEGIN LOADER  -->
             <x-layout-overlay/>
             <!--  END LOADER  -->

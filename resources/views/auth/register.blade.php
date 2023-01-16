@@ -46,7 +46,7 @@
                         </div>
 
 
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="surname" class="form-label">Nazwisko</label>
                                 <input id="surname" type="text" class="form-control add-billing-address-input" name="surname" value="{{ old('surname') }}" required autocomplete="surname" autofocus>
@@ -58,7 +58,7 @@
                             </span>
                             @enderror
 
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-md-12">
@@ -74,6 +74,11 @@
                         </div>
 
                         <div class="col-md-12">
+                                <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role">
+                            
+                        </div>
+
+                        {{-- <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Telefon</label>
                                 <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
@@ -83,7 +88,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
-                        </div>
+                        </div> --}}
 
                         <div class="col-12">
                             <div class="mb-3">
@@ -156,7 +161,7 @@
 
                         <div class="col-12">
                             <div class="text-center">
-                                <p class="mb-0">Masz już konto? <a href="{{route('signin')}}" class="text-warning">Zaloguj się</a></p>
+                                <p class="mb-0">Masz już konto? <a href="{{route('login')}}" class="text-warning">Zaloguj się</a></p>
                             </div>
                         </div>
                         
@@ -166,7 +171,7 @@
             </div>
         </div>
     </div>
-    
+
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
 
