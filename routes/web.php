@@ -85,7 +85,8 @@ foreach ($prefixRouters as $prefixRouter) {
 //orders
         Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
-
+        
+        Route::get('orders/create-order-email/{id}', [OrderController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
         Route::get('orders/order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
 
@@ -113,8 +114,8 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::delete('users/user/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
 
         //emails
-
-        Route::get('/mailbox/23', [EmailController::class, 'show'])->name('single.email');
+        Route::get('emails/mailbox/inbox', [EmailController::class, 'index'])->middleware('auth')->name('email.inbox');
+        Route::get('/mailbox/23', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
         
         /**
          * ==============================

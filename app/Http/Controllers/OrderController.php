@@ -20,6 +20,16 @@ class OrderController extends Controller
         $title = "Dodawanie zamówienia";
         $breadcrumb = "Dodawanie nowego zamówienia";
 
+        return view('pages.orders.order-email-create', compact('title', 'breadcrumb'));
+    }
+
+
+
+    public function createFromEmail($id) {
+        $title = "Dodawanie zamówienia z emaila";
+        $breadcrumb = "Dodawanie nowego zamówienia z emaila";
+
         return view('pages.orders.order-add', compact('title', 'breadcrumb'));
     }
+
 }

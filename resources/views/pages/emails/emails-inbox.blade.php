@@ -136,10 +136,12 @@
                                 
                                 <div class="message-box-scroll" id="ct">
 {{-- list of emails --}}
+@foreach($emails as $email)
                                     <div id="unread-promotion-page" class="mail-item mailInbox">
                                         <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
                                             <div class="mb-0">
-                                                <div class="mail-item-heading social collapsed"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse3" aria-expanded="false">
+                                                <div class="mail-item-heading social collapsed"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
+
                                                     <div class="mail-item-inner">
 
                                                         <div class="d-flex">
@@ -151,10 +153,10 @@
                                                             </div>
                                                             <div class="f-body">
                                                                 <div class="meta-mail-time">
-                                                                    <p class="user-email" data-mailTo="laurieFox@mail.com">Laurie Fox</p>
+                                                                    <p class="user-email" data-mailTo="laurieFox@mail.com">{{$email->sender}}</p>
                                                                 </div>
                                                                 <div class="meta-title-tag">
-                                                                    <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.\n"}]}'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="mail-title" data-mailTitle="Promotion Page">Promotion Page - </span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.
+                                                                    <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"Lorem .....'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="mail-title" data-mailTitle="{{$email->title}}">{{$email->title}} - </span> {{$email->content}}
                                                                     </p>
                                                                     <div class="tags">
                                                                         <span class="g-dot-primary"></span>
@@ -166,7 +168,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                     </div>
+
                                                     <div class="attachments">
                                                         <span class="">Confirm File.txt</span>
                                                         <span class="">Important Docs.xml</span>
@@ -175,61 +179,24 @@
                                             </div>
                                         </div>
                                     </div>
-
-<div id="unread-promotion-page" class="mail-item mailInbox">
-                                        <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
-                                            <div class="mb-0">
-                                                <div class="mail-item-heading social collapsed"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse4" aria-expanded="false">
-                                                    <div class="mail-item-inner">
-
-                                                        <div class="d-flex">
-                                                            <div class="form-check form-check-primary form-check-inline mt-1" data-bs-toggle="collapse" data-bs-target>
-                                                                <input class="form-check-input inbox-chkbox" type="checkbox" id="form-check-default3">
-                                                            </div>
-                                                            <div class="f-head">
-                                                                <img src="{{Vite::asset('resources/images/profile-16.jpeg')}}" class="user-profile" alt="avatar">
-                                                            </div>
-                                                            <div class="f-body">
-                                                                <div class="meta-mail-time">
-                                                                    <p class="user-email" data-mailTo="laurieFox@mail.com">Laurie Fox</p>
-                                                                </div>
-                                                                <div class="meta-title-tag">
-                                                                    <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.\n"}]}'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="mail-title" data-mailTitle="Promotion Page">Promotion Page - </span> Lcuja wafla
-                                                                    </p>
-                                                                    <div class="tags">
-                                                                        <span class="g-dot-primary"></span>
-                                                                        <span class="g-dot-warning"></span>
-                                                                        <span class="g-dot-success"></span>
-                                                                        <span class="g-dot-danger"></span>
-                                                                    </div>
-                                                                    <p class="meta-time align-self-center">2:00 PM</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="attachments">
-                                                        <span class="">Confirm File.txt</span>
-                                                        <span class="">Important Docs.xml</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
+@endforeach
                                 </div>
                             </div>
 {{-- individual email content section --}}
                             <div class="content-box">
                                 <div class="d-flex msg-close">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left close-message"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                                    <h2 class="mail-title" data-selectedMailTitle=""></h2>
+                                    {{-- <h2 class="mail-title" data-selectedMailTitle="">{{$email->title}}</h2> --}}
+                                    <h2  >{{$email->title}}</h2>
+                                    
                                 </div>
 
+                                
 
 
-                                <div id="mailCollapse3" class="collapse" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
+@foreach($emails as $email)
+
+                                <div id="mailCollapse{{$email->id}}" class="collapse" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
                                     <div class="mail-content-container mailInbox" data-mailfrom="info@mail.com" data-mailto="linda@mail.com" data-mailcc="">
 
                                         <div class="d-flex justify-content-between">
@@ -240,11 +207,13 @@
                                                 </div>
                                                 <div class="f-body">
                                                     <div class="meta-title-tag">
-                                                        <h4 class="mail-usr-name" data-mailtitle="Promotion Page">Laurie Fox</h4>
+                                                        <h4 class="mail-usr-name" data-mailtitle="{{$email->title}}">{{$email->sender}}</h4>
+                                                        
                                                     </div>
+                                                    
                                                     <div class="meta-mail-time">
-                                                        <p class="user-email" data-mailto="laurieFox@mail.com">laurieFox@mail.com</p>
-                                                        <p class="mail-content-meta-date current-recent-mail">12/14/2022 -</p>
+                                                        <p class="user-email" data-mailto="laurieFox@mail.com">{{$email->email}}</p>
+                                                        <p class="mail-content-meta-date current-recent-mail">{{$email->date}} -</p>
                                                         <p class="meta-time align-self-center">2:00 PM</p>
                                                     </div>
                                                 </div>
@@ -260,22 +229,24 @@
                                             </div>
                                         </div>
 
-                                        <p class="mail-content" data-mailTitle="Promotion Page" data-maildescription='{"ops":[{"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.\n"}]}'> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. </p>
+                                        <a href=""><button class="btn btn-danger ms-5">Utwórz zlecenie z emaila</button></a>
+                                        <a href=""><button class="btn btn-warning ms-5">Usuń emaila</button></a>
+
+                                        
+
+
+                                        <p class="mail-content" data-mailTitle="Promotion Page" data-maildescription='{"ops":[{"insert":"Lorem .....\n"}]}'> {{$email->content}} </p>
 
                                         <div class="gallery text-center">
                                             <img alt="image-gallery" src="{{Vite::asset('resources/images/scroll-6.jpeg')}}" class="img-fluid mb-4 mt-4" style="width: 250px; height: 180px;">
-                                            <img alt="image-gallery" src="{{Vite::asset('resources/images/scroll-7.jpeg')}}" class="img-fluid mb-4 mt-4" style="width: 250px; height: 180px;">
-                                            <img alt="image-gallery" src="{{Vite::asset('resources/images/scroll-8.jpeg')}}" class="img-fluid mb-4 mt-4" style="width: 250px; height: 180px;">
                                         </div>
 
-                                        <p>Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+                                        <p>{{$email->content}}</p>
 
-                                        <p>Best Regards,</p>
-                                        <p>Laurie Fox</p>
 
 
                                         <div class="attachments">
-                                            <h6 class="attachments-section-title">Attachments</h6>
+                                            <h6 class="attachments-section-title">Załączniki</h6>
                                             <div class="attachment file-pdf">
                                                 <div class="media">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -300,7 +271,7 @@
 
                                     </div>
                                 </div>
-
+@endforeach
 
 
                                
