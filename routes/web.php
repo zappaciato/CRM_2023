@@ -83,7 +83,7 @@ foreach ($prefixRouters as $prefixRouter) {
         //     })->name('sales');
         // });
 //orders
-        Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware('auth')->name('new.orders');
+        Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware(['can:is-admin'])->name('new.orders');
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
         
         Route::get('orders/create-order-email/{id}', [OrderController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');

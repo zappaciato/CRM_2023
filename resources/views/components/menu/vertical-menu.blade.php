@@ -32,6 +32,7 @@
                     </div>
                 </div>
                 <div class="shadow-bottom"></div>
+@can('is-active-user')
                 <ul class="list-unstyled menu-categories" id="accordionExample">
                     <li class="menu {{ Request::is('*/dashboard/*') ? "active" : "" }}">
                         <a href="#dashboard" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/dashboard/*') ? "true" : "false" }}" class="dropdown-toggle">
@@ -56,6 +57,9 @@
                     <li class="menu menu-heading">
                         <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>APLIKACJE</span></div>
                     </li>
+@endcan
+@can('is-admin')
+    
 
                     <li class="menu {{ Request::routeIs('email.inbox') ? 'active' : '' }}">
                         <a href="{{route('email.inbox')}}" aria-expanded="false" class="dropdown-toggle">
@@ -65,7 +69,8 @@
                             </div>
                         </a>
                     </li>
-
+@endcan
+@can('is-active-user')
                     <li class="menu {{ Request::routeIs('calendar') ? 'active' : '' }}">
                         <a href="{{getRouterValue();}}/app/calendar" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
@@ -706,5 +711,5 @@
                 </ul>
                 
             </nav>
-
+@endcan
         </div>
