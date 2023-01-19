@@ -35,12 +35,16 @@
     
 
 
+<div class="d-flex flex-direction-row justify-content-end">
+    <a href="{{route('contact.add')}}"><button class="btn btn-success mb-2">Dodaj nowy kontakt</button></a>
+</div>
+
 
 <div class="row">
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">        
             <div class="statbox widget box box-shadow">
                 <div class="widget-content widget-content-area">
-                    <a href="{{route('contact.add')}}"><button class="btn btn-success">Dodaj nowy kontakt</button></a>
+                    
                     
                     <table class="multi-table table dt-table-hover" style="width:100%">
                         <thead>

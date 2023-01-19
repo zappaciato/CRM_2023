@@ -1,3 +1,21 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{--  --}}
+
 <h1>Single contact {{$contact->name}} ::: {{$contact->surname}}</h1>
 
 

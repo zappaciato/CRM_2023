@@ -114,7 +114,7 @@ class ContactController extends Controller
 
     public function update(Request $request, $id)
     {
-
+Log::info('I am in update contact method');
         $contact = Contact::findOrFail($id);
 
 
@@ -122,12 +122,12 @@ class ContactController extends Controller
         $data = $this->validator($request->all());
 
 
-        $company->update($data);
+        $contact->update($data);
         Log::info('I am updating the record.');
 
-
+Alert::alert('Gratulacje!', 'Kontakt: ' . $contact->name . ' ' . $contact->surname . ' został zaktualizowany!', 'success');
         
-        return redirect(route('single.company', $company->id))->with('message', 'Your have finished editing and the selected company is now updated!');
+        return redirect(route('contact.list'));
     }
 
 

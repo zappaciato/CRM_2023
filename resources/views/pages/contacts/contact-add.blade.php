@@ -1,4 +1,4 @@
-<x-base-layout :scrollspy="true">
+<x-base-layout :scrollspy="false">
 
     <x-slot:pageTitle>
         {{$title}} 
@@ -20,33 +20,39 @@
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
 
-    <x-slot:scrollspyConfig>
+    {{-- <x-slot:scrollspyConfig>
         data-bs-spy="scroll" data-bs-target="#navSection" data-bs-offset="100"
-    </x-slot>
+    </x-slot> --}}
     
     <!-- BREADCRUMB -->
-    <div class="page-meta">
+    <div class="page-meta d-flex justify-content-between">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Form</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Validation</li>
+                <li class="breadcrumb-item"><a href="#">Kontakt</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nowy kontakt</li>
             </ol>
         </nav>
+        
+        
     </div>
     <!-- /BREADCRUMB -->
 
-    <div id="navSection" data-bs-spy="affix" class="nav  sidenav">
+    {{-- <div id="navSection" data-bs-spy="affix" class="nav  sidenav">
         <div class="sidenav-content">
             <a href="#basic" class="active nav-link">Basic</a>
             <a href="#custom_styles" class="nav-link">Custom Styles</a>
             <a href="#browser_default" class="nav-link">Browser Default</a>
             <a href="#tooltips" class="nav-link">Tooltips</a>
         </div>
-    </div>
-    
-    <div class="row layout-top-spacing">
+    </div> --}}
 
-            <div class="row">
+    <div class="d-flex flex-direction-row justify-content-end">
+    <a href="{{route('contact.list')}}"><button class="btn btn-success">Wróć do listy kontaktów</button></a>
+</div>
+    
+    <div class="row d-flex justify-content-center layout-top-spacing">
+
+            <div class="row col-10">
                 <div id="custom_styles" class="col-lg-12 layout-spacing col-md-12">
                     <div class="statbox widget box box-shadow">
                         <div class="widget-header">
@@ -159,7 +165,7 @@
                                 {{-- end quill --}}
 
                                 <div class="col-12">
-                                <button class="btn btn-primary" type="submit">Submit form</button>
+                                <button class="btn btn-primary" type="submit">Dodaj</button>
                                 </div>
                             </form>
 
@@ -213,118 +219,3 @@ theme: 'snow'  // or 'bubble'
 
 
 
-
-{{-- //////////////////////////////// --}}
-
-<h1>Formularz dodawania kontaktu</h1>
-<form action="{{route('contact.add')}}" method="POST">
-        @csrf
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            
-                            <h2>POdaj dane kontaktu</h2>
-
-                            
-                        </div>
-
-
-                        
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Imię</label>
-                                <input type="text" id="name" class="form-control add-billing-address-input" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-                            </div>
-
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-
-                        </div>
-
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="surname" class="form-label">Nazwisko</label>
-                                <input id="surname" type="text" class="form-control add-billing-address-input" name="surname" value="{{ old('surname') }}" required autocomplete="surname" autofocus>
-                            </div>
-
-                                @error('surname')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-
-                        </div>
-
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email">
-                            </div>
-                            @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="position" class="form-label">Pozycja</label>
-                                <input id="position" type="position" class="form-control" name="position" value="{{ old('position') }}" required autocomplete="position">
-                            </div>
-                            @error('position')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="phone" class="form-label">Telefon</label>
-                                <input id="phone" type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
-                            </div>
-                            @error('phone')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-
-                        <div class="col-md-12">
-                                <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role">
-                            
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label for="phone_business" class="form-label">Telefon</label>
-                                <input id="phone_business" type="text" class="form-control" name="phone_business" value="{{ old('phone_business') }}" required autocomplete="phone_business" autofocus>
-                            </div>
-                            @error('phone_business')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                            @enderror
-                        </div>
-
-                        <div class="col-12">
-                            <div class="mb-3">
-                                <label for="notes" class="form-label">Notatka</label>
-                                <input id="notes" type="notes" class="form-control" name="notes" required autocomplete="notes">
-                            </div>
-                            @error('notes')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div>
-
-                        <button class="btn btn-primary" type="submit">Dodaj kontakt</button>
-                    </div>
-</form>
