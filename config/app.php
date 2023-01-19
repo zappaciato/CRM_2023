@@ -197,6 +197,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
+
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
     ],
 
     /*
@@ -215,5 +217,6 @@ return [
     ])->toArray(),
 
     'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+    'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
 
 ];

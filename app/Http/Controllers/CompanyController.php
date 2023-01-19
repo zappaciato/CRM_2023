@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class CompanyController extends Controller
@@ -158,6 +159,8 @@ Log::info('I am updating the record.');
 
         //metoda back jest juz defaultowa
         // return back()->with('message', 'Your have finished editing and the selected post is now updated!');
+
+        Alert::alert('Gratulacje!', 'Dane firmy zostały zaktualizowane!', 'success');
         return redirect(route('single.company', $company->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
@@ -181,7 +184,9 @@ Log::info('I am updating the record.');
 
         //przekierowujemy na strone główną
 
-        return redirect('/')->with('message', 'The company has been deleted!');
+        Alert::alert('Gratulacje!', 'Dane firmy zostały usnięte!', 'success');
+
+        return redirect('/');
     }
 
 
