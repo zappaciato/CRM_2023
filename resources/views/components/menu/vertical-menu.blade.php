@@ -32,6 +32,7 @@
                     </div>
                 </div>
                 <div class="shadow-bottom"></div>
+@can('is-active-user')
                 <ul class="list-unstyled menu-categories" id="accordionExample">
                     <li class="menu {{ Request::is('*/dashboard/*') ? "active" : "" }}">
                         <a href="#dashboard" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/dashboard/*') ? "true" : "false" }}" class="dropdown-toggle">
@@ -56,16 +57,20 @@
                     <li class="menu menu-heading">
                         <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>APLIKACJE</span></div>
                     </li>
+@endcan
+@can('is-admin')
+    
 
-                    <li class="menu {{ Request::routeIs('mailbox') ? 'active' : '' }}">
-                        <a href="{{getRouterValue();}}/app/mailbox" aria-expanded="false" class="dropdown-toggle">
+                    <li class="menu {{ Request::routeIs('email.inbox') ? 'active' : '' }}">
+                        <a href="{{route('email.inbox')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 <span>Email</span>
                             </div>
                         </a>
                     </li>
-
+@endcan
+@can('is-active-user')
                     <li class="menu {{ Request::routeIs('calendar') ? 'active' : '' }}">
                         <a href="{{getRouterValue();}}/app/calendar" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
@@ -419,7 +424,7 @@
                         </a>
                     </li> --}}
 
-                    <li class="menu {{ Request::is('*/datatables/*') ? "active" : "" }}">
+                    {{-- <li class="menu {{ Request::is('*/datatables/*') ? "active" : "" }}">
                         <a href="#datatables" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/datatables/*') ? "true" : "false" }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
@@ -445,7 +450,7 @@
                         </ul>
                     </li>
 
-                    {{-- <li class="menu {{ Request::is('*/form/*') ? "active" : "" }}">
+                    <li class="menu {{ Request::is('*/form/*') ? "active" : "" }}">
                         <a href="#forms" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/form/*') ? "true" : "false" }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
@@ -706,5 +711,5 @@
                 </ul>
                 
             </nav>
-
+@endcan
         </div>

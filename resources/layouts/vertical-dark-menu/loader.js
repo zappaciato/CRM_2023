@@ -15,7 +15,7 @@ window.addEventListener("load", function(){
                 darkMode: true,
             }
         },
-        reset: false
+        reset: true
     };
 
     if (settingsObject.reset) {

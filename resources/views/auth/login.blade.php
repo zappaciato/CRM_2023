@@ -33,7 +33,7 @@
                         <div class="position-relative">
     
                             {{-- <img src="{{Vite::asset('resources/images/wykrojniki.jpg')}}" alt="auth-img"> --}}
-    
+                            <h1 class="text-white px-2">PerfectCut</h1>
                             <h2 class="mt-5 text-white font-weight-bolder px-2">Wycinamy jak się patrzy</h2>
                             <p class="text-white px-2">juz od lat!</p>
                         </div>
