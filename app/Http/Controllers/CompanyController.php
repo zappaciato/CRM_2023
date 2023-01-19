@@ -39,68 +39,10 @@ class CompanyController extends Controller
 
         Log::info('Record has been validated??');
 
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
-
         return $validated;
     }
 
-    // public function create()
-    // {
-    //     Log::info('show the create company form');
-    //     return view('pages.companies.add-company');
-    // }
 
-    // protected function validator(array $data)
-    // {
-    //     Log::info('Trying to validate company data');
-    //     Log::debug($data);
-    //     $validated = Validator::make($data, [
-    //         'created_by' => 'required',
-    //         'name' => 'required',
-    //         'phone' => 'required',
-    //         'country' => 'required',
-    //         'nip' => 'required',
-    //         'email' => 'required',
-    //         'www' => 'required',
-    //         'notes' => 'required',
-    //     ])->validate();
-
-
-    //     return $validated;
-    // }
-
-    // public function store(Request $request)
-    // {
-
-    //     $data = $this->validator($request->all());
-
-    //     Log::info('Comapny data validated!!');
-
-    //     Company::create([
-    //         'name' => $data['name'],
-    //         'created_by' => $data['created_by'],
-    //         'phone' => $data['phone'],
-    //         'country' => $data['country'],
-    //         'nip' => $data['nip'],
-    //         'email' => $data['email'],
-    //         'www' => $data['www'],
-    //         'notes' => $data['notes'],
-    //     ]);
-
-    //     Log::info('created a new company');
-
-    //     ModelsLog::create([
-    //         'name' => 'New Company ' . $request->name . ' added.',
-    //         'type' =>  'New company added',
-    //     ]);
-
-    //     Log::info('Log added a new company!');
-
-    //     session()->flash('message', 'Nowa firma została dodana!');
-
-    //     return redirect(route('createCompany'));
-    // }
 
     public function show($id)
     {
@@ -135,30 +77,8 @@ class CompanyController extends Controller
 
         $data = $this->validator($request->all());
 
-        // if (isset($data['image'])) {
-        //     $path = $request->file('image')->store('/public/photos');
-
-        //     $data['image'] = $path;
-        // }
-
-        // sprawdzamy czy sa jakie tagi dodane? 
-        // if (isset($data['tags'])) {
-        //     $tags = TagsParsingService::parse($data['tags']);
-        //     $post->tags()->sync($tags); //synchronizuje nam tagi z tymi ktore są? 
-        // }
 
         $company->update($data);
-Log::info('I am updating the record.');
-        //jak juz image uaktualniony to kasujemy stary: ale tez upewnimy sie ze ten image tam jest bo inaczej wyskoczy blad;
-        // if (isset($data['image'])) {
-        //     // dd($data['image']);
-        //     Storage::delete($oldImage);
-        // }
-
-        // session()->flash('message', 'Your have finished editing the selected post!'); tego nie potrzeba robi w ten sposob caly czas. patrz nizej;
-
-        //metoda back jest juz defaultowa
-        // return back()->with('message', 'Your have finished editing and the selected post is now updated!');
 
         Alert::alert('Gratulacje!', 'Dane firmy zostały zaktualizowane!', 'success');
         return redirect(route('single.company', $company->id))->with('message', 'Your have finished editing and the selected company is now updated!');
@@ -186,7 +106,7 @@ Log::info('I am updating the record.');
 
         Alert::alert('Gratulacje!', 'Dane firmy zostały usnięte!', 'success');
 
-        return redirect('/');
+        return redirect(route('company.list'));
     }
 
 

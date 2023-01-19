@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceOrderController;
@@ -87,9 +88,16 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
         
         Route::get('orders/create-order-email/{id}', [OrderController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
-        Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
-        Route::get('orders/order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
 
+//service orders
+        Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
+        Route::get('orders/service-order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
+
+        Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
+        Route::put('orders/service-order/edit/{id}', [ServiceOrderController::class, 'update'])->middleware('auth');
+
+//usuwanie service-order
+        Route::delete('orders/service-order/delete/{id}', [ServiceOrderController::class, 'destroy'])->name('single.service.order.delete');
 
 
 
@@ -101,7 +109,20 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::put('companies/company/edit/{id}', [CompanyController::class, 'update'])->middleware('auth');
 
         //usuwanie firmy
-        Route::delete('/companies/company/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+        Route::delete('companies/company/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+
+//contacts
+
+        Route::get('contacts/contact-persons-list', [ContactController::class, 'index'])->middleware('auth')->name('contact.list');
+        Route::get('contacts/contact-person/add', [ContactController::class, 'create'])->middleware('auth')->name('contact.add');
+        Route::post('contacts/contact-person/add', [ContactController::class, 'store'])->middleware('auth');
+
+
+        Route::get('contacts/contact-person/{id}', [ContactController::class, 'show'])->middleware('auth')->name('single.contact');
+        Route::get('contacts/contact-person/edit/{id}', [ContactController::class, 'edit'])->middleware('auth')->name('contact.edit');
+        Route::put('contacts/contact-person/edit/{id}', [ContactController::class, 'update'])->middleware('auth');
+
+        Route::delete('contacts/contact-person/delete/{id}', [ContactController::class, 'destroy'])->middleware('auth')->name('contact.delete');
 
 //users
         Route::get('users/users-list', [UserController::class, 'index'])->middleware('auth')->name('user.list');

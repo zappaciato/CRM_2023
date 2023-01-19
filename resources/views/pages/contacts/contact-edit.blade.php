@@ -1,0 +1,1 @@
+<h1>Educja kontaktu name: {{$contact->name}}, nazwiwsko: {{$contact->surname}}</h1>
