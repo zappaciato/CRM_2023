@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EmailController;
@@ -86,6 +87,7 @@ foreach ($prefixRouters as $prefixRouter) {
 //orders
         Route::get('orders/new-orders', [OrderController::class, 'index'])->middleware(['can:is-admin'])->name('new.orders');
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
+        Route::post('orders/add-order', [OrderController::class, 'store'])->middleware('auth');
         
         Route::get('orders/create-order-email/{id}', [OrderController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
 
@@ -103,13 +105,23 @@ foreach ($prefixRouters as $prefixRouter) {
 
 // companies
         Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
-        Route::get('companies/company/{id}', [CompanyController::class, 'show'])->middleware('auth')->name('single.company');
+        
 
+        Route::get('companies/company/add', [CompanyController::class, 'create'])->middleware('auth')->name('company.add');
+        Route::post('companies/company/add', [CompanyController::class, 'store'])->middleware('auth');
+
+        Route::get('companies/company/{id}', [CompanyController::class, 'show'])->middleware('auth')->name('single.company');
         Route::get('companies/company/edit/{id}', [CompanyController::class, 'edit'])->middleware('auth')->name('company.edit');
         Route::put('companies/company/edit/{id}', [CompanyController::class, 'update'])->middleware('auth');
 
-        //usuwanie firmy
+//delete ompany
         Route::delete('companies/company/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+
+
+//addresses
+            Route::get('comapnies/address/addresses-list', [AddressController::class, 'index'])->name('address.list');
+            Route::get('companies/address/address-add', [AddressController::class, 'create'])->name('address.add');
+            Route::post('companies/address/address-add', [AddressController::class, 'store']);
 
 //contacts
 

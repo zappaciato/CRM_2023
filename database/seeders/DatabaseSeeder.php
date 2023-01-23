@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create();
-        Order::factory(10)->create();
-        Company::factory(8)->create();
-        Email::factory(10)->create();
-        Contact::factory(20)->create();
+        User::factory(100)->create();
+        Order::factory(100)->create();
+        Company::factory(100)->create();
+        Email::factory(100)->create();
+        Contact::factory(200)->create();
     }
 }

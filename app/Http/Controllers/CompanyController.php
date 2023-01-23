@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -42,20 +43,69 @@ class CompanyController extends Controller
         return $validated;
     }
 
+    public function create () {
+        Log::info('I am creating the view for adding a neew company');
+        $title = "Dodaj firmę";
+        $breadcrumb = "Dodaj nową firmę";
+        return view('pages.companies.company-add', compact('title', 'breadcrumb'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $data = $this->validator($request->all());
+
+        Log::info('This is COMPANY data after validation and creation');
+        // Log::debug($data);
+
+        $company = Company::create($data);
+
+        
+        Log::debug($company);
+        $title = 'Dodaj nowy adress';
+        $breadcrumb = 'Nowy Adress';
+        // return redirect(route('address.add', $company->id));
+        // return redirect()->route('address.add')->with('company', $company);
+        return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));
+    }
+
 
 
     public function show($id)
     {
-        Log::info('I am showing the record.');
+        Log::info('I am showing the record of a single Company and blow is the ID value');
+        $address = CompanyAddress::where('company_id', $id)->get();
         Log::debug($id);
+        Log::debug($address);
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
+//find if a company has an address
+
+        // if($address = CompanyAddress::where('company_id', $id)->firstOrFail() !== null) {
+        //     return $address = CompanyAddress::where('company_id', $id)->firstOrFail();
+        // } else {
+        //     $address = null;
+        // };
+
+        
+        Log::info('This is the address of a chosen comapny');
+        
+
+
+
         Log::debug($company);
         // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address'));
     }
+
+
 
     public function edit($id) {
         Log::info('I am editing the record.');
@@ -110,7 +160,15 @@ class CompanyController extends Controller
     }
 
 
+    // public function addresses()
+    // {
+    //     return $this->hasMany('App\FirmsAddress', 'firm_id');
+    // }
 
+    // public function persons()
+    // {
+    //     return $this->hasMany('App\Persons', 'firms_id')->orderBy('created_at', 'desc');
+    // }
 
 
     // // for the RESTful API test

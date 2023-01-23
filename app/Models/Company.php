@@ -20,9 +20,13 @@ class Company extends Model
         'notes',
     ];
 
-    // public function users()
+    public function addresses() {
+        return $this->hasMany(CompanyAddress::class);
+    }
+
+    // public function contacts()
     // {
-    //     return $this->belogsTo(User::class, 'user_id', 'id');
+    //     return $this->hasMany(Contact::class, 'user_id', 'id');
     // }
 
     // public function orders()

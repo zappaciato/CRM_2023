@@ -44,6 +44,30 @@
             <h4>Strona www: <span>{{$company->www}}</span></h4>
             <h4>Notatki: <span>{{$company->notes}}</span></h4>
 
+{{-- @php
+    dd($address)
+@endphp --}}
+            
+
+            @if(!$address->isNotEmpty()) 
+                <h1>Adres:</h1>
+                <h4>Adres nie został dodany do firmy. </h4>
+                <h6>Czy chcesz dodać adres do tej firmy? </h6>
+            
+            @else 
+            <h1>Adres:</h1>
+
+            <h4>Nazwa: <span>{{$address[0]->name}}</span></h4>
+            <h4>Miasto: <span>{{$address[0]->city}}</span></h4>
+            <h4>Ulica: <span>{{$address[0]->street}}</span></h4>
+            <h4>Kod pocztowy: <span>{{$address[0]->postal_code}}</span></h4>
+            <h4>województwo: <span>{{$address[0]->province}}</span></h4>
+            
+            <h4>Notatki: <span>{{$address[0]->notes}}</span></h4>
+
+            
+            @endif
+
             <a href="{{route('company.list')}}"><button class="btn btn-success">Wróć</button></a>
 
             <a href="{{route('company.edit', $company->id)}}"><button class="btn btn-warning">Edytuj</button></a>
