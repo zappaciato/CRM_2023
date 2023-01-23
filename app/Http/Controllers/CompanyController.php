@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class CompanyController extends Controller
@@ -38,81 +40,72 @@ class CompanyController extends Controller
 
         Log::info('Record has been validated??');
 
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
-
         return $validated;
     }
 
-    // public function create()
-    // {
-    //     Log::info('show the create company form');
-    //     return view('pages.companies.add-company');
-    // }
+    public function create () {
+        Log::info('I am creating the view for adding a neew company');
+        $title = "Dodaj firmę";
+        $breadcrumb = "Dodaj nową firmę";
+        return view('pages.companies.company-add', compact('title', 'breadcrumb'));
+    }
 
-    // protected function validator(array $data)
-    // {
-    //     Log::info('Trying to validate company data');
-    //     Log::debug($data);
-    //     $validated = Validator::make($data, [
-    //         'created_by' => 'required',
-    //         'name' => 'required',
-    //         'phone' => 'required',
-    //         'country' => 'required',
-    //         'nip' => 'required',
-    //         'email' => 'required',
-    //         'www' => 'required',
-    //         'notes' => 'required',
-    //     ])->validate();
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $data = $this->validator($request->all());
+
+        Log::info('This is COMPANY data after validation and creation');
+        // Log::debug($data);
+
+        $company = Company::create($data);
+
+        
+        Log::debug($company);
+        $title = 'Dodaj nowy adress';
+        $breadcrumb = 'Nowy Adress';
+        // return redirect(route('address.add', $company->id));
+        // return redirect()->route('address.add')->with('company', $company);
+        return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));
+    }
 
 
-    //     return $validated;
-    // }
-
-    // public function store(Request $request)
-    // {
-
-    //     $data = $this->validator($request->all());
-
-    //     Log::info('Comapny data validated!!');
-
-    //     Company::create([
-    //         'name' => $data['name'],
-    //         'created_by' => $data['created_by'],
-    //         'phone' => $data['phone'],
-    //         'country' => $data['country'],
-    //         'nip' => $data['nip'],
-    //         'email' => $data['email'],
-    //         'www' => $data['www'],
-    //         'notes' => $data['notes'],
-    //     ]);
-
-    //     Log::info('created a new company');
-
-    //     ModelsLog::create([
-    //         'name' => 'New Company ' . $request->name . ' added.',
-    //         'type' =>  'New company added',
-    //     ]);
-
-    //     Log::info('Log added a new company!');
-
-    //     session()->flash('message', 'Nowa firma została dodana!');
-
-    //     return redirect(route('createCompany'));
-    // }
 
     public function show($id)
     {
-        Log::info('I am showing the record.');
+        Log::info('I am showing the record of a single Company and blow is the ID value');
+        $address = CompanyAddress::where('company_id', $id)->get();
         Log::debug($id);
+        Log::debug($address);
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
+//find if a company has an address
+
+        // if($address = CompanyAddress::where('company_id', $id)->firstOrFail() !== null) {
+        //     return $address = CompanyAddress::where('company_id', $id)->firstOrFail();
+        // } else {
+        //     $address = null;
+        // };
+
+        
+        Log::info('This is the address of a chosen comapny');
+        
+
+
+
         Log::debug($company);
         // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address'));
     }
+
+
 
     public function edit($id) {
         Log::info('I am editing the record.');
@@ -134,30 +127,10 @@ class CompanyController extends Controller
 
         $data = $this->validator($request->all());
 
-        // if (isset($data['image'])) {
-        //     $path = $request->file('image')->store('/public/photos');
-
-        //     $data['image'] = $path;
-        // }
-
-        // sprawdzamy czy sa jakie tagi dodane? 
-        // if (isset($data['tags'])) {
-        //     $tags = TagsParsingService::parse($data['tags']);
-        //     $post->tags()->sync($tags); //synchronizuje nam tagi z tymi ktore są? 
-        // }
 
         $company->update($data);
-Log::info('I am updating the record.');
-        //jak juz image uaktualniony to kasujemy stary: ale tez upewnimy sie ze ten image tam jest bo inaczej wyskoczy blad;
-        // if (isset($data['image'])) {
-        //     // dd($data['image']);
-        //     Storage::delete($oldImage);
-        // }
 
-        // session()->flash('message', 'Your have finished editing the selected post!'); tego nie potrzeba robi w ten sposob caly czas. patrz nizej;
-
-        //metoda back jest juz defaultowa
-        // return back()->with('message', 'Your have finished editing and the selected post is now updated!');
+        Alert::alert('Gratulacje!', 'Dane firmy zostały zaktualizowane!', 'success');
         return redirect(route('single.company', $company->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
@@ -181,11 +154,21 @@ Log::info('I am updating the record.');
 
         //przekierowujemy na strone główną
 
-        return redirect('/')->with('message', 'The company has been deleted!');
+        Alert::alert('Gratulacje!', 'Dane firmy zostały usnięte!', 'success');
+
+        return redirect(route('company.list'));
     }
 
 
+    // public function addresses()
+    // {
+    //     return $this->hasMany('App\FirmsAddress', 'firm_id');
+    // }
 
+    // public function persons()
+    // {
+    //     return $this->hasMany('App\Persons', 'firms_id')->orderBy('created_at', 'desc');
+    // }
 
 
     // // for the RESTful API test

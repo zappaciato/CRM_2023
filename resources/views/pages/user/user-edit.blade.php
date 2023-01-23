@@ -30,6 +30,7 @@
         @vite(['resources/scss/dark/assets/forms/switches.scss'])
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/users/account-setting.scss'])
+
         
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
@@ -70,6 +71,27 @@
                 </div>
             </div>
 
+            @if(Session::has('success'))
+        <div class="alert alert-success">
+            {{ Session::get('success') }}
+            @php
+                Session::forget('success');
+            @endphp
+        </div>
+        @endif
+
+        <!-- Way 1: Display All Error Messages -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
             <div class="tab-content" id="animateLineContent-4">
                 <div class="tab-pane fade show active" id="animated-underline-home" role="tabpanel" aria-labelledby="animated-underline-home-tab">
                     <div class="row">
@@ -79,6 +101,8 @@
                                 <input type="hidden" name="_method" value="PUT">
 
                                 <input type="hidden" name="password" value="{{$user->password}}">
+
+
                                 <div class="info">
                                     <h6 class="">Informacje ogólne</h6>
                                     <div class="row">
@@ -670,6 +694,7 @@ dd($errors);
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+
         <script src="{{asset('plugins/filepond/filepond.min.js')}}"></script>
         <script src="{{asset('plugins/filepond/FilePondPluginFileValidateType.min.js')}}"></script>
         <script src="{{asset('plugins/filepond/FilePondPluginImageExifOrientation.min.js')}}"></script>
@@ -683,10 +708,16 @@ dd($errors);
         <script src="{{asset('plugins/sweetalerts2/sweetalerts2.min.js')}}"></script>
 
         @vite(['resources/assets/js/users/account-settings.js'])
-
+        
         <script type="module">
             userProfile.addFiles("{{Vite::asset('resources/images/user-profile.jpeg')}}");
+
+
+
+
         </script>
+
+
         
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->

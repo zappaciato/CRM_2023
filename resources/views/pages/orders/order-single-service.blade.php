@@ -58,8 +58,18 @@
             
         </nav>
         <a href="{{route('service.orders')}}"><button class="btn btn-success">Wróć do listy zgłoszeń</button></a>
-        <a href=""><button class="btn btn-warning">Edytuj zgłoszenie</button></a>
+        <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning">Edytuj zgłoszenie</button></a>
         <a class="ms-5" href=""><button class="btn btn-danger ms-5">Anuluj zgłoszenie</button></a>
+
+
+        <form method="POST" action="{{route('single.service.order.delete', $singleOrder->id)}}">
+            @csrf
+            {{method_field('DELETE')}} 
+            <button class="btn btn-danger mt-5" onclick="return confirm('Are you sure?')">Usuń zgłoszenie</button>
+        </form>
+
+
+
     </div>
     <!-- /BREADCRUMB -->
 <div class="row layout-top-spacing">

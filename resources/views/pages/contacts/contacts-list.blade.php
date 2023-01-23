@@ -20,8 +20,8 @@
     <div class="page-meta">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Firmy</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Lista Firm</li>
+                <li class="breadcrumb-item"><a href="#">Kontakty</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Lista Kontaktów</li>
             </ol>
         </nav>
     </div>
@@ -30,40 +30,52 @@
 
 
     <div class="seperator-header">
-        <h4 class="">Firmy</h4>
-        <a href="{{route('company.add')}}"><button class="btn btn-danger">Dodaj nową firmę</button></a>
+        <h4 class="">Osoby kontaktowe</h4>
     </div>
     
 
 
+<div class="d-flex flex-direction-row justify-content-end">
+    <a href="{{route('contact.add')}}"><button class="btn btn-success mb-2">Dodaj nowy kontakt</button></a>
+</div>
+
 
 <div class="row">
-        <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
+        <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">        
             <div class="statbox widget box box-shadow">
                 <div class="widget-content widget-content-area">
+                    
                     
                     <table class="multi-table table dt-table-hover" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Nazawa Firmy</th>
+                                <th>Imię</th>
+                                <th>Nazwisko</th>
+                                <th>Pozycja</th>
+                                <th>Telefon</th>
+                                {{-- <th>Telefon 2</th> --}}
                                 <th>Email</th>
-                                <th class="text-center">NIP</th>
-                                <th class="text-center">www</th>
+                                {{-- <th class="text-center">Notatki</th> --}}
                                 <th class="text-center dt-no-sorting">Akcje</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($companies as $company )
+                            @foreach ($contacts as $contact )
                                 
                             
                             <tr>
-                                <td>{{$company->id}}</td>
-                                <td>{{$company->name}}</td>
-                                <td>{{$company->email}}</td>
-                                <td>{{$company->nip}}</td>
-                                <td>{{substr(($company->www),0,18)}}</td>
-                                <td class="text-center"> <a href="{{ route('single.company', $company->id) }}"><button class="btn btn-primary">Otwórz</button></a>  </td>
+                                <td>{{$contact->id}}</td>
+                                <td>{{$contact->name}}</td>
+                                <td>{{$contact->surname}}</td>
+                                <td>{{$contact->position}}</td>
+                                
+                                <td>{{$contact->phone}}</td>
+                                {{-- <td>{{$contact->phone_buisness}}</td> --}}
+                                <td>{{$contact->email}}</td>
+                                
+                                {{-- <td>{{substr(($contact->notes),0,18)}}</td> --}}
+                                <td class="text-center"> <a href="{{ route('single.contact', $contact->id) }}"><button class="btn btn-primary">Otwórz</button></a>  </td>
                             </tr>
 
                             @endforeach
@@ -72,10 +84,13 @@
                         <tfoot>
                             <tr>
                                 <th>Id</th>
-                                <th>Nazawa Firmy</th>
+                                <th>Imię</th>
+                                <th>Nazwisko</th>
+                                <th>Pozycja</th>
+                                <th>Telefon</th>
+                                {{-- <th>Telefon 2</th> --}}
                                 <th>Email</th>
-                                <th class="text-center">NIP</th>
-                                <th class="text-center">www</th>
+                                {{-- <th class="text-center">Notatki</th> --}}
                                 <th class="text-center dt-no-sorting">Akcje</th>
                             </tr>
                         </tfoot>

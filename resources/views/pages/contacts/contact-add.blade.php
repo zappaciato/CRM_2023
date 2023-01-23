@@ -47,7 +47,7 @@
     </div> --}}
 
     <div class="d-flex flex-direction-row justify-content-end">
-    <a href="{{route('service.orders')}}"><button class="btn btn-success">Wróć do listy zgłoszeń</button></a>
+    <a href="{{route('contact.list')}}"><button class="btn btn-success">Wróć do listy kontaktów</button></a>
 </div>
     
     <div class="row d-flex justify-content-center layout-top-spacing">
@@ -58,84 +58,111 @@
                         <div class="widget-header">
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                    <h4>Wypełnij dane nowego zgłoszenia</h4>
+                                    <h4>Wypełnij dane nowego kontaktu</h4>
                                 </div>                 
                             </div>
                         </div>
 
                         
                         <div class="widget-content widget-content-area"> 
-                            <form class="row g-3 needs-validation" action="{{route('add.order')}}" method="POST" novalidate>
+                            <form class="row g-3 needs-validation" action="{{route('contact.add')}}" method="POST" novalidate>
         @csrf                               
                                 {{-- <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role"> --}}
 
                                 <div class="col-md-4">
-                                    <label for="company" class="form-label">Firma</label>
-                                        <select id="company" class="form-select" name="company" value>
-                                            <option selected="">FIrma Jeden</option>
-                                            <option>Firma dwa</option>
-                                            <option>Firma trzy</option>
-                                        </select>
-
+                                <label for="name" class="form-label">Imię</label>
+                                <input type="text" id="name" class="form-control" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
                                 </div>
 
                                 
 
                                 <div class="col-md-4">
-                                <label for="contact_person">Osoba kontaktowa z firmy</label>
-                                        <select  id="contact_person" name="contact_person" class="form-select" >
-                                            <option selected="">Jan Kowalski</option>
-                                            <option>Cezary Pazura</option>
-                                            <option>Michaell Jordan</option>
-                                        </select>
+                                <label for="surname" class="form-label">Nazwisko</label>
+                                <input id="surname" type="text" class="form-control add-billing-address-input" name="surname" value="{{ old('surname') }}" required autocomplete="surname" autofocus required>
+                                <div class="valid-feedback">
+                                    Wyglada ok!
+                                </div>
                                 </div>
 
                                 <div class="col-md-4">
-                                <label for="contact_person">Adres</label>
-                                        <select  id="address" name="address" class="form-select" >
-                                            <option selected="">Pl WOlności</option>
-                                            <option>Oxford St</option>
-                                            <option>Umberstabmbplatz</option>
-                                        </select>
+                                <label for="email" class="form-label">Email</label>
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <div class="valid-feedback">
+                                    Wygląda ok!
+                                </div>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                <label for="position" class="form-label">Pozycja</label>
+                                <input id="position" type="position" class="form-control" name="position" value="{{ old('position') }}" required autocomplete="position">
+                                <div class="invalid-feedback">
+                                    Podaj pozycję w firmie
+                                </div>
+                                </div>
+
+{{-- dropdown na potem w razie czego --}}
+                                {{-- <div class="col-md-3">
+                                <label for="validationCustom04" class="form-label">State</label>
+                                <select class="form-select" id="validationCustom04" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <option>...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a valid state.
+                                </div>
+                                </div> --}}
+
+
+                                <div class="col-md-4">
+                                <label for="phone" class="form-label">Telefon</label>
+                                <input id="phone" type="phone" class="form-control" name="phone" value="{{ old('phone') }}" required autocomplete="phone">
+                                <div class="invalid-feedback">
+                                    Podaj telefon
+                                </div>
                                 </div>
 
                                 <div class="col-md-4">
-                                <label for="manager">Prowadzący</label>
-                                        <select  id="manager" name="manager" class="form-select" >
-                                            <option selected="">Wojtek</option>
-                                            <option>Jacek St</option>
-                                            <option>Ula brzozowicz</option>
-                                        </select>
+                                <label for="phone_business" class="form-label">Telefon dodatkowy</label>
+                                <input id="phone_business" type="text" class="form-control" name="phone_business" value="{{ old('phone_business') }}" required autocomplete="phone_business" autofocus>
+                                <div class="invalid-feedback">
+                                    Podaj telefon
                                 </div>
-
-                                <div class="col-md-4">
-                                <label for="involved_person">Prowadzący</label>
-                                        <select  id="involved_person" name="involved_person" class="form-select" >
-                                            <option selected="">Marcin</option>
-                                            <option>Jadwiga</option>
-                                            <option>Umbro</option>
-                                        </select>
-                                </div>
-
-                                <div class="col-md-4">
-                                <label for="priority" class="form-label">Priorytet</label>
-                                        <select  id="priority" name="priority" class="form-select" >
-                                            <option selected="">Wysoki</option>
-                                            <option>Średni</option>
-                                            <option>Niski</option>
-                                        </select>
                                 </div>
 
 
-                                <div class="col-md-8">
-                                <label for="order_content">Zawartość zgłoszenia</label>
-                                        <textarea type="text" class="form-control" id="order_content" name="order_content"> </textarea>
+                                <div class="col-md-12">
+                                <label for="notes" class="form-label">Notatka</label>
+                                <textarea id="notes" type="notes" class="form-control" name="notes" autocomplete="notes" cols="30" rows="7"></textarea>
                                 </div>
 
-                                <div class="col-md-4">
-                                <label for="order_notes">Uwagi do zgłoszenia</label>
-                                        <textarea type="text" class="form-control" id="order_notes" name="order_notes" name="order_notes"> </textarea>
-                                </div>
+                                {{-- quill --}}
+
+{{-- <div id="basic" class="row layout-spacing layout-top-spacing">
+        <div class="col-lg-12">
+            <div class="statbox widget box box-shadow">
+                <div class="widget-header">
+                    <div class="row">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                            <h4> Notatka </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content widget-content-area">
+                    <div id="editor-container">
+                                <input id="notes" type="notes" class="form-control" name="notes" autocomplete="notes">
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div> --}}
+
+                                {{-- end quill --}}
 
                                 <div class="col-12">
                                 <button class="btn btn-primary" type="submit">Dodaj</button>

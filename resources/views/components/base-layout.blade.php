@@ -88,6 +88,9 @@
 
     --}}
 
+    {{-- sweet alerts --}}
+    @include('sweetalert::alert')
+
     @if (
             !Request::routeIs('404') &&
             !Request::routeIs('maintenance') &&

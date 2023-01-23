@@ -17,15 +17,26 @@ return new class extends Migration
             $table->id();
             // $table->string('created_by');
             $table->string('name');
-            $table->string('phone');
-            $table->string('country');
             $table->integer('nip');
             $table->string('email');
+            $table->string('phone');
+            $table->string('phone_stationary')->nullable(); //
+            $table->string('country');
+
             $table->string('www');
             $table->text('notes');
             $table->timestamps();
         });
+
+
+       
+
+
+
+
     }
+
+
 
     /**
      * Reverse the migrations.

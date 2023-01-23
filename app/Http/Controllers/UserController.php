@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class UserController extends Controller
 {
@@ -14,6 +16,7 @@ class UserController extends Controller
         $breadcrumb = "Nowe zamówienia";
 
         $users = User::all();
+
 
         return view('pages.user.user-list', compact('title', 'breadcrumb', 'users'));
     }
@@ -24,17 +27,18 @@ class UserController extends Controller
         Log::info('I am validating the user record.');
         Log::debug($data); 
         $validated =  Validator::make($data, [
-            'name' => 'required',
+            'name' => 'required|min:3',
             'email' => 'required',
             'role' => 'required',
             'password' => 'required',
         ])->validate();
 
+
         Log::info('User Record has been validated!!');
 
         // $validated = Arr::add($validated, 'published', 0);
         // $validated = Arr::add($validated, 'premium', 0);
-
+        
         return $validated;
     }
 
@@ -73,13 +77,16 @@ class UserController extends Controller
         // $oldImage = $post->image;
 
         $data = $this->validator($request->all());
+        Log::info('Below debug of data in update method!');
+Log::debug($data);
 
-  
 
         $user->update($data);
         Log::info('I am updating the record.');
 
-        return redirect(route('single.user', $user->id))->with('message', 'Your have finished editing and the selected user is now updated!');
+        Alert::alert('Gratulacje!', 'Konto użytkownika zostało zaktualizowane', 'success');
+
+        return redirect(route('single.user', $user->id));
     }
 
     // /**
