@@ -94,14 +94,41 @@
                                     Wygląda ok!
                                 </div>
                                 </div>
+{{-- dropdown list with companies --}}
+                                <div class="col-md-4">
+                                <label for="company_id">Frima</label>
+                                
+                                        <select  id="company_id" name="company_id" class="form-select" >
+                                            {{-- <option selected="">Jan Kowalski</option> --}}
+                                @foreach($companies as $company)
+                                            <option value="{{$company->id}}">{{$company->name}}</option>
+                                @endforeach
+                                        </select>
+                                
+                                </div>
+
+
+                                {{-- <div class="col-md-4">
+                                <label for="contact_person">Frima</label>                                 --}}
+                                        {{-- <select  id="contact_person" name="contact_person" class="form-select" > --}}
+                                            {{-- <option selected="">Jan Kowalski</option> --}}
+                                {{-- @foreach($companies as $company) --}}
+                                            {{-- <option value="{{$company->id}}">{{$company->name}}</option> --}}
+                                {{-- @endforeach --}}
+                                        {{-- </select>
+                                </div> --}}
 
 
                                 <div class="col-md-4">
                                 <label for="position" class="form-label">Pozycja</label>
-                                <input id="position" type="position" class="form-control" name="position" value="{{ old('position') }}" required autocomplete="position">
-                                <div class="invalid-feedback">
-                                    Podaj pozycję w firmie
-                                </div>
+                                {{-- <input id="position" type="position" class="form-select" name="position" value="{{ old('position') }}" required autocomplete="position"> --}}
+                                <select id="position" type="position" class="form-select" name="position" value="{{ old('position') }}">
+                                <option value="owner">Właściciel</option>
+                                <option value="management">Zarząd</option>
+                                <option value="office-employee">Pracownik biura</option>
+                                <option value="warehouse-employee">Pracownik magazynu</option>
+                                <option value="factory-employee">Pracownik fabryki</option>
+                                </select>
                                 </div>
 
 {{-- dropdown na potem w razie czego --}}

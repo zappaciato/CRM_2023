@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -32,6 +33,7 @@ class ContactController extends Controller
             'phone' => 'required',
             'phone_business' => 'required',
             'notes' => 'required',
+            'company_id' => 'required',
         ])->validate();
 
 
@@ -53,7 +55,12 @@ class ContactController extends Controller
      public function create() {
         $title = "Dodaj kontakt";
         $breadcrumb = "Dodaj nowy kontakt";
-        return view('pages.contacts.contact-add', compact('title', 'breadcrumb'));
+
+        $companies = Company::select('id', 'name')->get();
+        // foreach($companies as $company) {
+        //     Log::info($company->id);
+        // }
+        return view('pages.contacts.contact-add', compact('title', 'breadcrumb', 'companies'));
      }
 
     /**

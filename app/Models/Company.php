@@ -24,6 +24,10 @@ class Company extends Model
         return $this->hasMany(CompanyAddress::class);
     }
 
+    public function contacts() {
+        return $this->hasMany(Contact::class);
+    }
+
     // public function contacts()
     // {
     //     return $this->hasMany(Contact::class, 'user_id', 'id');

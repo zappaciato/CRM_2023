@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('street')->nullable(); //
             $table->string('city'); // kraj
             $table->string('postal_code'); //
-            $table->string('country');
+            $table->string('country')->default('Polska');
             $table->string('province')->nullable(); // wojewodztwo
 
             // $table->unsignedBigInteger('company_id'); // czy w ogóle przypisane do czegokolwiek

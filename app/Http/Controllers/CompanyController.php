@@ -79,30 +79,24 @@ class CompanyController extends Controller
     public function show($id)
     {
         Log::info('I am showing the record of a single Company and blow is the ID value');
-        $address = CompanyAddress::where('company_id', $id)->get();
-        Log::debug($id);
-        Log::debug($address);
+        // $address = CompanyAddress::where('company_id', $id)->get();
+
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
-//find if a company has an address
+        $address = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu;
+        $employees = $company->contacts;
 
-        // if($address = CompanyAddress::where('company_id', $id)->firstOrFail() !== null) {
-        //     return $address = CompanyAddress::where('company_id', $id)->firstOrFail();
-        // } else {
-        //     $address = null;
-        // };
-
-        
+        Log::debug($id);
         Log::info('This is the address of a chosen comapny');
-        
-
-
-
+        Log::debug($address);
+        Log::info('This is the workers of a chosen comapny');
+        Log::debug($employees);
+        Log::info('This is the comapny');
         Log::debug($company);
         // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address', 'employees'));
     }
 
 
