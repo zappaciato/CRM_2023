@@ -99,7 +99,7 @@
                                 <label for="company_id">Frima</label>
                                 
                                         <select  id="company_id" name="company_id" class="form-select" >
-                                            {{-- <option selected="">Jan Kowalski</option> --}}
+                                            {{-- <option selected="" value="0">Bez firmy</option> --}}
                                 @foreach($companies as $company)
                                             <option value="{{$company->id}}">{{$company->name}}</option>
                                 @endforeach

@@ -96,13 +96,19 @@ class ContactController extends Controller
         Log::debug($id);
         
         $contact = Contact::where('id', $id)->firstOrFail();
+        // $company = Company::select() $contact->company_id;
+        $company = Company::where('id', $contact->id)->get('name');
+
         $title = "Osoba kontaktowa";
         $breadcrumb = "Kontakt:  " . $contact->name . '' . $contact->surname;
 
-
+        Log::info('This is contact detals in contact controller;');
         Log::debug($contact);
+
+        Log::info('This is company detals in contact controller for this contact only');
+        Log::debug($company[0]->name);
         // dd($company);
-        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'contact'));
+        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'contact', 'company'));
     }
 
 

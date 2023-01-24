@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -21,8 +22,12 @@ class OrderController extends Controller
         $title = "Dodawanie zamówienia";
         $breadcrumb = "Dodawanie nowego zamówienia";
         Log::info('I am creating the view for adding a new order.');
-
-        return view('pages.orders.order-add', compact('title', 'breadcrumb'));
+        // $companies = Company::select('id', 'name')->get();
+        // $companies =  Company::get(['name', 'id']);
+        $companies = Company::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        Log::debug($companies);
+        // Log::debug($companies2);
+        return view('pages.orders.order-add', compact('title', 'breadcrumb', 'companies'));
     }
 
 

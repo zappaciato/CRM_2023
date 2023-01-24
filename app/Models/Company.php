@@ -9,6 +9,9 @@ class Company extends Model
 {
     use HasFactory;
 
+
+    protected $table = 'companies';
+
     protected $fillable = [
         // 'created_by',
         'name',

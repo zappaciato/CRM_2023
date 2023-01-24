@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DropdownListController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceOrderController;
@@ -97,6 +98,12 @@ foreach ($prefixRouters as $prefixRouter) {
 
         Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
         Route::put('orders/service-order/edit/{id}', [ServiceOrderController::class, 'update'])->middleware('auth');
+
+//kind of API for dependable dropdown list for adding a new order
+        
+        Route::get('orders-add/fetch-contacts', [DropdownListController::class, 'fetchContacts'])->name('fetch.contacts');
+        Route::get('orders-add/fetch-addresses', [DropdownListController::class, 'fetchAdresses'])->name('fetch.addresses');
+        Route::get('orders-add/fetch-users', [DropdownListController::class, 'fetchUsers'])->name('fetch.users');
 
 //usuwanie service-order
         Route::delete('orders/service-order/delete/{id}', [ServiceOrderController::class, 'destroy'])->name('single.service.order.delete');
