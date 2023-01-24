@@ -77,13 +77,14 @@
             @else 
             <h1>Kontakty:</h1>
 
-            <h4>Nazwa: <span>{{$address[0]->name}}</span></h4>
-            <h4>Miasto: <span>{{$address[0]->city}}</span></h4>
-            <h4>Ulica: <span>{{$address[0]->street}}</span></h4>
-            <h4>Kod pocztowy: <span>{{$address[0]->postal_code}}</span></h4>
-            <h4>województwo: <span>{{$address[0]->province}}</span></h4>
+            <h4>Imię: <span>{{$employees[0]->name}}</span></h4>
+            <h4>Nazwisko: <span>{{$employees[0]->surname}}</span></h4>
+            <h4>Pozycja: <span>{{$employees[0]->position}}</span></h4>
+            <h4>email: <span>{{$employees[0]->email}}</span></h4>
+            <h4>Telefon: <span>{{$employees[0]->phone}}</span></h4>
+            <h4>Telefon 2: <span>{{$employees[0]->phone_business}}</span></h4>
             
-            <h4>Notatki: <span>{{$address[0]->notes}}</span></h4>
+            <h4>Notatki: <span>{{$employees[0]->notes}}</span></h4>
 
             
             @endif
