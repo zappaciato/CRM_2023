@@ -36,10 +36,19 @@ class EmailController extends Controller
     }
 
 
-    public function show () {
+    public function show ($id) {
 
-        $title = "New Orders";
-        $breadcrumb = "Nowe zamówienia";
-        return view('pages.emails.email-single', compact('title', 'breadcrumb'));
+        Log::info('I am showing the record email. below Id of the email.');
+        Log::debug($id);
+        $title = "Emaile";
+        $breadcrumb = "Wybrany email";
+
+        // $email = Email::where('id', $id)->get();
+        $email = Email::findOrFail($id);
+
+
+Log::debug($email);
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email'));
     }
+
 }

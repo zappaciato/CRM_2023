@@ -155,7 +155,7 @@ foreach ($prefixRouters as $prefixRouter) {
 
         //emails
         Route::get('emails/mailbox/inbox', [EmailController::class, 'index'])->middleware('auth')->name('email.inbox');
-        Route::get('/mailbox/23', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
+        Route::get('/mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
         
         /**
          * ==============================

@@ -30,6 +30,8 @@ class UserController extends Controller
             'name' => 'required|min:3',
             'email' => 'required',
             'role' => 'required',
+            'phone' => 'required',
+            'image' => 'nullable|image|max:1024',
             'password' => 'required',
         ])->validate();
 

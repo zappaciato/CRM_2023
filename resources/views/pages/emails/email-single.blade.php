@@ -22,6 +22,9 @@
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
 
+    <h1>{{$email->subject}}</h1>
+
+    
 
 <div id="mailCollapseThree" class="p-5" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
                                     <div class="mail-content-container mailInbox" data-mailfrom="info@mail.com" data-mailto="linda@mail.com" data-mailcc="">
@@ -45,7 +48,7 @@
                                             </div>
 
                                             <div class="action-btns">
-                                                <a href="http://localhost/modern-light-menu/service-orders/234" data-toggle="tooltip" data-placement="top" data-original-title="Reply">
+                                                <a href="{{route('email.inbox')}}" data-toggle="tooltip" data-placement="top" data-original-title="Reply">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-left reply"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
                                                 </a>
                                                 {{-- <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Forward">

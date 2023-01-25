@@ -105,6 +105,7 @@ class CompanyController extends Controller
         Log::info('I am editing the record.');
         $company = Company::findOrFail($id);
 
+        
         $title = 'Edycja firmy';
         $breadcrumb = 'Eduycja firmy '.$company->name;
 

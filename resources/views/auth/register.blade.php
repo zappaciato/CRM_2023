@@ -19,7 +19,7 @@
         <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7  d-flex flex-column align-self-center mx-auto">
             <div class="card">
                 <div class="card-body">
-<form action="/register" method="POST">
+<form action="/register" method="POST" enctype="multipart/form-data">
         @csrf
                     <div class="row">
                         <div class="col-md-12 mb-3">
@@ -66,6 +66,7 @@
                                 <label for="email" class="form-label">Email</label>
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email">
                             </div>
+
                             @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -78,7 +79,7 @@
                             
                         </div>
 
-                        {{-- <div class="col-md-12">
+                        <div class="col-md-12">
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Telefon</label>
                                 <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required autocomplete="phone" autofocus>
@@ -88,7 +89,13 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
-                        </div> --}}
+                        </div>
+
+
+                        <div class="form-fieldset col-md-12">
+                <label for="image" class="form-label">Dodaj zdjęcie:</label>
+                <input type="file" name="image" class="form-control">
+            </div>
 
                         <div class="col-12">
                             <div class="mb-3">
