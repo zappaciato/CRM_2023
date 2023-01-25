@@ -46,6 +46,9 @@ class EmailController extends Controller
         // $email = Email::where('id', $id)->get();
         $email = Email::findOrFail($id);
 
+        $email->emailstatus = ['przeczytany']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i ""
+        $email->update($email->emailstatus);
+        // Email::update('status' => 'przecztany')->where('id', $id);
 
 Log::debug($email);
         return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email'));

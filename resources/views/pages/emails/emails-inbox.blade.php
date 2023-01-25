@@ -144,7 +144,7 @@
                                     <div id="unread-promotion-page" class="mail-item mailInbox">
                                         <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
                                             <div class="mb-0">
-                                                <div class="mail-item-heading social collapsed"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
+                                                <div class="mail-item-heading social collapsed {{($email->emailstatus !== '["przeczytany"]') ? 'email-row-unread' : 'email-row-read'}}"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
 
                                                     <div class="mail-item-inner">
 
@@ -173,7 +173,7 @@
                                                                         <span class="g-dot-success"></span>
                                                                         <span class="g-dot-danger"></span>
                                                                     </div>
-                                                                    
+
                                                                     <p class="meta-time align-self-center">{{$email->date}}</p>
                                                                 </div>
                                                             </div>
@@ -192,7 +192,7 @@
 @endforeach
 @else
 <div class="container d-flex justify-content-center align-items-center h-100">
-<h1>Nie ma wiadomosci email!</h1>
+<h1>Brak wiadomosci email!</h1>
 </div>
 @endif
                                 </div>

@@ -54,3 +54,29 @@
   height: 30rem;
   width: 30rem;
 }
+
+
+.email-content-display-wrapper {
+  display: flex;
+  margin-top: 3rem;
+  margin-left: 6rem;
+  justify-content: space-between;
+}
+
+.email-content-display {
+  /* width: 1900px; */
+}
+
+
+.custom-btn {
+  width: 16rem;
+}
+
+
+.email-row-unread {
+  background-color: rgba(0, 81, 255, 0.233);
+}
+
+.email-row-read {
+  background-color: rgba(0, 255, 128, 0.233);
+}
