@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
             $table->integer('company_id');
             $table->integer('email_id');
             $table->string('contact_person');
@@ -25,8 +26,9 @@ return new class extends Migration
             $table->string('order_content');
             $table->string('order_notes');
             
-            $table->string('date');
-            $table->enum('status', ['new', 'open', 'finished']);
+            $table->string('deadline');
+            $table->string('status');
+            // $table->enum('status', ['new', 'open', 'finished']);
             $table->timestamps();
 
             // $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;

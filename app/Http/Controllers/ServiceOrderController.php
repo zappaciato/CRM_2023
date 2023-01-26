@@ -10,10 +10,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ServiceOrderController extends Controller
 {
     public function index() {
-        $title = "New Orders";
-        $breadcrumb = "Nowe zamówienia";
+        $title = "Zgłoszenia serwisowe";
+        $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
-        $orders = Order::where('status', 'new')->get();
+        $orders = Order::all();
         
 
         return view('pages.orders.orders-service', compact('title', 'breadcrumb', 'orders'));

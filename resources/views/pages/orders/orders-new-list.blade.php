@@ -60,13 +60,13 @@
                             
                             <tr>
                                 <td>{{$order->id}}</td>
-                                <td>{{$order->company}}</td>
+                                <td>{{$order->company_id}}</td>
                                 <td>{{$order->title}}</td>
                                 <td>{{$order->date}}</td>
                                 <td>
                                     <div class="t-dot bg-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Normal"></div>
                                 </td>
-                                <td class="text-center"> <a href="{{route('single.email')}}"><button class="btn btn-primary">Otwórz</button> </a> </td>
+                                <td class="text-center"> <a href="{{route('single.email', 1)}}"><button class="btn btn-primary">Otwórz</button> </a> </td>
                             </tr>
 
                             @endforeach

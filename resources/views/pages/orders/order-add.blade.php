@@ -69,9 +69,18 @@
         @csrf                               
                                 {{-- <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role"> --}}
 
+
+                                <div class="col-md-12">
+                                    <label for="title" class="form-label">Tytuł zgłoszenia</label>
+                                        <input type="text" name="title" class="form-control" id="title">
+                                        </select>
+
+                                </div>
+
+
                                 <div class="col-md-4">
-                                    <label for="company" class="form-label">Firma</label>
-                                        <select id="company" class="form-select company" name="company" value>
+                                    <label for="company_id" class="form-label">Firma</label>
+                                        <select id="company_id" class="form-select company" name="company_id">
                                             {{-- <option selected="">FIrma Jeden</option> --}}
                                 @foreach ($companies as $id => $company)
                                     <option value="{{$id}}">{{$company}}</option>
@@ -79,10 +88,15 @@
                                         </select>
 
                                 </div>
+
+
+                                <input type="hidden" name="email_id" value="1">
+
+
                                 {{-- contacts dependable list --}}
                                 <div class="col-md-4 form-group {{ $errors->has('comapny_id') ? 'has-error' : '' }}">
                                     <label for="contact_person">Osoba kontaktowa z firmy</label>
-                                    <select name="contact_person" id="contact_person" class="form-control">
+                                    <select name="contact_person" id="contact_person" class="form-select">
                                         {{-- <option value="">{{ trans('global.pleaseSelect') }}</option> --}}
                                     </select>
                                 @if($errors->has('contact_person'))
@@ -111,21 +125,21 @@
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                 <label for="lead_person">Prowadzący</label>
                                         <select  id="lead_person" name="lead_person" class="form-select" >
 
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                 <label for="involved_person">Prowadzący</label>
                                         <select  id="involved_person" name="involved_person" class="form-select" >
 
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                 <label for="priority" class="form-label">Priorytet</label>
                                         <select  id="priority" name="priority" class="form-select" >
                                             <option selected="">Wysoki</option>
@@ -134,7 +148,20 @@
                                         </select>
                                 </div>
 
-
+                                <div class="col-md-2">
+                                <label for="status" class="form-label">Status</label>
+                                        <select  id="status" name="status" class="form-select" >
+                                            <option selected="">Nowe</option>
+                                            <option>Przyjęte</option>
+                                            <option>Zamknięte</option>
+                                        </select>
+                                </div>
+{{-- TODO: date picker --}}
+                                <div class="col-md-2">
+                                <label for="deadline">Termin wykonania</label>
+                                        <input type="text" class="form-control" id="deadline" name="deadline"> 
+                                </div>
+{{-- end TODO date picker --}}
                                 <div class="col-md-8">
                                 <label for="order_content">Zawartość zgłoszenia</label>
                                         <textarea type="text" class="form-control" id="order_content" name="order_content"> </textarea>
@@ -237,13 +264,13 @@ if(company_id) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-    $('#company').change(function() {
+    $('#company_id').change(function() {
         $.ajax({
             url: "{{ route('fetch.contacts') }}?company_id=" + $(this).val(),
             methods: 'GET',
             success: function(data) {
                 console.log(data);
-                console.log('It is working you bloody AJAX');
+                console.log('It is working you bloody AJAX fetching contacts on company change');
                 $('#contact_person').html(data.html);
             }
         });
@@ -267,7 +294,7 @@ $(document).ready(function(){
             success: function(data) {
                 console.log(data);
                 console.log('It is working you bloody AJAX');
-                $('#manager').html(data.html);
+                $('#lead_person').html(data.html);
             }
         });
 
