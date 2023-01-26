@@ -103,7 +103,7 @@
                                 </div> --}}
 
                                 <div class="col-md-4">
-                                <label for="contact_person">Adres</label>
+                                <label for="address">Adres</label>
                                         <select  id="address" name="address" class="form-select" >
                                             {{-- <option selected="">Pl WOlności</option>
                                             <option>Oxford St</option>
@@ -112,8 +112,8 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                <label for="manager">Prowadzący</label>
-                                        <select  id="manager" name="manager" class="form-select" >
+                                <label for="lead_person">Prowadzący</label>
+                                        <select  id="lead_person" name="lead_person" class="form-select" >
 
                                         </select>
                                 </div>

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,6 +17,11 @@ class ContactFactory extends Factory
      */
     public function definition()
     {
+
+        $compData = Company::select('id', 'name')->get();
+
+        $randomNumber = $this->faker->unique()->numberBetween($min = 0, $max = count($compData)); // 8567
+
         return [
             'name' => $this->faker->firstNameFemale(),
             'surname' => $this->faker->firstNameFemale(),
@@ -24,6 +30,7 @@ class ContactFactory extends Factory
             'phone' => $this->faker->numerify('############'),
             'phone_business' => $this->faker->numerify('############'),
             'notes' => $this->faker->realText($maxNbChars = 200, $indexSize = 2),
+            'company_id' => $compData[$randomNumber]->id,
         ];
     }
 }

@@ -60,7 +60,7 @@ class OrderController extends Controller
         Log::info('I am tryign to store the data');
         $data = $this->validator($request->all());
 Log::debug($data);
-        return view('welcome', compact('data', 'title', 'breadcrumb'));
+        return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
 
         // return redirect(route('contact.list', $contact->id));
     }

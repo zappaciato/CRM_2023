@@ -10,10 +10,19 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'company',
-        'title',
-        'status',
+        'company_id',
+        'email_id',
+        'contact_person',
+        'address',
+        'lead_person',
+        'involved_person',
+        'priority',
+        'order_content',
+        'order_notes',
+
         'date',
+        'status',
+        'company_id',
 
 
         // 'companyName',

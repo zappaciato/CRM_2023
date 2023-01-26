@@ -169,12 +169,12 @@
                                                                     <input type="text" class="form-control mb-3" id="location" placeholder="Location">
                                                                 </div>
                                                             </div> --}}
-                                                            {{-- <div class="col-md-6">
+                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="phone">Telefon</label>
-                                                                    <input type="text" class="form-control mb-3" id="phone" placeholder="Write your phone number here" value="{{$user->phone}}">
+                                                                    <input type="text" name="phone" class="form-control mb-3" id="phone" placeholder="Write your phone number here" value="{{$user->phone}}">
                                                                 </div>
-                                                            </div> --}}
+                                                            </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="email">Email</label>

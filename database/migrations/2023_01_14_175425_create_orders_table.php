@@ -15,11 +15,22 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('company');
-            $table->string('title');
+            $table->integer('company_id');
+            $table->integer('email_id');
+            $table->string('contact_person');
+            $table->string('address');
+            $table->string('lead_person');
+            $table->string('involved_person');
+            $table->string('priority');
+            $table->string('order_content');
+            $table->string('order_notes');
+            
             $table->string('date');
             $table->enum('status', ['new', 'open', 'finished']);
             $table->timestamps();
+
+            // $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
+            // $table->foreignId('email_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
         });
     }
 

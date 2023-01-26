@@ -32,7 +32,23 @@
     </div>
     <!-- /BREADCRUMB -->
     
-    <div class="row layout-top-spacing">
+    <div class="row">
+
+
+        <div class="mt-2 mb-5 d-flex ">
+            <a class="me-5" href="{{route('company.list')}}"><button class="btn btn-success">Wróć</button></a>
+
+            <a href="{{route('company.edit', $company->id)}}"><button class="btn btn-warning">Edytuj</button></a>
+
+            {{-- <a href="{{route('company.list')}}"><button class="btn btn-danger">Skasuj</button></a> --}}
+
+        <form class="m-auto" method="POST" action="{{ route('company.delete', $company->id) }}">
+            @csrf
+            {{method_field('DELETE')}} 
+            <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete Company</button>
+        </form>
+        </div>
+
 
         <div class="col-12">
 
@@ -49,58 +65,62 @@
 @endphp --}}
             
 
-            @if(!$address->isNotEmpty()) 
+            @if(!$addresses->isNotEmpty()) 
                 <h1>Adres:</h1>
                 <h4>Adres nie został dodany do firmy. </h4>
-                <h6>Czy chcesz dodać adres do tej firmy? </h6>
+{{-- TODO tu mozna zrobic jako modal - > form --}}
+            <a href="{{route('address.add')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
             
             @else 
-            <h1>Adres:</h1>
 
-            <h4>Nazwa: <span>{{$address[0]->name}}</span></h4>
-            <h4>Miasto: <span>{{$address[0]->city}}</span></h4>
-            <h4>Ulica: <span>{{$address[0]->street}}</span></h4>
-            <h4>Kod pocztowy: <span>{{$address[0]->postal_code}}</span></h4>
-            <h4>województwo: <span>{{$address[0]->province}}</span></h4>
+            <h1>Adresy:</h1>
+
+            {{-- TODO tu mozna zrobic jako modal - > form --}}
+            <a href="{{route('address.add')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
             
-            <h4>Notatki: <span>{{$address[0]->notes}}</span></h4>
+@foreach ($addresses as $address)
+    
 
+<div class="card mt-5 p-5">
+            <h4>Nazwa: <span>{{$address->name}}</span></h4>
+            <h4>Miasto: <span>{{$address->city}}</span></h4>
+            <h4>Ulica: <span>{{$address->street}}</span></h4>
+            <h4>Kod pocztowy: <span>{{$address->postal_code}}</span></h4>
+            <h4>województwo: <span>{{$address->province}}</span></h4>
+            
+            <h4>Notatki: <span>{{$address->notes}}</span></h4>
+</div>
+@endforeach
             
             @endif
 
 
-            @if(!$employees->isNotEmpty()) 
+            @if(!$contacts->isNotEmpty()) 
                 <h1>Kontakty:</h1>
                 <h4>Kontakt nie został dodany do firmy. </h4>
-                <h6>Czy chcesz dodać kontakt do tej firmy? </h6>
+                <a href="{{route('contact.add')}}"><button class="btn btn-info">Dodaj kontakt do firmy</button></a>
             
             @else 
             <h1>Kontakty:</h1>
-
-            <h4>Imię: <span>{{$employees[0]->name}}</span></h4>
-            <h4>Nazwisko: <span>{{$employees[0]->surname}}</span></h4>
-            <h4>Pozycja: <span>{{$employees[0]->position}}</span></h4>
-            <h4>email: <span>{{$employees[0]->email}}</span></h4>
-            <h4>Telefon: <span>{{$employees[0]->phone}}</span></h4>
-            <h4>Telefon 2: <span>{{$employees[0]->phone_business}}</span></h4>
+@foreach ($contacts as $contact )
+    
+<div class="card mt-5 p-5">
+            <h4>Imię: <span>{{$contact->name}}</span></h4>
+            <h4>Nazwisko: <span>{{$contact->surname}}</span></h4>
+            <h4>Pozycja: <span>{{$contact->position}}</span></h4>
+            <h4>email: <span>{{$contact->email}}</span></h4>
+            <h4>Telefon: <span>{{$contact->phone}}</span></h4>
+            <h4>Telefon 2: <span>{{$contact->phone_business}}</span></h4>
+            <h4>Notatki: <span>{{$contacts[0]->notes}}</span></h4>
+        </div>
+@endforeach            
             
-            <h4>Notatki: <span>{{$employees[0]->notes}}</span></h4>
 
+             <a href="{{route('contact.add')}}"><button class="btn btn-info">Dodaj nowy kontakt do firmy</button></a>
             
             @endif
 
-            <a href="{{route('company.list')}}"><button class="btn btn-success">Wróć</button></a>
-
-            <a href="{{route('company.edit', $company->id)}}"><button class="btn btn-warning">Edytuj</button></a>
-
-            {{-- <a href="{{route('company.list')}}"><button class="btn btn-danger">Skasuj</button></a> --}}
-
-        <form method="POST" action="{{ route('company.delete', $company->id) }}">
-            @csrf
-            {{method_field('DELETE')}} 
-            <button class="btn btn-danger mt-5" onclick="return confirm('Are you sure?')">Delete Company</button>
-        </form>
-
+            
 
         </div>
 

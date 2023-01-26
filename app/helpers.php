@@ -77,6 +77,11 @@ if (!function_exists('layoutConfig')) {
 
             // $__getConfiguration = Config::get('app-config.layout.vlm');
             $__getConfiguration = Config::get('app-config.layout.vdm');
+            
+        } else if (Request::is('mailbox/mail/*')) {
+
+            // $__getConfiguration = Config::get('app-config.layout.vlm');
+            $__getConfiguration = Config::get('app-config.layout.vdm');
         }
 
         // Login
@@ -118,6 +123,9 @@ if (!function_exists('getRouterValue')) {
 
             $__getRoutingValue = '/collapsible-menu';
         } else if (Request::is('/new-orders')) {
+
+            $__getRoutingValue = '/modern-dark-menu';
+        } else if (Request::is('mailbox/mail/*')) {
 
             $__getRoutingValue = '/modern-dark-menu';
         }

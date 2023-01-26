@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -57,6 +58,8 @@ class ContactController extends Controller
         $breadcrumb = "Dodaj nowy kontakt";
 
         $companies = Company::select('id', 'name')->get();
+
+
         // foreach($companies as $company) {
         //     Log::info($company->id);
         // }
@@ -92,23 +95,23 @@ class ContactController extends Controller
 
     public function show($id)
     {
-        Log::info('I am showing the record -> contact.');
-        Log::debug($id);
-        
-        $contact = Contact::where('id', $id)->firstOrFail();
-        // $company = Company::select() $contact->company_id;
-        $company = Company::where('id', $contact->id)->get('name');
+
+        $singleContact = Contact::where('id', $id)->firstOrFail();
+
+        $company = Company::where('id', $singleContact->company_id)->firstOrFail();
+
+        $companyAddress = CompanyAddress::where('company_id', $company['id'])->firstOrFail();
+
+        Log::debug($singleContact);
+        Log::debug($company);
+        Log::debug($companyAddress);
 
         $title = "Osoba kontaktowa";
-        $breadcrumb = "Kontakt:  " . $contact->name . '' . $contact->surname;
+        $breadcrumb = "Kontakt:  ";
 
-        Log::info('This is contact detals in contact controller;');
-        Log::debug($contact);
-
-        Log::info('This is company detals in contact controller for this contact only');
-        Log::debug($company[0]->name);
+        
         // dd($company);
-        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'contact', 'company'));
+        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress'));
     }
 
 

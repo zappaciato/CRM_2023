@@ -85,18 +85,18 @@ class CompanyController extends Controller
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
-        $address = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu;
-        $employees = $company->contacts;
+        $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
+        $contacts = $company->contacts;
 
         Log::debug($id);
         Log::info('This is the address of a chosen comapny');
-        Log::debug($address);
+        Log::debug($addresses);
         Log::info('This is the workers of a chosen comapny');
-        Log::debug($employees);
+        Log::debug($contacts);
         Log::info('This is the comapny');
         Log::debug($company);
         // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address', 'employees'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts'));
     }
 
 
