@@ -31,7 +31,7 @@
 
     <div class="seperator-header">
         <h4 class="">Nowe zlecenia</h4>
-        <a href="{{route('add.order')}}"><button class="btn btn-danger">Dodaj nowe zlecenie</button></a>
+        <a href="{{route('add.order')}}"><button class="btn btn-danger">Dodaj nowe zgłoszenie serwisowe</button></a>
         
     </div>
     
@@ -49,7 +49,7 @@
                                 <th>Id</th>
                                 <th>Zamawiający</th>
                                 <th>Tytuł</th>
-                                <th > Data </th>
+                                <th > Termin wykonania </th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center dt-no-sorting">Akcje</th>
                             </tr>
@@ -62,9 +62,9 @@
                                 <td>{{$order->id}}</td>
                                 <td>{{$order->company_id}}</td>
                                 <td>{{$order->title}}</td>
-                                <td>{{$order->date}}</td>
-                                <td>
-                                    <div class="t-dot bg-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Normal"></div>
+                                <td>{{$order->deadline}}</td>
+                                <td>{{$order->status}}
+                                    {{-- <div class="t-dot bg-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-original-title="Normal"></div> --}}
                                 </td>
                                 <td class="text-center"> <a href="{{route('single.email', 1)}}"><button class="btn btn-primary">Otwórz</button> </a> </td>
                             </tr>

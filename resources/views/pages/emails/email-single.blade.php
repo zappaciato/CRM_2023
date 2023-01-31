@@ -84,7 +84,7 @@
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
-                                                <a href=""><button class="btn btn-success mt-4 custom-btn">Utwórz zgłoszenie z emaila</button></a>
+                                                <a href="{{route('add.order')}}"><button class="btn btn-success mt-4 custom-btn">Utwórz zgłoszenie z emaila</button></a>
                                             </div>
 
                                         </div>

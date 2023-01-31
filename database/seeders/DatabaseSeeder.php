@@ -22,9 +22,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // User::factory(7)->create();
-        // Company::factory(11)->create();
-        // CompanyAddress::factory(11)->create();
-        // Contact::factory(11)->create();
+        Company::factory(11)->create();
+        CompanyAddress::factory(11)->create();
+        Contact::factory(11)->create();
         Email::factory(11)->create();
         // Order::factory(10)->create();
 

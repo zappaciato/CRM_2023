@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\CompanyAddress;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -85,18 +86,13 @@ class CompanyController extends Controller
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
+        
         $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
         $contacts = $company->contacts;
+        // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; 
+        $orders = $company->orders;
 
-        Log::debug($id);
-        Log::info('This is the address of a chosen comapny');
-        Log::debug($addresses);
-        Log::info('This is the workers of a chosen comapny');
-        Log::debug($contacts);
-        Log::info('This is the comapny');
-        Log::debug($company);
-        // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts', 'orders'));
     }
 
 

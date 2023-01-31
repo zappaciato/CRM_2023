@@ -42,6 +42,7 @@
                         <thead>
                             <tr>
                                 <th>Nr</th>
+                                <th>Firma/Klient</th>
                                 <th>Tytuł</th>
 
                                 <th>Typ</th>
@@ -57,10 +58,18 @@
                             @foreach ($orders as $order)
                             <tr>
                                 <td>{{$order->id}}</td>
+                                @foreach ($companies as $company)
+                                    @if($order->company_id === $company->id)
+                                    <td>{{$company->name}}</td>
+                                    {{-- @else
+                                    <td>Brak przypisanej firmy</td> --}}
+                                    @endif
+                                @endforeach
+                                
                                 <td style="max-width: 200px; overflow:hidden">{{$order->title}}</td>
 
                                 <td>inne</td>
-                                <td>{{$order->date}}</td>
+                                <td>{{$order->deadline}}</td>
                                 <td>3D, 4B</td>
                                 <td>Piotr Opęchwoski</td>
                                 <td>p.opechowski@loopus.pl</td>
@@ -77,6 +86,7 @@
                         <tfoot>
                             <tr>
                                 <th>Nr</th>
+                                <th>Firma/Klient</th>
                                 <th>Tytuł</th>
                                 <th>Typ</th>
                                 <th>Termin</th>

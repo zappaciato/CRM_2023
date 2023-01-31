@@ -38,4 +38,11 @@ class Order extends Model
         // 'orderContent',
         // 'notes',
     ];
+
+    public function companies()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    
 }

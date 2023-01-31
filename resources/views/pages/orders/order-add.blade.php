@@ -159,7 +159,7 @@
 {{-- TODO: date picker --}}
                                 <div class="col-md-2">
                                 <label for="deadline">Termin wykonania</label>
-                                        <input type="text" class="form-control" id="deadline" name="deadline"> 
+                                        <input type="date" class="form-control" id="deadline" name="deadline"> 
                                 </div>
 {{-- end TODO date picker --}}
                                 <div class="col-md-8">

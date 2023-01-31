@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class ServiceOrderController extends Controller
@@ -14,9 +16,14 @@ class ServiceOrderController extends Controller
         $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
         $orders = Order::all();
+        $companies = Company::select('id', 'name')->get();
+        
+        Log::debug($orders);
+
+        Log::debug($companies);
         
 
-        return view('pages.orders.orders-service', compact('title', 'breadcrumb', 'orders'));
+        return view('pages.orders.orders-service-list', compact('title', 'breadcrumb', 'orders', 'companies'));
     }
 
     protected function validator($data)
@@ -43,11 +50,11 @@ class ServiceOrderController extends Controller
     {
         // $singleOrder = Order::where('id', $id)->get();  to nie daje mi kolekcji we wlasciwym formacie
         $singleOrder = Order::findOrFail($id);
-        Log::debug($singleOrder->id);
+        Log::debug($singleOrder);
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
         $breadcrumb = 'Zgłoszenie nr: ' . $singleOrder->id;
 
-        return view('pages.orders.order-single-service', compact('title', 'id', 'breadcrumb', 'singleOrder'));
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder'));
     }
 
 

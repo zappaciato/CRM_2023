@@ -89,7 +89,9 @@
                 <div class="p-5 d-flex justify-content-evenly">
                     
                         <div>
-                        <h6> <strong>Prowadzący:</strong> Piotr Opęchowski</h6>
+                        <h6> <strong>Prowadzący:</strong> {{$singleOrder->lead_person}}</h6>
+                        <br>
+                        <h6> <strong>Os. zaangażowana:</strong> {{$singleOrder->involved_person}}</h6>
                         <br>
                         <h6> <strong>Status:</strong>  <span>{{$singleOrder->status}}</span></h6>
                         <br>
@@ -97,15 +99,21 @@
                         <br>
                         </div>
                         <div>
-                        <h6><strong>Firma:</strong> Marex Opakowani</h6>
+                        <h6><strong>Firma:</strong> {{$singleOrder->company_id}}</h6>
                         <br>
-                        <h6><strong>Pracownik:</strong> konstruktor</h6>
+                        <h6><strong>Treść zgłoszenia:</strong> {{$singleOrder->order_content}}</h6>
+                        <br>
+                        <h6> <strong>Dodatkowe notatki wew:</strong> {{$singleOrder->order_notes}}</h6>
                         <br>
                         </div>
                         <div>
-                        <h6><strong>Data otrzymania:</strong> {{$singleOrder->date}}</h6>
+                        <h6><strong>Data otrzymania:</strong> {{$singleOrder->created_at}}</h6>
                         <br>
-                        <h6><strong>Termin wykonania:</strong> 23.03.2023</h6>
+                        <h6><strong>Termin wykonania:</strong> {{$singleOrder->deadline}}</h6>
+                        <h6> <strong>Status:</strong> {{$singleOrder->status}}</h6>
+                        <br>
+                        <h6> <strong>Reference to email:</strong> {{$singleOrder->email_id}}</h6>
+                        <br>
                         </div>
                 
                 </div>
@@ -135,7 +143,7 @@
                     <div class="t-dot t-dot-success">
                     </div>
                     <div class="t-text">
-                    <p>Email do klienta wysłany <a href="{{route('single.email')}}"> <button class="btn btn-success">Pokaż</button></a></p></p> 
+                    <p>Email do klienta wysłany <a href="{{route('single.email', $singleOrder->email_id )}}"> <button class="btn btn-success">Pokaż</button></a></p></p> 
                     <p class="t-meta-time">2 godziny temu</p>
                     </div>
                     </div>
@@ -155,7 +163,7 @@
                     <div class="t-dot t-dot-info">
                     </div>
                     <div class="t-text">
-                    <p>Wiadomość od <a href="#">Piotr Wiski</a><a href="{{route('single.email')}}"> <button class="btn btn-success">Pokaż</button></a></p></p>
+                    <p>Wiadomość od <a href="#">Piotr Wiski</a><a href="{{route('single.email',  $singleOrder->email_id)}}"> <button class="btn btn-success">Pokaż</button></a></p></p>
                     <p class="t-meta-time">6 godzin temu</p>
                     </div>
                     </div>
@@ -165,7 +173,7 @@
                     <div class="t-dot t-dot-danger">
                     </div>
                     <div class="t-text">
-                    <p>Wiadomość email od: <a href="#">Piotr Opęchowski</a> <a href="{{route('single.email')}}"> <button class="btn btn-success">Pokaż</button></a></p>
+                    <p>Wiadomość email od: <a href="#">Piotr Opęchowski</a> <a href="{{route('single.email',  $singleOrder->email_id)}}"> <button class="btn btn-success">Pokaż</button></a></p>
                     <p class="t-meta-time">9 godzin temu</p>
                     </div>
                     </div>

@@ -82,6 +82,7 @@ class OrderController extends Controller
         $breadcrumb = '';
         Log::info('I am tryign to store the data and redirect');
         $data = $this->validator($request->all());
+        Log::info('I am trying to debug the data to store - ORDER!');
 Log::debug($data);
 
 Order::create($data);

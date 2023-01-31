@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
@@ -19,8 +20,11 @@ class ContactFactory extends Factory
     {
 
         $compData = Company::select('id', 'name')->get();
+        Log::info('Compdata below!!!!!!!!!!');
+        Log::debug($compData);
+        Log::debug(count($compData));
 
-        $randomNumber = $this->faker->unique()->numberBetween($min = 0, $max = count($compData)); // 8567
+        $randomNumber = $this->faker->unique()->numberBetween($min = 0, $max = count($compData)-1); // 8567
 
         return [
             'name' => $this->faker->firstNameFemale(),

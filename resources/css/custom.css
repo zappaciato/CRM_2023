@@ -80,3 +80,15 @@
 .email-row-read {
   background-color: rgba(0, 255, 128, 0.233);
 }
+
+.contact-card {
+  width: 48%;
+}
+
+.address-card {
+  width: 150%;
+}
+
+.company-card {
+   width: 150%;
+}
