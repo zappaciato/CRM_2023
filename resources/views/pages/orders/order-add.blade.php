@@ -126,14 +126,14 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                <label for="lead_person">Prowadzący</label>
+                                <label for="lead_person">Os. odpowiedzialna</label>
                                         <select  id="lead_person" name="lead_person" class="form-select" >
 
                                         </select>
                                 </div>
 
                                 <div class="col-md-3">
-                                <label for="involved_person">Prowadzący</label>
+                                <label for="involved_person">Os. zaangażowana</label>
                                         <select  id="involved_person" name="involved_person" class="form-select" >
 
                                         </select>

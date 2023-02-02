@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\Email;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -32,12 +33,7 @@ class OrderController extends Controller
 
 
 
-    public function createFromEmail($id) {
-        $title = "Dodawanie zamówienia z emaila";
-        $breadcrumb = "Dodawanie nowego zamówienia z emaila";
 
-        return view('pages.orders.order-add', compact('title', 'breadcrumb'));
-    }
 
 
     protected function validator($data)

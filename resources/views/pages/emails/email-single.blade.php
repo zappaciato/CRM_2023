@@ -50,7 +50,7 @@
                                             {{-- email subject --}}
                                             <div class="container d-flex justify-content-center align-items-end border-bottom border-danger mt-6 p-2 ms-5 me-5">
                                             <div class="container d-flex justify-content-evenly "><h4>Tytuł:</h4></div>
-                                            <div class="container d-flex justify-content-between "><h4>{{$email->subject}}</h4></div>
+                                            <div class="container d-flex justify-content-between "><h4>"{{$email->subject}}"</h4></div>
                                             </div>
                                             
                                             
@@ -76,7 +76,7 @@
                                             data-mailTitle="{{$email->subject}}" 
                                             data-maildescription='{"ops":[{"insert":"{{$email->text_plain}}"}]}'> 
                                                                                         
-                                            {!!$email->text_html!!}
+                                            {!!$email->text_html!!} jhk jhkj  hjk hj
 
                                         </h1>
                                         </div>
@@ -84,7 +84,7 @@
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
-                                                <a href="{{route('add.order')}}"><button class="btn btn-success mt-4 custom-btn">Utwórz zgłoszenie z emaila</button></a>
+                                                <a href="{{route('create.order.email', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Utwórz zgłoszenie z emaila</button></a>
                                             </div>
 
                                         </div>
