@@ -17,7 +17,10 @@ class ContactController extends Controller
         $title = "Contacts";
         $breadcrumb = "New Contacts";
         $contacts = Contact::all();
-        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts'));
+
+        $companies = Company::select('id','name')->get();
+        Log::debug($companies);
+        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies'));
     }
 
 

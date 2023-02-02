@@ -57,17 +57,32 @@
             
             
         </nav>
-        <a href="{{route('service.orders')}}"><button class="btn btn-success">Wróć do listy zgłoszeń</button></a>
-        <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning">Edytuj zgłoszenie</button></a>
-        <a class="ms-5" href=""><button class="btn btn-danger ms-5">Anuluj zgłoszenie</button></a>
 
+        <div class="d-flex justify-content-between">
 
-        <form method="POST" action="{{route('single.service.order.delete', $singleOrder->id)}}">
-            @csrf
-            {{method_field('DELETE')}} 
-            <button class="btn btn-danger mt-5" onclick="return confirm('Are you sure?')">Usuń zgłoszenie</button>
-        </form>
+            <div class="d-flex">
+            <a href="{{route('service.orders')}}"><button class="btn btn-success btn-lg">Wróć do listy zgłoszeń</button></a>
+            <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning ms-5 btn-lg">Edytuj zgłoszenie</button></a>
+            </div>
 
+            <div class="d-flex">
+            {{-- order cancellation with one button --}}
+            <form method="POST" action="{{route('cancel.order', $singleOrder->id)}}">
+                @csrf
+                <input type="hidden" name="_method" value="PUT">
+                <input type="hidden" name="status" value="anulowane">
+
+            <button type="submit" class="btn btn-dark btn-lg cancel-btn">Anuluj zgłoszenie</button>
+            </form>
+
+            {{-- delete order --}}
+            <form method="POST" action="{{route('single.service.order.delete', $singleOrder->id)}}">
+                @csrf
+                {{method_field('DELETE')}} 
+                <button class="btn btn-danger ms-5 btn-lg delete-btn" onclick="return confirm('Are you sure?')">Usuń zgłoszenie</button>
+            </form>
+            </div>
+        </div>
 
 
     </div>
@@ -89,17 +104,19 @@
                 <div class="p-5 d-flex justify-content-evenly">
                     
                         <div>
-                        <h6> <strong>Prowadzący:</strong> {{$singleOrder->lead_person}}</h6>
+                            @foreach($users as $user)
+                        <h6> <strong>Prowadzący:</strong> {{$singleOrder->lead_person == $user->id ? $user->name : 'Nie ma przypisanej osoby'}}</h6>
                         <br>
-                        <h6> <strong>Os. zaangażowana:</strong> {{$singleOrder->involved_person}}</h6>
+                        <h6> <strong>Os. zaangażowana:</strong> {{$singleOrder->involved_person == $user->id ? $user->name : 'Nie ma przypisanej osoby'}}</h6>
                         <br>
+                            @endforeach
                         <h6> <strong>Status:</strong>  <span>{{$singleOrder->status}}</span></h6>
                         <br>
                         <h6><strong>Typ:</strong> rotacje</h6>
                         <br>
                         </div>
                         <div>
-                        <h6><strong>Firma:</strong> {{$singleOrder->company_id}}</h6>
+                        <h6><strong>Firma:</strong> {{$company->name}}</h6>
                         <br>
                         <h6><strong>Treść zgłoszenia:</strong> {{$singleOrder->order_content}}</h6>
                         <br>

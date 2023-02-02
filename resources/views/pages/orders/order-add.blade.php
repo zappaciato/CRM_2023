@@ -152,8 +152,11 @@
                                 <label for="status" class="form-label">Status</label>
                                         <select  id="status" name="status" class="form-select" >
                                             <option selected="">Nowe</option>
-                                            <option>Przyjęte</option>
-                                            <option>Zamknięte</option>
+                                            <option>Otwarte</option>
+                                            <option>W toku</option>
+                                            <option>Reklamacje</option>
+                                            <option>Sfinalizowane</option>
+                                            <option>Anulowane</option>
                                         </select>
                                 </div>
 {{-- TODO: date picker --}}

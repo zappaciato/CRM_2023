@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\CompanyAddress;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -18,6 +21,8 @@ class CompanyController extends Controller
         Log::info('I am showing all the records.');
         $title = "Companies";
         $breadcrumb = "Companies list";
+
+
 
         $companies = Company::all();
 
@@ -65,11 +70,12 @@ class CompanyController extends Controller
         // Log::debug($data);
 
         $company = Company::create($data);
-
         
-        Log::debug($company);
         $title = 'Dodaj nowy adress';
         $breadcrumb = 'Nowy Adress';
+
+        //SEND EMAIL TO ADMIN
+        Mail::to(env('ADMIN_EMAIL'))->send(new OrderChanged());
         // return redirect(route('address.add', $company->id));
         // return redirect()->route('address.add')->with('company', $company);
         return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));

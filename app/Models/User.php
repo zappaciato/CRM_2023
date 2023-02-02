@@ -46,11 +46,16 @@ class User extends Authenticatable
     ];
 
     public function isAdmin() {
-        return $this->role === 'admin';
+        return $this->role === 'admin' ;
     }
 
     public function isActive() {
-        return $this->role !== 'nieprzypisany' && 'admin';
+        return $this->role === 'konstruktor';
     }
+
+    // public function orders() {
+    //     return $this->hasMany(Order::class);
+
+    // }
 
 }

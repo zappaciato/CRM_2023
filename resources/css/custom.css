@@ -92,3 +92,21 @@
 .company-card {
    width: 150%;
 }
+
+.delete-btn {
+  
+}
+
+.delete-btn:hover {
+  background-color: yellow !important;
+  color: black !important;
+  font-weight: 800;
+}
+
+.cancel-btn {
+
+}
+
+.cancel-btn:hover {
+  background-color: red !important;
+}

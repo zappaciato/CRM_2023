@@ -39,10 +39,15 @@ class Order extends Model
         // 'notes',
     ];
 
-    public function companies()
-    {
+    public function companies() {
+
         return $this->belongsTo(Company::class);
     }
+
+    // public function users() {
+
+    //     return $this->hasMany(User::class);
+    // }
 
     
 }

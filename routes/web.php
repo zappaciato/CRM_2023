@@ -98,8 +98,9 @@ foreach ($prefixRouters as $prefixRouter) {
 
         Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
         Route::put('orders/service-order/edit/{id}', [ServiceOrderController::class, 'update'])->middleware('auth');
+        Route::put('orders/service-order/cancel/{id}', [ServiceOrderController::class, 'cancelOrder'])->middleware('auth')->name('cancel.order');
 
-//kind of API for dependable dropdown list for adding a new order
+//kind of API for dependable dropdown list for adding a new order with AJAX and jQuery
         
         Route::get('orders-add/fetch-contacts', [DropdownListController::class, 'fetchContacts'])->name('fetch.contacts');
         Route::get('orders-add/fetch-addresses', [DropdownListController::class, 'fetchAdresses'])->name('fetch.addresses');
