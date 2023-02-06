@@ -65,7 +65,7 @@
 
                         
                         <div class="widget-content widget-content-area"> 
-                            <form class="row g-3 needs-validation" action="{{route('add.order')}}" method="POST" novalidate>
+                            <form class="row g-3 needs-validation" action="{{route('create.order.email', $email->id)}}" method="POST" novalidate>
         @csrf                               
                                 {{-- <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role"> --}}
 
@@ -178,7 +178,9 @@
                         </div>
                     </div>
         </div>
-
+{{-- @php
+    dd($errors);
+@endphp --}}
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>

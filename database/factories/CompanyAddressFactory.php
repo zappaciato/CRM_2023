@@ -32,6 +32,7 @@ Log::debug($randomNumber);
             'postal_code' => $this->faker->postcode(),
             'country' => $this->faker->country(),
             'province' => $this->faker->state(),
+            'notes' => $this->faker->sentence(4),
             'company_id' => $compData[$randomNumber]->id,
         ];
     }

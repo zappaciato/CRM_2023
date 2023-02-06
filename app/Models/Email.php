@@ -27,4 +27,6 @@ class Email extends Model
         'date' ,
         'emailstatus',
     ];
+
+    
 }

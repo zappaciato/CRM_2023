@@ -128,7 +128,8 @@ foreach ($prefixRouters as $prefixRouter) {
 
 //addresses
             Route::get('comapnies/address/addresses-list', [AddressController::class, 'index'])->name('address.list');
-            Route::get('companies/address/address-add', [AddressController::class, 'create'])->name('address.add');
+            Route::get('companies/address/address-add/', [AddressController::class, 'create'])->name('address.add');
+            Route::get('comapnies/address/address-add/in-company', [AddressController::class, 'createWithinCompany'])->name('addess.add.inCompany');
             Route::post('companies/address/address-add', [AddressController::class, 'store']);
 
 //contacts
@@ -159,6 +160,7 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
 
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
+        Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
         /**
          * ==============================

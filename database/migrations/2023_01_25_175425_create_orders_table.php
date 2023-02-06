@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('lead_person');
             $table->string('involved_person');
             $table->string('priority');
-            $table->string('order_content');
+            $table->longText('order_content');
             $table->string('order_notes');
             
             $table->string('deadline');

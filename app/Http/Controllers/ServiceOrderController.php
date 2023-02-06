@@ -6,6 +6,7 @@ use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Order;
+use App\Models\OrderNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -61,13 +62,19 @@ class ServiceOrderController extends Controller
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
         $breadcrumb = 'Zgłoszenie nr: ' . $singleOrder->id;
 
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company'));
+        $orderNotifications = OrderNotification::where('id', $singleOrder->id)->get();
+
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications'));
     }
 
 
     public function edit($id)
     {
         $singleOrder = Order::findOrFail($id);
+
+        //dodawanie powiadomienia OrderNotification
+
+        
 
 
         $title = 'Edycja zgłoszenia';
@@ -76,7 +83,61 @@ class ServiceOrderController extends Controller
         return view('pages.orders.order-single-service-edit', compact('title', 'breadcrumb', 'singleOrder'));
     }
 
+    public function sendEmail($id) {
+
+        $singleOrder = Order::findOrFail($id);
+        Log::info('Below is the 1 single order data 2 usersemails 3 cntact emails');
+        Log::debug($singleOrder);
+        // do kogo email?
+        // to lead person involved and the email from the contact for this particular order
+        $usersEmails = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
+        // $contactEmails = Contact::whereIn('id', [$singleOrder->contact_person])->firstOrFail();
+        $contactEmails = Contact::select('email')->where('id', $singleOrder->contact_person)->get();
+Log::debug($usersEmails);
+        Log::debug($contactEmails);
+
+        // $usersEmails = User::select('email')->where('id', $singleOrder->lead_person)->get();        // $recipients = ['k@k.pl', 'test@go.pl'];
+        // $recipients = [$usersEmails->email, $contactEmails];
+
+        $recipients = [];
+        foreach ($usersEmails as $email) {
+            Log::debug($email);
+            array_push($recipients, $email);
+        }
+
+        foreach ($contactEmails as $email) {
+            Log::debug($email);
+            array_push($recipients, $email);
+        }
+
+
+        // $recipients['email'] =+  $usersEmails->email;
+        // $recipients['email'] =+ $contactEmails->email;
+        Log::info('Below the RECIPIENTS ALL');
+        Log::debug($recipients);
+        // Log::debug($contactEmails->email);
+        foreach ($recipients as $recipient) {
+            Log::info('Below the RECIPIENTS ine by ONE');
+            Log::debug($recipient->email);
+
+
+            //Add this event to OrderNotification table;
+            $notification = new OrderNotification();
+            $notification->type = 'order_updated';
+            $notification->content = 'Status złoszenia został zaktualizowany na: ' . $singleOrder->status;
+            $notification->order_id = $singleOrder->id;
+            $notification->save();
+            Log::debug($notification);
+
+
+
+            return Mail::to($recipient->email)->send(new OrderChanged());
+
+    }
+}
+
     public function cancelOrder($id) {
+
                     Log::info('I am cancelling the order!');
                     $singleOrder = Order::findOrFail($id);
                     $data['status'] = 'anulowane';
@@ -84,39 +145,10 @@ class ServiceOrderController extends Controller
 
                     Alert::alert('Gratulacje!', 'Zgłoszenie zostało anulowane!', 'success');
 
-                    // do kogo email?
-                    // to lead person involved and the email from the contact for this particular order
-                    $usersEmails = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
-                    // $contactEmails = Contact::whereIn('id', [$singleOrder->contact_person])->firstOrFail();
-                    $contactEmails = Contact::select('email')->where('id', $singleOrder->contact_person)->get();
+                    //send email as a notification to all required people
+                    $this->sendEmail($id);
 
-                    // $usersEmails = User::select('email')->where('id', $singleOrder->lead_person)->get();        // $recipients = ['k@k.pl', 'test@go.pl'];
-                    // $recipients = [$usersEmails->email, $contactEmails];
 
-                    $recipients = [];
-            foreach($usersEmails as $email){
-                Log::debug($email);
-                        array_push($recipients, $email);
-            }
-
-            foreach ($contactEmails as $email) {
-                Log::debug($email);
-                    array_push($recipients, $email);
-
-            }
-                    
-
-                    // $recipients['email'] =+  $usersEmails->email;
-                    // $recipients['email'] =+ $contactEmails->email;
-            Log::info('Below the RECIPIENTS ALL');
-                    Log::debug($recipients); 
-                    // Log::debug($contactEmails->email);
-            foreach ($recipients as $recipient) {
-                        Log::info('Below the RECIPIENTS ine by ONE');
-                        Log::debug($recipient->email); 
-                        Mail::to($recipient->email)->send(new OrderChanged());
-
-            }
         
 
         // Log::debug(new OrderChanged(['status' => $data['status']]));
@@ -135,6 +167,9 @@ class ServiceOrderController extends Controller
         Log::debug($data);
 
         $singleOrder->update($data);
+
+        
+
 
 
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');

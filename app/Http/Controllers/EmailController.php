@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
+use App\Models\Order;
+use App\Models\OrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class EmailController extends Controller
 {
@@ -57,33 +60,73 @@ Log::debug($email);
     }
 
 
+    protected function validator($data)
+    {
+        Log::info('I am validating the order record.');
+        Log::debug($data);
+
+        $validated =  Validator::make($data, [
+            'title' => 'required',
+            'company_id' => 'required|integer',
+            'email_id' => 'required|integer',
+            'contact_person' => 'required',
+            'address' => 'nullable',
+            'lead_person' => 'required',
+            'involved_person' => 'required',
+            'priority' => 'required',
+            'order_content' => 'required',
+            'order_notes' => 'required',
+            'deadline' => 'required',
+            'status' => 'required',
+
+        ])->validate();
+
+
+        Log::info('ORDER Record has been validated!!');
+
+        // $validated = Arr::add($validated, 'published', 0);
+        // $validated = Arr::add($validated, 'premium', 0);
+
+        return $validated;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $title = '';
+        $breadcrumb = '';
+        Log::info('I am tryign to store the data and redirect');
+        $data = $this->validator($request->all());
+        Log::info('I am trying to debug the data to store - ORDER!');
+        Log::debug($data);
+        $data['address'] = "jaki adres";
+        $newOrder = Order::create($data);
+        //Add this event to OrderNotification table;
+        $notification = new OrderNotification();
+        $notification->type = 'order_created';
+        $notification->content = 'Zgłoszenie zostało utowrzone' . $newOrder->name;
+        $notification->order_id = $newOrder->id;
+        $notification->save();
+        Log::debug($notification);
+
+        // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
+
+        return redirect(route('service.orders'));
+    }
+
 
         public function createFromEmail($id) {
             $title = "Dodawanie zamówienia z emaila";
             $breadcrumb = "Dodawanie nowego zamówienia z emaila";
             $email = Email::findOrFail($id);
-            // Jak sprawdzic z emaila z ktorej firmy to doszlo? za pomoca from_email
-            // $companies = Company::all()->pluck('name', 'id');
 
             $contacts = Contact::select('id','company_id', 'email', 'name', 'surname')->get();
             foreach ($contacts as $contact) {
-
-//to sie nie danadje bo najpeirw zrobi a potem sprawdzi czy jest true zeby zrobic jeszcze raz. 
-                // do {
-                // $company  =  Company::where('id', $contact->company_id)->firstOrFail();
-                // $contact = Contact::where('id', $contact->id);
-                // } while ($contact->email == $email->from_address)
-
-                // switch($contact->email) {
-                //     case($email->from_address):
-                //         Log::debug($contact->email);
-                //     $company  =  Company::where('id', $contact->company_id)->firstOrFail();
-                //     $contact = Contact::where('id', $contact->id);
-                //     break;
-
-                // };
-
-
 
                 if($contact->email == $email->from_address) {
                 Log::info('This is the company which sent this email!');
@@ -96,6 +139,8 @@ Log::debug($email);
                     break;
                 }
             }
+
+        
 
             Log::info('This is the final contact out of scope!');
             // Log::debug($contact);

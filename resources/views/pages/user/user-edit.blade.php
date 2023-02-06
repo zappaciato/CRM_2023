@@ -133,13 +133,14 @@
                                                                     <input type="text" class="form-control mb-3" id="name" name="name" placeholder="Full Name" value="{{$user->name}}">
                                                                 </div>
                                                             </div>
-
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="profession">Rola</label>
-                                                                    <input type="text" class="form-control mb-3" id="role" name="role" placeholder="role" value="{{$user->role}}">
-                                                                </div>
-                                                            </div>
+                                                <div class="col-md-6">
+                                                    <label for="role" class="form-label">Rola</label>
+                                                        <select  id="role" name="role" class="form-select" >
+                                                            <option selected="">Nieprzypisany</option>
+                                                            <option value="admin">Administrator</option>
+                                                            <option value="konstruktor">Konstruktor</option>
+                                                        </select>
+                                                </div>
                                                             
                                                             {{-- <div class="col-md-6">
                                                                 <div class="form-group">

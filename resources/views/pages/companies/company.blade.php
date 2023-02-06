@@ -97,14 +97,14 @@
                                         <h5>Adresy:</h5>
                                         <h4>Adres nie został dodany do firmy. </h4>
                             {{-- TODO tu mozna zrobic jako modal - > form --}}
-                                        <a href="{{route('address.add')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+                                        <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
                                     
                                     @else 
 
                                     <h5>Adresy:</h5>
 
                                     {{-- TODO tu mozna zrobic jako modal - > form --}}
-                                        <a href="{{route('address.add')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+                                        <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
                                     
                                     @foreach ($addresses as $address)
                                     <div class="card p-5 mt-2 address-card">

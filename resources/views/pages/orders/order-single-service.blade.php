@@ -60,9 +60,10 @@
 
         <div class="d-flex justify-content-between">
 
-            <div class="d-flex">
+            <div class="d-flex ">
             <a href="{{route('service.orders')}}"><button class="btn btn-success btn-lg">Wróć do listy zgłoszeń</button></a>
             <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning ms-5 btn-lg">Edytuj zgłoszenie</button></a>
+            <a href=""><button  class="btn btn-info btn-lg cancel-btn ms-5">Wyślij wiadomość do klienta</button></a>
             </div>
 
             <div class="d-flex">
@@ -74,6 +75,8 @@
 
             <button type="submit" class="btn btn-dark btn-lg cancel-btn">Anuluj zgłoszenie</button>
             </form>
+
+            
 
             {{-- delete order --}}
             <form method="POST" action="{{route('single.service.order.delete', $singleOrder->id)}}">
@@ -103,19 +106,27 @@
                 <h5 class="ms-5"  >Tytuł: {{$singleOrder->title}}</h5>
                 <div class="p-5 d-flex justify-content-evenly">
                     
-                        <div>
-                            @foreach($users as $user)
-                        <h6> <strong>Prowadzący:</strong> {{$singleOrder->lead_person == $user->id ? $user->name : 'Nie ma przypisanej osoby'}}</h6>
+                        <div class="card w-50 p-5">
+                        @foreach($users as $user)
+
+                        @if($singleOrder->lead_person == $user->id)
+                        <h6> <strong>Os. Odpowiedzialna:</strong> {{$user->name}}</h6>
                         <br>
-                        <h6> <strong>Os. zaangażowana:</strong> {{$singleOrder->involved_person == $user->id ? $user->name : 'Nie ma przypisanej osoby'}}</h6>
+                        @endif
+
+                        @if($singleOrder->involved_person == $user->id)
+                        <h6> <strong>Os. zaangażowana:</strong> {{ $user->name }}</h6>
                         <br>
-                            @endforeach
+                        @endif
+                        
+                        @endforeach
+
                         <h6> <strong>Status:</strong>  <span>{{$singleOrder->status}}</span></h6>
                         <br>
                         <h6><strong>Typ:</strong> rotacje</h6>
                         <br>
                         </div>
-                        <div>
+                        <div class="card w-50 p-5">
                         <h6><strong>Firma:</strong> {{$company->name}}</h6>
                         <br>
                         <h6><strong>Treść zgłoszenia:</strong> {{$singleOrder->order_content}}</h6>
@@ -123,7 +134,7 @@
                         <h6> <strong>Dodatkowe notatki wew:</strong> {{$singleOrder->order_notes}}</h6>
                         <br>
                         </div>
-                        <div>
+                        <div class="card w-50 p-5">
                         <h6><strong>Data otrzymania:</strong> {{$singleOrder->created_at}}</h6>
                         <br>
                         <h6><strong>Termin wykonania:</strong> {{$singleOrder->deadline}}</h6>
@@ -138,79 +149,97 @@
 
         </div>
 
-        <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
 
 <div class="widget-content widget-content-area br-8">
 
-                    <div class="mt-container mx-auto">
-                    <div class="timeline-line">
+    <div class="mt-container mx-auto">
+        <div class="timeline-line">
 
+
+            @foreach($orderNotifications as $notification)
+
+            @switch($notification->type)
+
+                @case('order_created')
                     <div class="item-timeline">
-                    <p class="t-time">10:00</p>
-                    <div class="t-dot t-dot-primary">
-                    </div>
-                    <div class="t-text">
-                    <p>Zgłoszenie zaktualizowane - zamknięte</p>
-                    <p class="t-meta-time">25 min temu</p>
-                    </div>
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-info">
+                        </div>
+                        <div class="t-text">
+                            <p>{{$notification->content}}</p>
+                            <p>{{$notification->type}}</p>
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
                     </div>
 
+                @break
+
+                @case('email_received')
                     <div class="item-timeline">
-                    <p class="t-time">12:45</p>
-                    <div class="t-dot t-dot-success">
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-danger">
+                        </div>
+                        <div class="t-text">
+                            <p>{{$notification->content}}</p>
+                            <p>Wiadomość od <a href="#">Piotr Wiski</a><a href="{{route('single.email',  $singleOrder->email_id)}}"> <button class="btn btn-success">Pokaż</button></a></p></p>
+                            <p>{{$notification->type}}</p>
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
                     </div>
-                    <div class="t-text">
-                    <p>Email do klienta wysłany <a href="{{route('single.email', $singleOrder->email_id )}}"> <button class="btn btn-success">Pokaż</button></a></p></p> 
-                    <p class="t-meta-time">2 godziny temu</p>
-                    </div>
-                    </div>
+                
+                @break
 
+                @case('order_updated')
                     <div class="item-timeline">
-                    <p class="t-time">14:00</p>
-                    <div class="t-dot t-dot-warning">
-                    </div>
-                    <div class="t-text">
-                    <p>SYSTEM - Zmiana statusu zgłoszenia na Otwarte</p>
-                    <p class="t-meta-time">4 godzin temu</p>
-                    </div>
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-success">
+                        </div>
+                        <div class="t-text">
+                            <p>{{$notification->content}}</p>
+                            <p>{{$notification->type}}</p>
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
                     </div>
 
+                @break
+                        
+                
+                @case('message_sent')
                     <div class="item-timeline">
-                    <p class="t-time">16:00</p>
-                    <div class="t-dot t-dot-info">
-                    </div>
-                    <div class="t-text">
-                    <p>Wiadomość od <a href="#">Piotr Wiski</a><a href="{{route('single.email',  $singleOrder->email_id)}}"> <button class="btn btn-success">Pokaż</button></a></p></p>
-                    <p class="t-meta-time">6 godzin temu</p>
-                    </div>
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-warning">
+                        </div>
+                        <div class="t-text">
+                            <p>{{$notification->content}}</p>
+                            <p>{{$notification->type}}</p>
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
                     </div>
 
+                @break
+
+                @default
                     <div class="item-timeline">
-                    <p class="t-time">17:00</p>
-                    <div class="t-dot t-dot-danger">
-                    </div>
-                    <div class="t-text">
-                    <p>Wiadomość email od: <a href="#">Piotr Opęchowski</a> <a href="{{route('single.email',  $singleOrder->email_id)}}"> <button class="btn btn-success">Pokaż</button></a></p>
-                    <p class="t-meta-time">9 godzin temu</p>
-                    </div>
-                    </div>
-
-                    <div class="item-timeline">
-                    <p class="t-time">16:00</p>
-                    <div class="t-dot t-dot-dark">
-                    </div>
-                    <div class="t-text">
-                    <p>Zgłoszenie przekazane do <a href="#"> Janet Jackson</a></p>
-                    <p class="t-meta-time">8 godzin temu</p>
-                    </div>
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-success">
+                        </div>
+                        <div class="t-text">
+                            <p>{{$notification->content}}</p>
+                            <p>{{$notification->type}}</p>
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
                     </div>
 
-                    </div>                                    
-                    </div>
+                @endswitch
+                @endforeach
+                    
 
-            </div>
-            
-        </div>
+        </div>                                    
+    </div>
+
+</div>   
+</div>
 
 
 

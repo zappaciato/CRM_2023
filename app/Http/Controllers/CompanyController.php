@@ -64,6 +64,7 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        
         $data = $this->validator($request->all());
 
         Log::info('This is COMPANY data after validation and creation');
@@ -75,7 +76,7 @@ class CompanyController extends Controller
         $breadcrumb = 'Nowy Adress';
 
         //SEND EMAIL TO ADMIN
-        Mail::to(env('ADMIN_EMAIL'))->send(new OrderChanged());
+        // Mail::to(env('ADMIN_EMAIL'))->send(new OrderChanged());
         // return redirect(route('address.add', $company->id));
         // return redirect()->route('address.add')->with('company', $company);
         return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));
