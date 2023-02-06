@@ -76,7 +76,7 @@
                                             data-mailTitle="{{$email->subject}}" 
                                             data-maildescription='{"ops":[{"insert":"{{$email->text_plain}}"}]}'> 
                                                                                         
-                                            {!!$email->text_html!!} jhk jhkj  hjk hj
+                                            {!!$email->text_html!!}
 
                                         </h1>
                                         </div>

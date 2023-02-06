@@ -9,8 +9,13 @@ use Illuminate\Support\Facades\Log;
 class OrderNotificationController extends Controller
 {
     public function index (){
+        // for later to list all notifications in opcje notifications Log
         $orderNotifications = OrderNotification::all();
-Log::debug(response()->json(['orderNotifications' => $orderNotifications]));
+        
+        Log::info('BELOW is data for ordernotification');
+        Log::debug(response()->json(['orderNotifications' => $orderNotifications]));
+
+
         return response()->json(['orderNotifications' => $orderNotifications]);
     }
 }

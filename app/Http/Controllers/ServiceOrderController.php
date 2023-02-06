@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use App\Models\User;
@@ -55,16 +56,26 @@ class ServiceOrderController extends Controller
     public function show($id)
     {
         // $singleOrder = Order::where('id', $id)->get();  to nie daje mi kolekcji we wlasciwym formacie
-        $singleOrder = Order::findOrFail($id);
+        // $singleOrder = Order::findOrFail($id);
+        $singleOrder = Order::where('id', $id)->firstOrFail();
+
+        $messagesToClient = $singleOrder->messagesToClients;
+        $orderNotifications = $singleOrder->orderNotifications;
+
+
         Log::debug($singleOrder);
         $users = User::select('id', 'name')->get();
+        $contact = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
+        // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
         $breadcrumb = 'Zgłoszenie nr: ' . $singleOrder->id;
 
-        $orderNotifications = OrderNotification::where('id', $singleOrder->id)->get();
-
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications'));
+        // $orderNotifications = OrderNotification::where('order_id', $singleOrder->id)->get();
+Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
+Log::debug($orderNotifications);
+Log::debug($messagesToClient);
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient'));
     }
 
 
@@ -119,21 +130,18 @@ Log::debug($usersEmails);
         foreach ($recipients as $recipient) {
             Log::info('Below the RECIPIENTS ine by ONE');
             Log::debug($recipient->email);
-
-
-            //Add this event to OrderNotification table;
-            $notification = new OrderNotification();
-            $notification->type = 'order_updated';
-            $notification->content = 'Status złoszenia został zaktualizowany na: ' . $singleOrder->status;
-            $notification->order_id = $singleOrder->id;
-            $notification->save();
-            Log::debug($notification);
-
-
-
             return Mail::to($recipient->email)->send(new OrderChanged());
 
     }
+
+        //Add this event to OrderNotification table: status update;
+        $notification = new OrderNotification();
+        $notification->type = 'order_updated';
+        $notification->content = 'Status złoszenia został zaktualizowany na: ' . $singleOrder->status;
+        $notification->subjectId = null;
+        $notification->order_id = $singleOrder->id;
+        $notification->save();
+        Log::debug($notification);
 }
 
     public function cancelOrder($id) {
@@ -167,10 +175,6 @@ Log::debug($usersEmails);
         Log::debug($data);
 
         $singleOrder->update($data);
-
-        
-
-
 
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');

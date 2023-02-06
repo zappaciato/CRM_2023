@@ -5,9 +5,11 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DropdownListController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\MessageToClientController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
+use App\Models\MessageToClient;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -162,6 +164,9 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
+
+        // Messages to clients
+        Route::post('orders/service-order/{id}/message', [MessageToClientController::class, 'store'])->middleware('auth')->name('message.to.client');
         /**
          * ==============================
          *        @Router -  Apps

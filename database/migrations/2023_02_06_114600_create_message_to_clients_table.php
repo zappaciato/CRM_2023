@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('order_notifications', function (Blueprint $table) {
+        Schema::create('message_to_clients', function (Blueprint $table) {
             $table->id();
-            $table->string('type');
+            $table->string('from');
+            $table->string('to');
+            $table->string('cc');
+            $table->string('subject');
             $table->string('content');
-            $table->integer('subjectId');
-;
+
+
             $table->timestamps();
+
 
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
         });
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_notifications');
+        Schema::dropIfExists('message_to_clients');
     }
 };

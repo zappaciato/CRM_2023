@@ -44,10 +44,21 @@ class Order extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function messagesToClients()
+    {
+        return $this->hasMany(MessageToClient::class);
+    }
+
+    public function orderNotifications()
+    {
+        return $this->hasMany(OrderNotification::class);
+    }
+}
+
     // public function users() {
 
     //     return $this->hasMany(User::class);
     // }
 
     
-}
+
