@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DropdownListController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\MessageToClientController;
+use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
@@ -111,6 +112,8 @@ foreach ($prefixRouters as $prefixRouter) {
 //usuwanie service-order
         Route::delete('orders/service-order/delete/{id}', [ServiceOrderController::class, 'destroy'])->name('single.service.order.delete');
 
+        // Order comments
+        Route::post('orders/service-order/', [OrderCommentController::class, 'store'])->middleware('auth')->name('order.comment.add');
 
 
 // companies

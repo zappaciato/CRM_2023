@@ -53,9 +53,15 @@ class User extends Authenticatable
         return $this->role === 'konstruktor';
     }
 
-    // public function orders() {
-    //     return $this->hasMany(Order::class);
 
-    // }
+    public function orderComments()
+    {
+        return $this->hasMany(OrderComment::class);
+    }
+    
+    public function orders() {
+        return $this->hasMany(Order::class);
+
+    }
 
 }

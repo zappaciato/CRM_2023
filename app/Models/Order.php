@@ -53,6 +53,15 @@ class Order extends Model
     {
         return $this->hasMany(OrderNotification::class);
     }
+
+    public function orderComments()
+    {
+        return $this->hasMany(OrderComment::class);
+    }
+
+    public function users() {
+        return $this->hasMany(User::class);
+    }
 }
 
     // public function users() {

@@ -61,7 +61,7 @@ class ServiceOrderController extends Controller
 
         $messagesToClient = $singleOrder->messagesToClients;
         $orderNotifications = $singleOrder->orderNotifications;
-
+        $comments = $singleOrder->orderComments;
 
         Log::debug($singleOrder);
         $users = User::select('id', 'name')->get();
@@ -75,7 +75,7 @@ class ServiceOrderController extends Controller
 Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
 Log::debug($orderNotifications);
 Log::debug($messagesToClient);
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient'));
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments'));
     }
 
 

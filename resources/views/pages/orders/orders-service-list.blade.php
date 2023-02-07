@@ -62,26 +62,26 @@
                                 <td>{{$order->id}}</td>
                                 @foreach ($companies as $company)
                                     @if($order->company_id === $company->id)
-                                    <td>{{$company->name}}</td>
+                                    <td style="max-width: 5px; overflow:hidden">{{$company->name}}</td>
                                     {{-- @else
                                     <td>Brak przypisanej firmy</td> --}}
                                     @endif
                                 @endforeach
                                 
-                                <td style="max-width: 200px; overflow:hidden">{{$order->title}}</td>
+                                <td style="min-width: 200px; max-width: 250px; overflow:hidden">{{$order->title}}</td>
 
                                 <td>inne</td>
                                 <td>{{$order->deadline}}</td>
-                                <td>{{$order->order_notes}}</td>
+                                <td style="max-width: 10px; overflow: hidden;">{{$order->order_notes}}</td>
 
                                 @foreach ($users as $user)
                                 @if($order->lead_person == $user->id)
-                                <td>{{ $user->name }}</td>
+                                <td style="max-width: 10px; overflow: hidden;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{$user->name}}">{{ $user->name }}</td>
                                 @endif
                                 {{-- <td>{{$order->involved_person == $user->id ? $user->name : 'os nie zostala przypisana'}}</td> --}}
                                 @endforeach
 
-                                <td>
+                                <td style=" max-width:58px; overflow:hidden">
                                     @switch($order->status)
                                         @case('anulowane')
                                             <span class="badge badge-danger mb-2 me-4">ANULOWANE</span>

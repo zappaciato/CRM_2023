@@ -110,3 +110,12 @@
 .cancel-btn:hover {
   background-color: red !important;
 }
+
+.message-content textarea {
+  border-radius: 3px;
+  border: 2px solid rgb(255, 153, 0);
+  padding: 15px;
+  width: 100% !important;
+  height: 100%;
+
+}

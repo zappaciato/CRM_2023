@@ -33,7 +33,7 @@ class Company extends Model
 
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsTo(Order::class);
     }
 
     // public function contacts()
