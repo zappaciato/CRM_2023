@@ -181,7 +181,12 @@
                                                                     <label for="email">Email</label>
                                                                     <input type="text" class="form-control mb-3" id="email" name="email" placeholder="Write your email here" value="{{$user->email}}">
                                                                 </div>
-                                                            </div>                                    
+                                                            </div>    
+                                                            
+                                                            <div class="form-fieldset col-md-12">
+                                <label for="image" class="form-label">Dodaj zdjęcie:</label>
+                                <input type="file" name="image" class="form-control">
+                            </div>
                                                             {{-- <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="website1">Website</label>

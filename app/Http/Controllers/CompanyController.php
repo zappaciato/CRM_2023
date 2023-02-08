@@ -96,7 +96,7 @@ class CompanyController extends Controller
         
         $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
         $contacts = $company->contacts;
-        // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; 
+        // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; Problem w tym, ze czasem w tinkerze to nie dziala;
         $orders = $company->orders;
 
         return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts', 'orders'));

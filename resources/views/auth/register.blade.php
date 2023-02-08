@@ -90,11 +90,11 @@
                                 @enderror
                             </div>
 
-
+{{-- 
                             <div class="form-fieldset col-md-12">
                                 <label for="image" class="form-label">Dodaj zdjęcie:</label>
                                 <input type="file" name="image" class="form-control">
-                            </div>
+                            </div> --}}
 
                             <div class="col-12">
                                 <div class="mb-3">

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -53,10 +55,11 @@ class UserController extends Controller
         $title = "Użytkownik";
         $breadcrumb = "Użytkownik ".$user->name;
 
-
-        Log::debug($user);
+        $userFiles = UserFile::where('user_id', $id)->get();
+Log::info('Grabbbing user files');
+        Log::debug($userFiles);
         // dd($company);
-        return view('pages.user.user', compact('title', 'breadcrumb', 'user'));
+        return view('pages.user.user', compact('title', 'breadcrumb', 'user', 'userFiles'));
     }
 
     public function edit($id)
@@ -79,7 +82,34 @@ class UserController extends Controller
         // $oldImage = $post->image;
 
         $data = $this->validator($request->all());
-        Log::info('Below debug of data in update method!');
+
+
+Log::debug(isset($data['image']));//gives true
+Log::info('Before uploading an image');
+        if (isset($data['image'])) {
+            
+            // $path = $request->file('image')->store('/public/photos');
+
+// zapisuje za kazdym razem trzeba zrobic sprawdzenie czy rekord juz istnieje
+            $userFile = new UserFile();
+            // $userFile->path = $path;
+            $name = "Foteczka koteczka";
+            $path = $request->file('image')->storeAs('uploads', $userFile->name, 'public');
+            Log::info("Image is set so we create the path");
+            Log::debug($path);
+            $userFile->path = $path;
+            $userFile->name = $name;
+            $userFile->user_id = $id;
+            Log::info("userfile path below: ");
+            Log::debug($userFile->path);
+            $userFile->save();
+
+Log::info('Below debugged $userfile object');
+            Log::debug($userFile);
+        }
+
+
+        Log::info('Below debug of data in update method for user with image or file!');
 Log::debug($data);
 
 

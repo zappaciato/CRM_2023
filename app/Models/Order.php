@@ -41,7 +41,7 @@ class Order extends Model
 
     public function companies() {
 
-        return $this->belongsTo(Company::class);
+        return $this->hasOne(Company::class);
     }
 
     public function messagesToClients()

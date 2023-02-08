@@ -21,10 +21,14 @@ class ServiceOrderController extends Controller
         $title = "Zgłoszenia serwisowe";
         $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
+        // tutaj rowniez mozemy skrocic kwerendę do wywloania jedynie firm i za pomoca relationships dostac sie do adresow i kontaktow oraz orders na razie nie zmieniam bo dziala. W razie oblozenia bazy danych mozna to zmienic. Pamietac o zmianie w widoku na inne zapisy
         $orders = Order::all();
+
+        // $orders = Order::with('company')->get();
+
         $companies = Company::select('id', 'name')->get();
         $users = User::select('id', 'name')->get(); 
-        
+        Log::info('BELOW $orders form Service Orders list and 2 x below the same $companies');
         Log::debug($orders);
 
         Log::debug($companies);
@@ -65,6 +69,7 @@ class ServiceOrderController extends Controller
 
         Log::debug($singleOrder);
         $users = User::select('id', 'name')->get();
+        //ponizej do zmiany eloqnet relationships to $contact
         $contact = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
         // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
@@ -134,14 +139,8 @@ Log::debug($usersEmails);
 
     }
 
-        //Add this event to OrderNotification table: status update;
-        $notification = new OrderNotification();
-        $notification->type = 'order_updated';
-        $notification->content = 'Status złoszenia został zaktualizowany na: ' . $singleOrder->status;
-        $notification->subjectId = null;
-        $notification->order_id = $singleOrder->id;
-        $notification->save();
-        Log::debug($notification);
+        //add notification set as a static function in OrderNotificationController
+        OrderNotificationController::createNotification($singleOrder);
 }
 
     public function cancelOrder($id) {

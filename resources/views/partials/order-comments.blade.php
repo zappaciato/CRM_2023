@@ -50,9 +50,13 @@
                                 <img alt="avatar" src="{{Vite::asset('resources/images/profile-2.jpeg')}}" class="rounded-circle" />
                             </div>
                             <div class="media-body" style="margin-bottom: -20px">
-
-                                <h5 class="media-heading mb-1">{{$comment->user_id == $user->id ? $user->name : 'uzytkownik anonimowy'}}</h5>
-
+                                
+                                @foreach($users as $user)
+                                @if($comment->user_id === $user->id)
+                                <h5 class="media-heading mb-1">{{$user->name }}</h5>
+                                @endif
+                                @endforeach
+                                
                                 <div class="meta-info mb-0">{{$comment->created_at}}</div>
                                 <p class="media-text mt-2 mb-0">{{$comment->content}}</p>
 
@@ -118,7 +122,7 @@
                                         <div class="mb-3">
                                             <form method="POST" action="{{route('order.comment.add')}}">
                                                 @csrf
-                                                
+
                                                 <input type="hidden" name="order_id" value="{{$singleOrder->id}}">
                                                 
                                                 <label class="form-label">Napisz komentarz</label>

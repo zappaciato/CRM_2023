@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class EmailController extends Controller
 {
+    
+
     public function index () {
 
         $title = "Emaile";
@@ -107,14 +109,10 @@ Log::debug($email);
         $data['address'] = "jaki adres";
         
         $newOrder = Order::create($data);
-        //Add this event to OrderNotification table;
-        $notification = new OrderNotification();
-        $notification->type = 'order_created';
-        $notification->content = 'Zgłoszenie zostało utowrzone' . $newOrder->name;
-        $notification->subjectId = $newOrder->id;
-        $notification->order_id = $newOrder->id;
-        $notification->save();
-        Log::debug($notification);
+
+        //add notification set as a static function in OrderNotificationController
+        OrderNotificationController::createNotification($newOrder);
+
 
         // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
 
