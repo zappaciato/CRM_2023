@@ -73,14 +73,10 @@ class MessageToClientController extends Controller
 Log::debug($messageToClient['from']);
 Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc']])->send(new MessageToClient($messageToClient));
 
-        //Add this event to OrderNotification table;
-        $notification = new OrderNotification(); 
-        $notification->type = 'message_sent';
-        $notification->content = $messageToClient['content'];
-        $notification->subjectId = $messageToClient['id'];
-        $notification->order_id = $request->order_id;
-        $notification->save();
-        Log::debug($notification);
+
+        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
+        OrderNotificationController::createNotification('message_sent', 'Wiadomość do klienta została wysłana: ' . $messageToClient['content'], $messageToClient['id'], $request->order_id);
+
 
         return Redirect::back();
         // return redirect(route('contact.list', $contact->id));

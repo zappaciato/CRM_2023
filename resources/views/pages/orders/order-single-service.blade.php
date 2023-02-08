@@ -289,14 +289,30 @@
                 
                 @break
 
-                @case('order_updated')
+                @case('order_update')
                     <div class="item-timeline">
                         <p class="t-time">{{$notification->created_at}}</p>
                         <div class="t-dot t-dot-success">
                         </div>
                         <div class="t-text">
-                            <p class="text-success">Status zgłoszenia został zaktualizowany na:</p>
-                            <p class="text-danger"> <strong>Otwarte</strong></p>
+                            <p class="text-danger">Zgłoszenie zostało edytowane i zaktualizowane!</p>
+                            <p class=""> <strong>{{$notification->content}}</strong></p>
+                            {{-- <p>{{$notification->content}}</p> --}}
+                            {{-- <p>{{$notification->type}}</p> --}}
+                            <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
+                        </div>
+                    </div>
+
+                @break
+
+                @case('order_status')
+                    <div class="item-timeline">
+                        <p class="t-time">{{$notification->created_at}}</p>
+                        <div class="t-dot t-dot-success">
+                        </div>
+                        <div class="t-text">
+                            <p class="text-light bg-info">Status zgłoszenia został zmieniony na:</p>
+                            <p class="text-danger"> <strong>{{$notification->content}}</strong></p>
                             {{-- <p>{{$notification->content}}</p> --}}
                             {{-- <p>{{$notification->type}}</p> --}}
                             <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>

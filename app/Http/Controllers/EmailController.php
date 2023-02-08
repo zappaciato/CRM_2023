@@ -110,8 +110,10 @@ Log::debug($email);
         
         $newOrder = Order::create($data);
 
-        //add notification set as a static function in OrderNotificationController
-        OrderNotificationController::createNotification($newOrder);
+        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
+        OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
+
+
 
 
         // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));

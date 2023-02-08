@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -100,7 +101,7 @@ Log::debug($messagesToClient);
     }
 
     public function sendEmail($id) {
-
+// ta metoda jest jedynie do testu.. trzeba ja zmienic refaktor i wyciagnac ja do message to client Controller np.. ale działa
         $singleOrder = Order::findOrFail($id);
         Log::info('Below is the 1 single order data 2 usersemails 3 cntact emails');
         Log::debug($singleOrder);
@@ -136,11 +137,9 @@ Log::debug($usersEmails);
             Log::info('Below the RECIPIENTS ine by ONE');
             Log::debug($recipient->email);
             return Mail::to($recipient->email)->send(new OrderChanged());
+        }
 
-    }
-
-        //add notification set as a static function in OrderNotificationController
-        OrderNotificationController::createNotification($singleOrder);
+                
 }
 
     public function cancelOrder($id) {
@@ -156,7 +155,8 @@ Log::debug($usersEmails);
                     $this->sendEmail($id);
 
 
-        
+        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
+        OrderNotificationController::createNotification('order_status', 'anulowane' . $singleOrder->status, $singleOrder->id, $singleOrder->id);
 
         // Log::debug(new OrderChanged(['status' => $data['status']]));
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
@@ -174,6 +174,9 @@ Log::debug($usersEmails);
         Log::debug($data);
 
         $singleOrder->update($data);
+
+        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
+        OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
 
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
