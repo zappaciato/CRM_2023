@@ -156,7 +156,7 @@ Log::debug($usersEmails);
 
 
         //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
-        OrderNotificationController::createNotification('order_status', 'anulowane' . $singleOrder->status, $singleOrder->id, $singleOrder->id);
+        OrderNotificationController::createNotification('order_status', $singleOrder->status, $singleOrder->id, $singleOrder->id);
 
         // Log::debug(new OrderChanged(['status' => $data['status']]));
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');

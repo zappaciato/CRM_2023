@@ -7,10 +7,31 @@
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <x-slot:headerFiles>
         <!--  BEGIN CUSTOM STYLE FILE  -->
+        {{-- @vite(['resources/scss/light/assets/components/timeline.scss']) --}}
+        <link rel="stylesheet" href="{{asset('plugins/filepond/filepond.min.css')}}">
+        <link rel="stylesheet" href="{{asset('plugins/filepond/FilePondPluginImagePreview.min.css')}}">
+        <link rel="stylesheet" href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}">
+        <link rel="stylesheet" href="{{asset('plugins/sweetalerts2/sweetalerts2.css')}}">
+
+        @vite(['resources/scss/light/plugins/filepond/custom-filepond.scss'])
+        @vite(['resources/scss/light/assets/components/tabs.scss'])
+        @vite(['resources/scss/light/assets/elements/alert.scss'])        
+        @vite(['resources/scss/light/plugins/sweetalerts2/custom-sweetalert.scss'])
+        @vite(['resources/scss/light/plugins/notification/snackbar/custom-snackbar.scss'])
+        @vite(['resources/scss/light/assets/forms/switches.scss'])
         @vite(['resources/scss/light/assets/components/list-group.scss'])
-        @vite(['resources/scss/light/assets/users/user-profile.scss'])
+        @vite(['resources/scss/light/assets/users/account-setting.scss'])
+
+        @vite(['resources/scss/dark/plugins/filepond/custom-filepond.scss'])
+        @vite(['resources/scss/dark/assets/components/tabs.scss'])
+        @vite(['resources/scss/dark/assets/elements/alert.scss'])        
+        @vite(['resources/scss/dark/plugins/sweetalerts2/custom-sweetalert.scss'])
+        @vite(['resources/scss/dark/plugins/notification/snackbar/custom-snackbar.scss'])
+        @vite(['resources/scss/dark/assets/forms/switches.scss'])
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
-        @vite(['resources/scss/dark/assets/users/user-profile.scss'])
+        @vite(['resources/scss/dark/assets/users/account-setting.scss'])
+
+        
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -20,412 +41,279 @@
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Użytkownik</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Profil</li>
+                <li class="breadcrumb-item active" aria-current="page">Dane i ustawienia</li>
             </ol>
         </nav>
     </div>
     <!-- /BREADCRUMB -->
-
-    <div class="row layout-spacing d-flex justify-content-center">
-
-        <!-- Content -->
-        <div class="col-xl-9 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
-            <div class="user-profile">
-                <div class="widget-content widget-content-area">
-                    <div class="d-flex justify-content-between">
-                        <h3 class="">Profil użytkownika</h3>
-
-                        <a href="{{route('user.edit', $user->id)}}" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
-                        {{-- link to settings: dobry layout --}}
-                        {{-- <a href="{{getRouterValue();}}/user/settings" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a> --}}
-                    </div>
-                    <div class="text-center user-info">
-                        <img src="{{$userFiles[2]->path}}" alt="{{$userFiles[2]->name}}">
-                        <p class="">{{$user->name}}</p>
-                    </div>
-                    <div class="user-info-list">
-
-                        <div class="">
-                            <ul class="contacts-block list-unstyled">
-                                <li class="contacts-block__item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee me-3"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg> {{$user->role}}
-                                </li>
-                                {{-- <li class="contacts-block__item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar me-3"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Jan 20, 1989
-                                </li> --}}
-                                {{-- <li class="contacts-block__item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin me-3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>New York, USA
-                                </li> --}}
-                                <li class="contacts-block__item">
-                                    <a href="mailto:example@mail.com"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail me-3"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>{{$user->email}}</a>
-                                </li>
-                                <li class="contacts-block__item">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone me-3"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> {{$user->phone}}
-                                </li>
-                            </ul>
-{{-- social media icons and links--}}
-                            {{-- <ul class="list-inline mt-4">
-                                <li class="list-inline-item mb-0">
-                                    <a class="btn btn-info btn-icon btn-rounded" href="javascript:void(0);">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item mb-0">
-                                    <a class="btn btn-danger btn-icon btn-rounded" href="javascript:void(0);">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dribbble"><circle cx="12" cy="12" r="10"></circle><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"></path></svg>
-                                    </a>
-                                </li>
-                                <li class="list-inline-item mb-0">
-                                    <a class="btn btn-dark btn-icon btn-rounded" href="javascript:void(0);">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                                    </a>
-                                </li>
-                            </ul> --}}
-                        </div>                                    
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
-
-            <div class="usr-tasks ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Task</h3>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Projects</th>
-                                    <th>Progress</th>
-                                    <th>Task Done</th>
-                                    <th class="text-center">Time</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Figma Design</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 29.56%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-danger">29.56%</p></td>
-                                    <td class="text-center">
-                                        <p>2 mins ago</p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Vue Migration</td>
-                                    <td>
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-info" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-success">50%</p></td>
-                                    <td class="text-center">
-                                        <p>4 hrs ago</p>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Flutter App</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-warning" role="progressbar" style="width: 39%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-danger">39%</p></td>
-                                    <td class="text-center">
-                                        <p>a min ago</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>API Integration</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-success" role="progressbar" style="width: 78.03%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-success">78.03%</p></td>
-                                    <td class="text-center">
-                                        <p>2 weeks ago</p>
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <td>Blog Update</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-secondary" role="progressbar" style="width: 100%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-success">100%</p></td>
-                                    <td class="text-center">
-                                        <p>18 hrs ago</p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Landing Page</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-danger" role="progressbar" style="width: 19.15%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-danger">19.15%</p></td>
-                                    <td class="text-center">
-                                        <p>5 days ago</p>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>Shopify Dev</td>
-                                    <td>                                                    
-                                        <div class="progress br-30">
-                                            <div class="progress-bar br-30 bg-info" role="progressbar" style="width: 60.55%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </td>
-                                    <td><p class="text-success">60.55%</p></td>
-                                    <td class="text-center">
-                                        <p>8 days ago</p>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-        </div> --}}
         
-    </div>
+    <div class="account-settings-container layout-top-spacing">
 
-    {{-- <div class="row">
+        <div class="account-content">
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <h2>Dane</h2>
 
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="summary layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Summary</h3>
-                    <div class="order-summary">
+                    <ul class="nav nav-pills" id="animateLine" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="animated-underline-home-tab" data-bs-toggle="tab" href="#animated-underline-home" role="tab" aria-controls="animated-underline-home" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg> Dane osobowe</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="animated-underline-profile-tab" data-bs-toggle="tab" href="#animated-underline-profile" role="tab" aria-controls="animated-underline-profile" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Zaangażowany w zadania <span class="orders-badge">{{count($userCurrentOrders)}}</span></button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="animated-underline-preferences-tab" data-bs-toggle="tab" href="#animated-underline-preferences" role="tab" aria-controls="animated-underline-preferences" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Inne</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="animated-underline-contact-tab" data-bs-toggle="tab" href="#animated-underline-contact" role="tab" aria-controls="animated-underline-contact" aria-selected="false" tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> Blokady</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-                        <div class="summary-list summary-income">
 
-                            <div class="summery-info">
+            <div class="tab-content" id="animateLineContent-4">
+                <div class="tab-pane fade show active" id="animated-underline-home" role="tabpanel" aria-labelledby="animated-underline-home-tab">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
+                            <div class="info">
+                                <h6 class="">Informacje ogólne <span><a href="{{route('user.edit', $user->id)}}" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a></span></h6>
 
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                                </div>
 
-                                <div class="w-summary-details">
 
-                                    <div class="w-summary-info">
-                                        <h6>Income <span class="summary-count">$92,600 </span></h6>
-                                        <p class="summary-average">90%</p>
+
+                                    <div class="row">
+                                        <div class="col-lg-11 mx-auto card p-5">
+                                            <div class="row">
+                                                <div class="col-xl-2 col-lg-12 col-md-4">
+                                                    <div class="profile-image  mt-4 pe-md-4">
+
+                                                        <div class="text-center user-info">
+                                                            {{-- <img src="{{$userFiles[2]->path}}" alt="{{$userFiles[2]->name}}">
+                                                            <p class="">{{$user->name}}</p> --}}
+                                                        </div>
+                                                        <!-- // The classic file input element we'll enhance
+                                                        // to a file pond, we moved the configuration
+                                                        // properties to JavaScript -->
+                                                        
+                                    {{-- do uploadu plików??? --}}
+                                                        {{-- <div class="img-uploader-content">
+                                                            <input type="file" class="filepond"
+                                                                name="filepond" accept="image/png, image/jpeg, image/gif"/>
+                                                        </div> --}}
+                                    
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
+                                                    <div class="">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="">
+                                                                    <p>Imię i nazwisko</p>
+                                                                    <h5>{{$user->name}}</h5>
+                                                                </div>
+                                                            </div>
+                                                <div class="col-md-6">
+                                                    <div class="">
+                                                                    <p>Rola</p>
+                                                                    <h5>{{$user->role}}</h5>
+                                                    </div>
+                                                </div>
+                                                            <div class="col-md-6">
+                                                                <div class="">
+                                                                    <p>Telefon</p>
+                                                                    <h5>{{$user->phone}}</h5>
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="">
+                                                                    <p>Email</p>
+                                                                    <h5>{{$user->email}}</h5>
+                                                    </div>
+                                                            </div>    
+
+
+                                                            <div class="col-md-12 mt-1">
+                                                                <div class="form-group text-end">
+                                                                    
+                                                                    {{-- <button type="submit" class="btn btn-secondary">Edytuj dane osobowe</button> --}}
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
-
-                            </div>
-
+                            </form>
                         </div>
 
-                        <div class="summary-list summary-profit">
-
-                            <div class="summery-info">
-
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                                </div>
-                                
-                                <div class="w-summary-details">
-
-                                    <div class="w-summary-info">
-                                        <h6>Profit <span class="summary-count">$37,515</span></h6>
-                                        <p class="summary-average">65%</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="summary-list summary-expenses">
-
-                            <div class="summery-info">
-
-                                <div class="w-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-                                </div>
-                                <div class="w-summary-details">
-
-                                    <div class="w-summary-info">
-                                        <h6>Expenses <span class="summary-count">$55,085</span></h6>
-                                        <p class="summary-average">42%</p>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
 
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-
-            <div class="pro-plan layout-spacing">
-                <div class="widget">
-
-                    <div class="widget-heading">
-
-                        <div class="task-info">
-                            <div class="w-title">
-                                <h5>Pro Plan</h5>
-                                <span>$25/month</span>
+                <div class="tab-pane fade" id="animated-underline-profile" role="tabpanel" aria-labelledby="animated-underline-profile-tab">
+                    <div class="row">
+                        @foreach($userCurrentOrders as $order)
+                        <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
+                        
+                            {{-- tutaj wpadaja aktualne zgłoszenia danego uzytkownika --}}
+                            <div class="container card p-2">
+                                <p>Numer id:</p><h4>{{$order->id}} </h4>
+                                <p class="ms-5">{{$order->title}} <a href="{{route('single.service.order', $order->id)}}"><button class="btn btn-success ms-5">Pokaż</button></a> </p>
+                                <p>{{$order->order_content}}</p>
+                                @if($order->involved_person == $user->id)
+                                <h6>Zaagnażowany jako: <strong>Os. zaangalżwoana</strong></h6>
+                                @elseif ($order->lead_person == $user->id)
+                                <h6>Zaagnażowany jako: <strong>Os. Odpowiedzialna</strong></h6>
+                                @endif
                             </div>
                         </div>
+                        @endforeach
+                    </div>
+                </div>
 
-                        <div class="task-action">
-                            <button class="btn btn-secondary">Renew Now</button>
+                <div class="tab-pane fade" id="animated-underline-preferences" role="tabpanel" aria-labelledby="animated-underline-preferences-tab">
+                    <div class="row">
+                        {{-- <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Choose Theme</h6>
+                                    <div class="d-sm-flex justify-content-around">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                              <img class="ms-3" width="100" height="68" alt="settings-dark" src="{{Vite::asset('resources/images/settings-light.svg')}}">
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                <img class="ms-3" width="100" height="68" alt="settings-light" src="{{Vite::asset('resources/images/settings-dark.svg')}}">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+
+                        <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Dane i raporty aktywności</h6>
+                                    <p>Sciągnij podsumowanie aktywności użytkownika</p>
+                                    <div class="form-group mt-4">
+                                        <button class="btn btn-primary">Ściagnij Dane</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        
+                        {{-- <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Public Profile</h6>
+                                    <p>Your <span class="text-success">Profile</span> will be visible to anyone on the network.</p>
+                                    <div class="form-group mt-4">
+                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
+                                            <input class="switch-input" type="checkbox" role="switch" id="publicProfile" checked>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+                                    
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="animated-underline-contact" role="tabpanel" aria-labelledby="animated-underline-contact-tab">
+                    <div class="alert alert-arrow-right alert-icon-right alert-light-warning alert-dismissible fade show mb-4" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
+                        <strong>Warning!</strong> Please proceed with caution. For any assistance - <a href="javascript:void(0);">Contact Us</a>
                     </div>
                     
-                    <div class="widget-content">
-
-                        <ul class="p-2 ps-3 mb-4">
-                            <li class="mb-1"><strong>10,000 Monthly Visitors</strong></li>
-                            <li class="mb-1"><strong>Unlimited Reports</strong></li>
-                            <li class=""><strong>2 Years Data Storage</strong></li>
-                        </ul>
-                        
-                        <div class="progress-data">
-                            <div class="progress-info">
-                                <div class="due-time">
-                                    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 5 Days Left</p>
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Purge Cache</h6>
+                                    <p>Remove the active resource from the cache without waiting for the predetermined cache expiry time.</p>
+                                    <div class="form-group mt-4">
+                                        <button class="btn btn-secondary btn-clear-purge">Clear</button>
+                                    </div>
                                 </div>
-                                <div class="progress-stats"><p class="text-info">$25 / month</p></div>
-                            </div>
-                            
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 65%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
                         </div>
 
+                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Deactivate Account</h6>
+                                    <p>You will not be able to receive messages, notifications for up to 24 hours.</p>
+                                    <div class="form-group mt-4">
+                                        <div class="switch form-switch-custom switch-inline form-switch-success mt-1">
+                                            <input class="switch-input" type="checkbox" role="switch" id="socialformprofile-custom-switch-success">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
+                            <div class="section general-info">
+                                <div class="info">
+                                    <h6 class="">Delete Account</h6>
+                                    <p>Once you delete the account, there is no going back. Please be certain.</p>
+                                    <div class="form-group mt-4">
+                                        <button class="btn btn-danger btn-delete-account">Delete my account</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
                     </div>
-
                 </div>
-
             </div>
             
         </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="payment-history layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Payment History</h3>
-
-                    <div class="list-group">
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">March</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory1" href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory1">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">February</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory2" href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory2">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="me-auto">
-                                <div class="fw-bold title">January</div>
-                                <p class="sub-title mb-0">Pro Membership</p>
-                            </div>
-                            <span class="pay-pricing align-self-center me-3">$45</span>
-                            <div class="btn-group dropstart align-self-center" role="group">
-                                <a id="paymentHistory3" href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="paymentHistory3">
-                                    <a class="dropdown-item" href="javascript:void(0);">View Invoice</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Download Invoice</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12">
-            <div class="payment-methods layout-spacing ">
-                <div class="widget-content widget-content-area">
-                    <h3 class="">Payment Methods</h3>
-
-                    <div class="list-group">
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="{{Vite::asset('resources/images/card-americanexpress.svg')}}" class="align-self-center me-3" alt="americanexpress">
-                            <div class="me-auto">
-                                <div class="fw-bold title">American Express</div>
-                                <p class="sub-title mb-0">Expires on 12/2025</p>
-                            </div>
-                            <span class="badge badge-success align-self-center me-3">Primary</span>
-                        </div>
-                        
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="{{Vite::asset('resources/images/card-mastercard.svg')}}" class="align-self-center me-3" alt="mastercard">
-                            <div class="me-auto">
-                                <div class="fw-bold title">Mastercard</div>
-                                <p class="sub-title mb-0">Expires on 03/2025</p>
-                            </div>
-                        </div>
-                        
-                        <div class="list-group-item d-flex justify-content-between align-items-start">
-                            <img src="{{Vite::asset('resources/images/card-visa.svg')}}" class="align-self-center me-3" alt="visa">
-                            <div class="me-auto">
-                                <div class="fw-bold title">Visa</div>
-                                <p class="sub-title mb-0">Expires on 10/2025</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div> --}}
+        
+    </div>
+{{-- @php
+dd($errors);
+@endphp --}}
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
 
+        <script src="{{asset('plugins/filepond/filepond.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginFileValidateType.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginImageExifOrientation.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginImagePreview.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginImageCrop.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginImageResize.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/FilePondPluginImageTransform.min.js')}}"></script>
+        <script src="{{asset('plugins/filepond/filepondPluginFileValidateSize.min.js')}}"></script>
+
+        <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
+        <script src="{{asset('plugins/sweetalerts2/sweetalerts2.min.js')}}"></script>
+
+        @vite(['resources/assets/js/users/account-settings.js'])
+        
+        <script type="module">
+            userProfile.addFiles("{{Vite::asset('resources/images/user-profile.jpeg')}}");
+
+
+
+
+        </script>
+
+
+        
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

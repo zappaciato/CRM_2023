@@ -1,5 +1,10 @@
 .orders-badge {
     color: red;
+    font-size: 16px;
+    background-color: rgb(131, 216, 231);
+    border-radius: 30%;
+    padding: 4px;
+    
 
 }
 
