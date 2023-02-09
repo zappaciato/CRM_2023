@@ -57,13 +57,21 @@ class UserController extends Controller
         $title = "Użytkownik";
         $breadcrumb = "Użytkownik ".$user->name;
 
-        $userFiles = UserFile::where('user_id', $id)->get();
-Log::info('Grabbbing user files');
-        Log::debug($userFiles);
-        Log::info('Display beloow all current orders for this particular user which are not cancelled');
-        Log::debug($userCurrentOrders);
+        $avatar = $user->getFirstMedia('avatars');
+
+        if($avatar !== null) {
+            $linkToAvatar = $avatar->getUrl();
+        } else {
+            $linkToAvatar = '#';
+        }
+
+        // $userFiles = UserFile::where('user_id', $id)->get('path');
+Log::info('Show link to avatar avatttttar below:');
+        // Log::debug($userFiles);
+        // Log::info('Display beloow all current orders for this particular user which are not cancelled');
+        Log::debug($linkToAvatar);
         // dd($company);
-        return view('pages.user.user', compact('title', 'breadcrumb', 'user', 'userFiles', 'userCurrentOrders'));
+        return view('pages.user.user', compact('title', 'breadcrumb', 'user', 'userCurrentOrders', 'linkToAvatar'));
     }
 
 
@@ -97,29 +105,12 @@ Log::info('Before uploading an image');
 
         if (isset($data['image'])) {
 Log::info('Checked and the image file is uploaded fine');            
-            // $path = $request->file('image')->store('/public/photos');
+Log::info('Below I am adding the image to the media collection');
 
-// zapisuje za kazdym razem trzeba zrobic sprawdzenie czy rekord juz istnieje
-            $userFile = new UserFile();
-            Log::info('No i have creaded new UserFile instance and now collecting the data for the image: name, path');
-            // $userFile->path = $path;
-            // dd($request->file());
-            $imageFile = $request->file('image');
-            $name = time() . '_' . $imageFile->getClientOriginalName();
-            Log::debug($name);
-            // $path = public_path() . '/uploads/images/'.$user->id;
-            $path = $imageFile->storeAs('uploads', $name, 'public');
-            Log::info("Image is set so we create the path");
-            Log::debug($path);
-            $userFile->path = $path;
-            $userFile->name = $name;
-            $userFile->user_id = $id;
-            Log::info("userfile path below: ");
-            Log::debug($path);
-            $userFile->save();
+            $user->addMediaFromRequest('image')->toMediaCollection('avatars');
 
-Log::info('Below debugged image name object');
-            // Log::debug($data['image'][0]);
+
+
         }
 
 

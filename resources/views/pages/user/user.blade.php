@@ -89,8 +89,8 @@
                                                     <div class="profile-image  mt-4 pe-md-4">
 
                                                         <div class="text-center user-info">
-                                                            {{-- <img src="{{$userFiles[2]->path}}" alt="{{$userFiles[2]->name}}">
-                                                            <p class="">{{$user->name}}</p> --}}
+                                                            <img src="{{  $linkToAvatar}}" style="width: 50px; height:50px;" alt="fff">
+                                                            <p class="">{{$user->name}}</p>
                                                         </div>
                                                         <!-- // The classic file input element we'll enhance
                                                         // to a file pond, we moved the configuration
