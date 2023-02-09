@@ -65,6 +65,10 @@
 
                         
                         <div class="widget-content widget-content-area"> 
+                            <div class="col-md-12 mb-5">
+                                <p>Jeśli nie znalazłeś firmy do nowego kontaktu, dodaj <strong> <u class="text-danger"> najpierw </u></strong> firmę.</p>
+                                        <a href="{{route('company.add')}}"><button class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg></button></a>
+                                </div>
                             <form class="row g-3 needs-validation" action="{{route('contact.add')}}" method="POST" novalidate>
         @csrf                               
                                 {{-- <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role"> --}}
@@ -94,14 +98,43 @@
                                     Wygląda ok!
                                 </div>
                                 </div>
+{{-- dropdown list with companies --}}
+                                
+
+                                <div class="col-md-7 ">
+                                <label for="company_id">Firma </label>
+                                
+                                        <select  id="company_id" name="company_id" class="form-select" >
+                                            {{-- <option selected="" value="0">Bez firmy</option> --}}
+                                @foreach($companies as $company)
+                                            <option value="{{$company->id}}">{{$company->name}}</option>
+                                @endforeach
+                                        </select>
+                                
+                                </div>
+
+
+                                {{-- <div class="col-md-4">
+                                <label for="contact_person">Frima</label>                                 --}}
+                                        {{-- <select  id="contact_person" name="contact_person" class="form-select" > --}}
+                                            {{-- <option selected="">Jan Kowalski</option> --}}
+                                {{-- @foreach($companies as $company) --}}
+                                            {{-- <option value="{{$company->id}}">{{$company->name}}</option> --}}
+                                {{-- @endforeach --}}
+                                        {{-- </select>
+                                </div> --}}
 
 
                                 <div class="col-md-4">
                                 <label for="position" class="form-label">Pozycja</label>
-                                <input id="position" type="position" class="form-control" name="position" value="{{ old('position') }}" required autocomplete="position">
-                                <div class="invalid-feedback">
-                                    Podaj pozycję w firmie
-                                </div>
+                                {{-- <input id="position" type="position" class="form-select" name="position" value="{{ old('position') }}" required autocomplete="position"> --}}
+                                <select id="position" type="position" class="form-select" name="position" value="{{ old('position') }}">
+                                <option value="owner">Właściciel</option>
+                                <option value="management">Zarząd</option>
+                                <option value="office-employee">Pracownik biura</option>
+                                <option value="warehouse-employee">Pracownik magazynu</option>
+                                <option value="factory-employee">Pracownik fabryki</option>
+                                </select>
                                 </div>
 
 {{-- dropdown na potem w razie czego --}}

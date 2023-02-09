@@ -1,5 +1,10 @@
 .orders-badge {
     color: red;
+    font-size: 16px;
+    background-color: rgb(131, 216, 231);
+    border-radius: 30%;
+    padding: 4px;
+    
 
 }
 
@@ -53,4 +58,69 @@
 .error-img-custom {
   height: 30rem;
   width: 30rem;
+}
+
+
+.email-content-display-wrapper {
+  display: flex;
+  margin-top: 3rem;
+  margin-left: 6rem;
+  justify-content: space-between;
+}
+
+.email-content-display {
+  /* width: 1900px; */
+}
+
+
+.custom-btn {
+  width: 16rem;
+}
+
+
+.email-row-unread {
+  background-color: rgba(0, 81, 255, 0.233);
+}
+
+.email-row-read {
+  background-color: rgba(0, 255, 128, 0.233);
+}
+
+.contact-card {
+  width: 100%;
+}
+
+.address-card {
+  width: 150%;
+}
+
+.company-card {
+   width: 150%;
+}
+
+.delete-btn {
+  
+}
+
+.delete-btn:hover {
+  background-color: yellow !important;
+  color: black !important;
+  font-weight: 800;
+}
+
+.cancel-btn {
+
+}
+
+.cancel-btn:hover {
+  background-color: red !important;
+}
+
+.message-content textarea {
+  border-radius: 3px;
+  border: 2px solid rgb(255, 153, 0);
+  padding: 15px;
+  width: 100% !important;
+  height: 100%;
+
 }

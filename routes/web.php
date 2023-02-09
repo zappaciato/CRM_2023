@@ -3,10 +3,14 @@
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DropdownListController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\MessageToClientController;
+use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
+use App\Models\MessageToClient;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -89,7 +93,7 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/add-order', [OrderController::class, 'create'])->middleware('auth')->name('add.order');
         Route::post('orders/add-order', [OrderController::class, 'store'])->middleware('auth');
         
-        Route::get('orders/create-order-email/{id}', [OrderController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
+        
 
 //service orders
         Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
@@ -97,10 +101,19 @@ foreach ($prefixRouters as $prefixRouter) {
 
         Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
         Route::put('orders/service-order/edit/{id}', [ServiceOrderController::class, 'update'])->middleware('auth');
+        Route::put('orders/service-order/cancel/{id}', [ServiceOrderController::class, 'cancelOrder'])->middleware('auth')->name('cancel.order');
+
+//kind of API for dependable dropdown list for adding a new order with AJAX and jQuery
+        
+        Route::get('orders-add/fetch-contacts', [DropdownListController::class, 'fetchContacts'])->name('fetch.contacts');
+        Route::get('orders-add/fetch-addresses', [DropdownListController::class, 'fetchAdresses'])->name('fetch.addresses');
+        Route::get('orders-add/fetch-users', [DropdownListController::class, 'fetchUsers'])->name('fetch.users');
 
 //usuwanie service-order
         Route::delete('orders/service-order/delete/{id}', [ServiceOrderController::class, 'destroy'])->name('single.service.order.delete');
 
+        // Order comments
+        Route::post('orders/service-order/', [OrderCommentController::class, 'store'])->middleware('auth')->name('order.comment.add');
 
 
 // companies
@@ -120,7 +133,8 @@ foreach ($prefixRouters as $prefixRouter) {
 
 //addresses
             Route::get('comapnies/address/addresses-list', [AddressController::class, 'index'])->name('address.list');
-            Route::get('companies/address/address-add', [AddressController::class, 'create'])->name('address.add');
+            Route::get('companies/address/address-add/', [AddressController::class, 'create'])->name('address.add');
+            Route::get('comapnies/address/address-add/in-company', [AddressController::class, 'createWithinCompany'])->name('addess.add.inCompany');
             Route::post('companies/address/address-add', [AddressController::class, 'store']);
 
 //contacts
@@ -148,8 +162,14 @@ foreach ($prefixRouters as $prefixRouter) {
 
         //emails
         Route::get('emails/mailbox/inbox', [EmailController::class, 'index'])->middleware('auth')->name('email.inbox');
-        Route::get('/mailbox/23', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
+        Route::get('mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
+
+        Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
+        Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
+
+        // Messages to clients
+        Route::post('orders/service-order/{id}/message', [MessageToClientController::class, 'store'])->middleware('auth')->name('message.to.client');
         /**
          * ==============================
          *        @Router -  Apps

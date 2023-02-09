@@ -44,11 +44,24 @@ class AddressController extends Controller
 
     public function create() {
         Log::info('I am creating the view form for a new address');
-        return view('pages.addresses.address-add');
+        $title = 'Dodaj adres firmy';
+        $breadcrumb = 'Dodawanie adresu';
+        // $company = Company::where('id', $id)->get();
+        return view('pages.addresses.address-add', compact('title', 'breadcrumb'));
+    }
+
+    public function createWithinCompany() {
+        
+        Log::info('I am in createaddres within company');
+
+        $title = 'Dodaj adres firmy';
+        $breadcrumb = 'Dodawanie adresu';
+        $companies = Company::all()->pluck('name', 'id')->prepend(trans('Wybierz FIRMĘ'), '');
+        return view('pages.addresses.address-add-inCompany', compact('title', 'breadcrumb', 'companies'));
     }
 
     public function store(Request $request) {
-        Log::info('I am trying to store the new address');
+        Log::info('I am trying to store the new address!');
 
         $data = $this->validator($request->all());
 
@@ -65,8 +78,5 @@ class AddressController extends Controller
 
         return redirect(route('company.list'));
 
-
-
-        
     }
 }

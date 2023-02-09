@@ -17,10 +17,20 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'company' => ucfirst($this->faker->word(2)),
-            'title' => $this->faker->sentence(2),
-            'date' => $this->faker->date(),
-            'status' => 'new',
+            
+            'company_id',
+            'email_id',
+            'contact_person',
+            'address',
+            'lead_person',
+            'involved_person',
+            'priority',
+            'order_content',
+            'order_notes',
+            
+            'date',
+            'status', 
+            'company_id',
         ];
     }
 }

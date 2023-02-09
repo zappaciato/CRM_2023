@@ -17,6 +17,7 @@ class CompanyAddress extends Model
             'province',
             'country',
             'company_id', 
+            'notes',
     ];
 
 

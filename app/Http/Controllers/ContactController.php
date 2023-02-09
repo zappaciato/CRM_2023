@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +17,10 @@ class ContactController extends Controller
         $title = "Contacts";
         $breadcrumb = "New Contacts";
         $contacts = Contact::all();
-        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts'));
+
+        $companies = Company::select('id','name')->get();
+        Log::debug($companies);
+        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies'));
     }
 
 
@@ -32,6 +37,7 @@ class ContactController extends Controller
             'phone' => 'required',
             'phone_business' => 'required',
             'notes' => 'required',
+            'company_id' => 'required',
         ])->validate();
 
 
@@ -53,7 +59,14 @@ class ContactController extends Controller
      public function create() {
         $title = "Dodaj kontakt";
         $breadcrumb = "Dodaj nowy kontakt";
-        return view('pages.contacts.contact-add', compact('title', 'breadcrumb'));
+
+        $companies = Company::select('id', 'name')->get();
+
+
+        // foreach($companies as $company) {
+        //     Log::info($company->id);
+        // }
+        return view('pages.contacts.contact-add', compact('title', 'breadcrumb', 'companies'));
      }
 
     /**
@@ -85,17 +98,23 @@ class ContactController extends Controller
 
     public function show($id)
     {
-        Log::info('I am showing the record -> contact.');
-        Log::debug($id);
-        
-        $contact = Contact::where('id', $id)->firstOrFail();
+
+        $singleContact = Contact::where('id', $id)->firstOrFail();
+
+        $company = Company::where('id', $singleContact->company_id)->firstOrFail();
+
+        $companyAddress = CompanyAddress::where('company_id', $company['id'])->firstOrFail();
+
+        Log::debug($singleContact);
+        Log::debug($company);
+        Log::debug($companyAddress);
+
         $title = "Osoba kontaktowa";
-        $breadcrumb = "Kontakt:  " . $contact->name . '' . $contact->surname;
+        $breadcrumb = "Kontakt:  ";
 
-
-        Log::debug($contact);
+        
         // dd($company);
-        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'contact'));
+        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress'));
     }
 
 

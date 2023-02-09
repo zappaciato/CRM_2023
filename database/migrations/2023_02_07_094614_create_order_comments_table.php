@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('order_comments', function (Blueprint $table) {
             $table->id();
-            $table->string('company');
-            $table->string('title');
-            $table->string('date');
-            $table->enum('status', ['new', 'open', 'finished']);
+            $table->text('content');
             $table->timestamps();
+
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
         });
     }
 
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('order_comments');
     }
 };

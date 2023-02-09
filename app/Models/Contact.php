@@ -17,5 +17,12 @@ class Contact extends Model
             'phone',
             'phone_business',
             'notes',
+            'company_id',
     ];
+
+
+    public function companies()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

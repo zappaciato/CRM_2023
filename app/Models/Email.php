@@ -10,11 +10,23 @@ class Email extends Model
     use HasFactory;
 
     protected $fillable = [
-    'sender',
-    'email',
-    'title',
-    'content',
-    'emailstatus',
-    'date',
+        'message_id', 
+        'headers_raw', 
+        'headers', 
+        'from_name', 
+        'from_address', 
+        'subject', 
+        'to', 
+        'to_string', 
+        'cc', 
+        'bcc', 
+        'text_plain',
+        'text_html',
+        'user_id', 
+
+        'date' ,
+        'emailstatus',
     ];
+
+    
 }

@@ -62,7 +62,7 @@
                                 <div class="col-12">
                                     <div class="mb-4">
                                         <label for="password" class="form-label">Hasło</label>
-                                        <input type="text" class="form-control" id="password" type="password" name="password" required autocomplete="current-password">
+                                        <input type="password" class="form-control" id="password" type="password" name="password" required autocomplete="current-password">
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -84,42 +84,6 @@
                                     </div>
                                 </div>
                                 
-                                {{-- <div class="col-12 mb-4">
-                                    <div class="">
-                                        <div class="seperator">
-                                            <hr>
-                                            <div class="seperator-text"> <span>Or continue with</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100 ">
-                                            <img src="{{Vite::asset('resources/images/google-gmail.svg')}}" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Google</span>
-                                        </button>
-                                    </div>
-                                </div>
-    
-                                <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100">
-                                            <img src="{{Vite::asset('resources/images/github-icon.svg')}}" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Github</span>
-                                        </button>
-                                    </div>
-                                </div> --}}
-    
-                                {{-- <div class="col-sm-4 col-12">
-                                    <div class="mb-4">
-                                        <button class="btn  btn-social-login w-100">
-                                            <img src="{{Vite::asset('resources/images/twitter.svg')}}" alt="" class="img-fluid">
-                                            <span class="btn-text-inner">Twitter</span>
-                                        </button>
-                                    </div>
-                                </div> --}}
-
                                 <div class="col-12">
                                     <div class="text-center">
                                         <p class="mb-0">Nie masz konta? <a href="{{route('register')}}" class="text-warning">Zarejestruj się</a></p>

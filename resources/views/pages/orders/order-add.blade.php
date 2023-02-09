@@ -9,8 +9,8 @@
         <!--  BEGIN CUSTOM STYLE FILE  -->
         @vite(['resources/scss/light/assets/components/timeline.scss'])
 
-        @vite(['resources/scss/light/plugins/editors/quill/quill.snow.scss'])
-        @vite(['resources/scss/dark/plugins/editors/quill/quill.snow.scss'])
+        {{-- @vite(['resources/scss/light/plugins/editors/quill/quill.snow.scss'])
+        @vite(['resources/scss/dark/plugins/editors/quill/quill.snow.scss']) --}}
         <!--  END CUSTOM STYLE FILE  -->
         
         <style>
@@ -28,8 +28,8 @@
     <div class="page-meta d-flex justify-content-between">
         <nav class="breadcrumb-style-one" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Kontakt</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Nowy kontakt</li>
+                <li class="breadcrumb-item"><a href="#">Zgłoszenie</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Nowe zgłoszenie</li>
             </ol>
         </nav>
         
@@ -69,55 +69,77 @@
         @csrf                               
                                 {{-- <input id="role" type="hidden" value="nieprzypisany" class="form-control" name="role"> --}}
 
-                                <div class="col-md-4">
-                                    <label for="company" class="form-label">Firma</label>
-                                        <select id="company" class="form-select" name="company" value>
-                                            <option selected="">FIrma Jeden</option>
-                                            <option>Firma dwa</option>
-                                            <option>Firma trzy</option>
+
+                                <div class="col-md-12">
+                                    <label for="title" class="form-label">Tytuł zgłoszenia</label>
+                                        <input type="text" name="title" class="form-control" id="title">
                                         </select>
 
                                 </div>
 
-                                
 
                                 <div class="col-md-4">
+                                    <label for="company_id" class="form-label">Firma</label>
+                                        <select id="company_id" class="form-select company" name="company_id">
+                                            {{-- <option selected="">FIrma Jeden</option> --}}
+                                @foreach ($companies as $id => $company)
+                                    <option value="{{$id}}">{{$company}}</option>
+                                @endforeach
+                                        </select>
+
+                                </div>
+
+
+                                <input type="hidden" name="email_id" value="1">
+
+
+                                {{-- contacts dependable list --}}
+                                <div class="col-md-4 form-group {{ $errors->has('comapny_id') ? 'has-error' : '' }}">
+                                    <label for="contact_person">Osoba kontaktowa z firmy</label>
+                                    <select name="contact_person" id="contact_person" class="form-select">
+                                        {{-- <option value="">{{ trans('global.pleaseSelect') }}</option> --}}
+                                    </select>
+                                @if($errors->has('contact_person'))
+                                    <p class="help-block">
+                                        {{ $errors->first('contact_person') }}
+                                    </p>
+                                @endif
+                                </div>
+                                
+
+                                {{-- <div class="col-md-4">
                                 <label for="contact_person">Osoba kontaktowa z firmy</label>
                                         <select  id="contact_person" name="contact_person" class="form-select" >
                                             <option selected="">Jan Kowalski</option>
                                             <option>Cezary Pazura</option>
                                             <option>Michaell Jordan</option>
                                         </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-4">
-                                <label for="contact_person">Adres</label>
+                                <label for="address">Adres</label>
                                         <select  id="address" name="address" class="form-select" >
-                                            <option selected="">Pl WOlności</option>
+                                            {{-- <option selected="">Pl WOlności</option>
                                             <option>Oxford St</option>
-                                            <option>Umberstabmbplatz</option>
+                                            <option>Umberstabmbplatz</option> --}}
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
-                                <label for="manager">Prowadzący</label>
-                                        <select  id="manager" name="manager" class="form-select" >
-                                            <option selected="">Wojtek</option>
-                                            <option>Jacek St</option>
-                                            <option>Ula brzozowicz</option>
+                                <div class="col-md-3">
+                                <label for="lead_person">Os. odpowiedzialna</label>
+                                        <select  id="lead_person" name="lead_person" class="form-select" >
+
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
-                                <label for="involved_person">Prowadzący</label>
+                                <div class="col-md-3">
+                                <label for="involved_person">Os. zaangażowana</label>
                                         <select  id="involved_person" name="involved_person" class="form-select" >
-                                            <option selected="">Marcin</option>
-                                            <option>Jadwiga</option>
-                                            <option>Umbro</option>
+
                                         </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                 <label for="priority" class="form-label">Priorytet</label>
                                         <select  id="priority" name="priority" class="form-select" >
                                             <option selected="">Wysoki</option>
@@ -126,7 +148,23 @@
                                         </select>
                                 </div>
 
-
+                                <div class="col-md-2">
+                                <label for="status" class="form-label">Status</label>
+                                        <select  id="status" name="status" class="form-select" >
+                                            <option selected="">Nowe</option>
+                                            <option>Otwarte</option>
+                                            <option>W toku</option>
+                                            <option>Reklamacje</option>
+                                            <option>Sfinalizowane</option>
+                                            <option>Anulowane</option>
+                                        </select>
+                                </div>
+{{-- TODO: date picker --}}
+                                <div class="col-md-2">
+                                <label for="deadline">Termin wykonania</label>
+                                        <input type="date" class="form-control" id="deadline" name="deadline"> 
+                                </div>
+{{-- end TODO date picker --}}
                                 <div class="col-md-8">
                                 <label for="order_content">Zawartość zgłoszenia</label>
                                         <textarea type="text" class="form-control" id="order_content" name="order_content"> </textarea>
@@ -153,9 +191,9 @@
 
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
-        <script type="module" src="{{asset('plugins/editors/quill/quill.js')}}"></script>
-        <script type="module" src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script>
-<script>
+        {{-- <script type="module" src="{{asset('plugins/editors/quill/quill.js')}}"></script>
+        <script type="module" src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script> --}}
+{{-- <script>
     window.addEventListener('load', function() {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
 var forms = document.getElementsByClassName('needs-validation');
@@ -184,7 +222,98 @@ toolbar: [
 placeholder: 'Dodaj notatkę...',
 theme: 'snow'  // or 'bubble'
 });
+</script> --}}
+
+
+{{-- jQuery and AJAX for for the dropdown list --}}
+
+{{-- trzeba to potem do pliku wrzucic i reference: <script src="{{ asset('assets/cosctammm/js/jquery.min.js') }}"></script> --}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+{{-- <script type="text/javascript">
+
+$(document).ready(function(){
+        $(document).on('change', '.company', function() {
+        console.log('It has changed!');
+
+        var company_id = $(this).find(':selected').val();
+        console.log(company_id);
+
+if(company_id) {
+        $.ajax({
+            type: 'GET',
+            // url: "{!! URL::to('orders-add/fetch-contacts') !!}",
+            // url: "{{ url('/orders-add/fetch-contacts') }}/" + company_id,
+            url: "{{ route('fetch.contacts') }}?country_id=" + $(this).val(),
+            // dataType: 'json',
+            // data: {'id':company_id},
+            success: function(data){
+                console.log('Success with AJAX');
+                console.log(data);
+            },
+            error: function(data){
+                console.log('Didnt work out!');
+            }
+        })
+
+    } else {
+                    alert('danger');
+                }
+
+    });
+});
+
+</script> --}}
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#company_id').change(function() {
+        $.ajax({
+            url: "{{ route('fetch.contacts') }}?company_id=" + $(this).val(),
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX fetching contacts on company change');
+                $('#contact_person').html(data.html);
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('fetch.addresses') }}?company_id=" + $(this).val(),
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#address').html(data.html);
+            }
+        });
+
+
+    });
+
+    $.ajax({
+            url: "{{ route('fetch.users') }}",
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#lead_person').html(data.html);
+            }
+        });
+
+    $.ajax({
+            url: "{{ route('fetch.users') }}",
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#involved_person').html(data.html);
+            }
+        });
+
+})
 </script>
+
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

@@ -10,10 +10,20 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'company',
         'title',
+        'company_id',
+        'email_id',
+        'contact_person',
+        'address',
+        'lead_person',
+        'involved_person',
+        'priority',
+        'order_content',
+        'order_notes',
+
+        'deadline',
         'status',
-        'date',
+        'company_id',
 
 
         // 'companyName',
@@ -28,4 +38,36 @@ class Order extends Model
         // 'orderContent',
         // 'notes',
     ];
+
+    public function companies() {
+
+        return $this->hasOne(Company::class);
+    }
+
+    public function messagesToClients()
+    {
+        return $this->hasMany(MessageToClient::class);
+    }
+
+    public function orderNotifications()
+    {
+        return $this->hasMany(OrderNotification::class);
+    }
+
+    public function orderComments()
+    {
+        return $this->hasMany(OrderComment::class);
+    }
+
+    public function users() {
+        return $this->hasMany(User::class);
+    }
 }
+
+    // public function users() {
+
+    //     return $this->hasMany(User::class);
+    // }
+
+    
+

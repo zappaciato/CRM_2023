@@ -53,6 +53,7 @@
                                 <th>Imię</th>
                                 <th>Nazwisko</th>
                                 <th>Pozycja</th>
+                                <th>Firma</th>
                                 <th>Telefon</th>
                                 {{-- <th>Telefon 2</th> --}}
                                 <th>Email</th>
@@ -69,6 +70,12 @@
                                 <td>{{$contact->name}}</td>
                                 <td>{{$contact->surname}}</td>
                                 <td>{{$contact->position}}</td>
+
+                                @foreach ($companies as $company )
+                                @if ($company->id == $contact->company_id)
+                                <td>{{$company->name}}</td>
+                                @endif
+                                @endforeach
                                 
                                 <td>{{$contact->phone}}</td>
                                 {{-- <td>{{$contact->phone_buisness}}</td> --}}
@@ -87,6 +94,7 @@
                                 <th>Imię</th>
                                 <th>Nazwisko</th>
                                 <th>Pozycja</th>
+                                <th>Firma</th>
                                 <th>Telefon</th>
                                 {{-- <th>Telefon 2</th> --}}
                                 <th>Email</th>

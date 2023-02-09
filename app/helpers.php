@@ -36,7 +36,7 @@ if (!function_exists('layoutConfig')) {
         // Log::debug($__getConfiguration);
         if (Request::is('modern-light-menu/*')) {
 
-            $__getConfiguration = Config::get('app-config.layout.vlm');
+            $__getConfiguration = Config::get('app-config.layout.vdm');
         } else if (Request::is('modern-dark-menu/*')) {
             Log::info('I am in layout config dark menu');
             $__getConfiguration = Config::get('app-config.layout.vdm');
@@ -74,6 +74,11 @@ if (!function_exists('layoutConfig')) {
 
         //new orders 
         else if (Request::is('/new-orders/*')) {
+
+            // $__getConfiguration = Config::get('app-config.layout.vlm');
+            $__getConfiguration = Config::get('app-config.layout.vdm');
+            
+        } else if (Request::is('mailbox/mail/*')) {
 
             // $__getConfiguration = Config::get('app-config.layout.vlm');
             $__getConfiguration = Config::get('app-config.layout.vdm');
@@ -118,6 +123,9 @@ if (!function_exists('getRouterValue')) {
 
             $__getRoutingValue = '/collapsible-menu';
         } else if (Request::is('/new-orders')) {
+
+            $__getRoutingValue = '/modern-dark-menu';
+        } else if (Request::is('mailbox/mail/*')) {
 
             $__getRoutingValue = '/modern-dark-menu';
         }

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -21,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
+        'phone', 
+        'image',
         'password',
     ];
 
@@ -34,6 +37,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    public function fileUrl(){
+        return Storage::url($this->file);
+    }
+
     /**
      * The attributes that should be cast.
      *
@@ -44,11 +52,26 @@ class User extends Authenticatable
     ];
 
     public function isAdmin() {
-        return $this->role === 'admin';
+        return $this->role === 'admin' ;
     }
 
     public function isActive() {
-        return $this->role !== 'nieprzypisany' && 'admin';
+        return $this->role === 'konstruktor';
+    }
+
+
+    public function orderComments()
+    {
+        return $this->hasMany(OrderComment::class);
+    }
+    
+    public function orders() {
+        return $this->hasMany(Order::class);
+
+    }
+
+    public function user_files(){
+        return $this->hasMany(UserFile::class);
     }
 
 }

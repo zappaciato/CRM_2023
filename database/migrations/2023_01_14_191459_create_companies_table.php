@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone');
             $table->string('phone_stationary')->nullable(); //
-            $table->string('country');
+            $table->string('country')->default('Polska');
 
             $table->string('www');
             $table->text('notes');

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\CompanyAddress;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,6 +21,8 @@ class CompanyController extends Controller
         Log::info('I am showing all the records.');
         $title = "Companies";
         $breadcrumb = "Companies list";
+
+
 
         $companies = Company::all();
 
@@ -58,17 +64,19 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        
         $data = $this->validator($request->all());
 
         Log::info('This is COMPANY data after validation and creation');
         // Log::debug($data);
 
         $company = Company::create($data);
-
         
-        Log::debug($company);
         $title = 'Dodaj nowy adress';
         $breadcrumb = 'Nowy Adress';
+
+        //SEND EMAIL TO ADMIN
+        // Mail::to(env('ADMIN_EMAIL'))->send(new OrderChanged());
         // return redirect(route('address.add', $company->id));
         // return redirect()->route('address.add')->with('company', $company);
         return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));
@@ -79,30 +87,19 @@ class CompanyController extends Controller
     public function show($id)
     {
         Log::info('I am showing the record of a single Company and blow is the ID value');
-        $address = CompanyAddress::where('company_id', $id)->get();
-        Log::debug($id);
-        Log::debug($address);
+        // $address = CompanyAddress::where('company_id', $id)->get();
+
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
-//find if a company has an address
-
-        // if($address = CompanyAddress::where('company_id', $id)->firstOrFail() !== null) {
-        //     return $address = CompanyAddress::where('company_id', $id)->firstOrFail();
-        // } else {
-        //     $address = null;
-        // };
-
         
-        Log::info('This is the address of a chosen comapny');
-        
+        $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
+        $contacts = $company->contacts;
+        // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; Problem w tym, ze czasem w tinkerze to nie dziala;
+        $orders = $company->orders;
 
-
-
-        Log::debug($company);
-        // dd($company);
-        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'address'));
+        return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts', 'orders'));
     }
 
 
@@ -111,6 +108,7 @@ class CompanyController extends Controller
         Log::info('I am editing the record.');
         $company = Company::findOrFail($id);
 
+        
         $title = 'Edycja firmy';
         $breadcrumb = 'Eduycja firmy '.$company->name;
 

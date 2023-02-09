@@ -85,7 +85,8 @@
                                 </div>
                             </div>
                         </div>
-{{-- end taby do emaili --}}
+                        {{-- end taby do emaili --}}
+
                         <div id="mailbox-inbox" class="accordion mailbox-inbox">
 
                             <div class="search">
@@ -131,16 +132,19 @@
 
                                 </div>
                             </div>
+
+
                     
                             <div class="message-box">
                                 
                                 <div class="message-box-scroll" id="ct">
 {{-- list of emails --}}
+@if($emails->isNotEmpty())
 @foreach($emails as $email)
                                     <div id="unread-promotion-page" class="mail-item mailInbox">
                                         <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
                                             <div class="mb-0">
-                                                <div class="mail-item-heading social collapsed"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
+                                                <div class="mail-item-heading social collapsed {{($email->emailstatus !== '["przeczytany"]') ? 'email-row-unread' : 'email-row-read'}}"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
 
                                                     <div class="mail-item-inner">
 
@@ -153,18 +157,24 @@
                                                             </div>
                                                             <div class="f-body">
                                                                 <div class="meta-mail-time">
-                                                                    <p class="user-email" data-mailTo="laurieFox@mail.com">{{$email->sender}}</p>
+                                                                    <p class="user-email" data-mailTo="laurieFox@mail.com">{{$email->from_address}}</p>
                                                                 </div>
+                                                                
                                                                 <div class="meta-title-tag">
-                                                                    <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"Lorem .....'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="mail-title" data-mailTitle="{{$email->title}}">{{$email->title}} - </span> {{$email->content}}
-                                                                    </p>
+                                                                    {{-- link to the individual email --}}
+                                                                    <a href="{{ route('single.email', $email->id) }}"><p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"Lorem .....'><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="mail-title" data-mailTitle="{{$email->subject}}">{{$email->subject}} - </span> {{$email->text_plain}}
+                                                                    </p></a>
+
+
+
                                                                     <div class="tags">
                                                                         <span class="g-dot-primary"></span>
                                                                         <span class="g-dot-warning"></span>
                                                                         <span class="g-dot-success"></span>
                                                                         <span class="g-dot-danger"></span>
                                                                     </div>
-                                                                    <p class="meta-time align-self-center">2:00 PM</p>
+
+                                                                    <p class="meta-time align-self-center">{{$email->date}}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -180,199 +190,17 @@
                                         </div>
                                     </div>
 @endforeach
-                                </div>
-                            </div>
-{{-- individual email content section --}}
-                            <div class="content-box">
-                                <div class="d-flex msg-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left close-message"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                                    {{-- <h2 class="mail-title" data-selectedMailTitle="">{{$email->title}}</h2> --}}
-                                    <h2  >{{$email->title}}</h2>
-                                    
-                                </div>
-
-                                
-
-
-@foreach($emails as $email)
-
-                                <div id="mailCollapse{{$email->id}}" class="collapse" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
-                                    <div class="mail-content-container mailInbox" data-mailfrom="info@mail.com" data-mailto="linda@mail.com" data-mailcc="">
-
-                                        <div class="d-flex justify-content-between">
-
-                                            <div class="d-flex user-info">
-                                                <div class="f-head">
-                                                    <img src="{{Vite::asset('resources/images/profile-16.jpeg')}}" class="user-profile" alt="avatar">
-                                                </div>
-                                                <div class="f-body">
-                                                    <div class="meta-title-tag">
-                                                        <h4 class="mail-usr-name" data-mailtitle="{{$email->title}}">{{$email->sender}}</h4>
-                                                        
-                                                    </div>
-                                                    
-                                                    <div class="meta-mail-time">
-                                                        <p class="user-email" data-mailto="laurieFox@mail.com">{{$email->email}}</p>
-                                                        <p class="mail-content-meta-date current-recent-mail">{{$email->date}} -</p>
-                                                        <p class="meta-time align-self-center">2:00 PM</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="action-btns">
-                                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Reply">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-left reply"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
-                                                </a>
-                                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Forward">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-right forward"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <a href=""><button class="btn btn-danger ms-5">Utwórz zlecenie z emaila</button></a>
-                                        <a href=""><button class="btn btn-warning ms-5">Usuń emaila</button></a>
-
-                                        
-
-
-                                        <p class="mail-content" data-mailTitle="Promotion Page" data-maildescription='{"ops":[{"insert":"Lorem .....\n"}]}'> {{$email->content}} </p>
-
-                                        <div class="gallery text-center">
-                                            <img alt="image-gallery" src="{{Vite::asset('resources/images/scroll-6.jpeg')}}" class="img-fluid mb-4 mt-4" style="width: 250px; height: 180px;">
-                                        </div>
-
-                                        <p>{{$email->content}}</p>
-
-
-
-                                        <div class="attachments">
-                                            <h6 class="attachments-section-title">Załączniki</h6>
-                                            <div class="attachment file-pdf">
-                                                <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Confirm File.txt</p>
-                                                        <p class="file-size">450kb</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="attachment file-folder">
-                                                <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Important Docs.xml</p>
-                                                        <p class="file-size">2.1MB</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-@endforeach
-
-
-                               
-                            </div>
-
-                        </div>
-                        
-                    </div>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="composeMailModal" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title add-title" id="notesMailModalTitleeLabel">Compose</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-bs-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> -->
-                                    <div class="compose-box">
-                                        <div class="compose-content">
-                                            <form>
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="mb-4 mail-form">
-                                                            <p>From:</p>
-                                                            <select class="form-control" id="m-form">
-                                                                <option value="info@mail.com">Info &lt;info@mail.com&gt;</option>
-                                                                <option value="shaun@mail.com">Shaun Park &lt;shaun@mail.com&gt;</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="mb-4 mail-to">
-                                                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> To:</p>
-                                                            <div class="">
-                                                                <input type="email" id="m-to" class="form-control">
-                                                                <span class="validation-text"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="mb-4 mail-cc">
-                                                            <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg> CC:</p>
-                                                            <div>
-                                                                <input type="text" id="m-cc" class="form-control">
-                                                                <span class="validation-text"></span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-4 mail-subject">
-                                                    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Subject:</p>
-                                                    <div class="w-100">
-                                                        <input type="text" id="m-subject" class="form-control">
-                                                        <span class="validation-text"></span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div class="">
-                                                    <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Upload Attachment:</p>
-                                                    <!-- <input type="file" class="form-control-file" id="mail_File_attachment" multiple="multiple"> -->
-                                                    <input class="form-control file-upload-input" type="file" id="formFile" multiple="multiple">
-                                                </div>
-
-                                                <div id="editor-container">
-
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="btn-save" class="btn float-left btn-success"> Save</button>
-                                    <button id="btn-reply-save" class="btn float-left btn-success"> Save Reply</button>
-                                    <button id="btn-fwd-save" class="btn float-left btn-success"> Save Fwd</button>
-
-                                    <button class="btn" data-bs-dismiss="modal"> <i class="flaticon-delete-1"></i> Discard</button>
-
-                                    <button id="btn-reply" class="btn btn-primary"> Reply</button>
-                                    <button id="btn-fwd" class="btn btn-primary"> Forward</button>
-                                    <button id="btn-send" class="btn btn-primary"> Send</button>
+@else
+<div class="container d-flex justify-content-center align-items-center h-100">
+<h1>Brak wiadomosci email!</h1>
+</div>
+@endif
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
             </div>
-
         </div>
     </div>
     

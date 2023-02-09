@@ -123,6 +123,7 @@ $isAltMenu = layoutConfig()['alt-menu'];
     @endif
 
     {{$footerFiles}}
+    
 </body>
 
 </html>

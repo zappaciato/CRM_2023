@@ -71,6 +71,7 @@
         'maintanence' => (Request::routeIs('maintenance') ? true : false),
     ]) @if ($scrollspy == 1) {{ $scrollspyConfig }} @else {{''}} @endif   @if (Request::routeIs('fullWidth')) layout="full-width"  @endif >
 
+{{-- Loader shuts the page in infinie loading: TODO: fix --}}
     <!-- BEGIN LOADER -->
     {{-- <x-layout-loader/> --}}
     <!--  END LOADER -->
@@ -88,7 +89,7 @@
 
     --}}
 
-    {{-- sweet alerts --}}
+    {{-- sweet alerts for notification: K.--}}
     @include('sweetalert::alert')
 
     @if (
@@ -110,6 +111,7 @@
         @php
             $ordersCount = count(App\Models\Order::all());
         @endphp
+        {{-- THis is my attempt to pass the data ablove (count()) to the componen: TODO --}}
         {{-- <x-navbar.style-vertical-menu :ordersCount="$ordersCount" classes="{{($isBoxed ? 'container-xxl' : '')}}"/> --}}
         <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
         

@@ -38,6 +38,7 @@ return new class extends Migration
             // $table->foreign('address_id')->references('id')->on('persons_address');
             // $table->foreign('firms_id')->references('id')->on('firms');
 
+            $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
 
             $table->timestamps();
         });

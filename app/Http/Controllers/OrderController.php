@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Email;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
@@ -22,24 +25,45 @@ class OrderController extends Controller
         $breadcrumb = "Dodawanie nowego zamówienia";
         Log::info('I am creating the view for adding a new order.');
 
-        return view('pages.orders.order-add', compact('title', 'breadcrumb'));
+        $companies = Company::all()->pluck('name', 'id')->prepend(trans('Wybierz FIRMĘ'), '');
+        Log::debug($companies);
+
+        return view('pages.orders.order-add', compact('title', 'breadcrumb', 'companies'));
     }
 
 
 
-    public function createFromEmail($id) {
-        $title = "Dodawanie zamówienia z emaila";
-        $breadcrumb = "Dodawanie nowego zamówienia z emaila";
 
-        return view('pages.orders.order-add', compact('title', 'breadcrumb'));
-    }
+
 
     protected function validator($data)
     {
-        Log::info('I am tryign to validate the data for the order.');
+        Log::info('I am validating the order record.');
         Log::debug($data);
 
-        return $data;
+        $validated =  Validator::make($data, [
+            'title' => 'required',
+            'company_id' => 'required|integer',
+            'email_id' => 'required|integer',
+            'contact_person' => 'required',
+            'address' => 'required',
+            'lead_person' => 'required',
+            'involved_person' => 'required',
+            'priority' => 'required',
+            'order_content' => 'required',
+            'order_notes' => 'required',
+            'deadline' => 'required',
+            'status' => 'required',
+
+        ])->validate();
+
+
+        Log::info('ORDER Record has been validated!!');
+
+        // $validated = Arr::add($validated, 'published', 0);
+        // $validated = Arr::add($validated, 'premium', 0);
+
+        return $validated;
     }
 
     /**
@@ -52,11 +76,15 @@ class OrderController extends Controller
     {
         $title = '';
         $breadcrumb = '';
-        Log::info('I am tryign to store the data');
+        Log::info('I am tryign to store the data and redirect');
         $data = $this->validator($request->all());
+        Log::info('I am trying to debug the data to store - ORDER!');
 Log::debug($data);
-        return view('welcome', compact('data', 'title', 'breadcrumb'));
 
-        // return redirect(route('contact.list', $contact->id));
+Order::create($data);
+
+        // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
+
+        return redirect(route('new.orders'));
     }
 }
