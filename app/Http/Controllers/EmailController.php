@@ -142,12 +142,12 @@ Log::debug($email);
                 }
             }
 
-        
+        $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
 
             Log::info('This is the final contact out of scope!');
             // Log::debug($contact);
             // Log::debug($company);
-            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact'));
+            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'emailPlain'));
         }
 
 
