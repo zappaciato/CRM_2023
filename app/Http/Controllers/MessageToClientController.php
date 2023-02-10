@@ -66,9 +66,6 @@ class MessageToClientController extends Controller
         Log::info('This is message to client data AFTER validation');
         Log::debug($data);
 
-        
-
-        
         $messageToClient = ModelsMessageToClient::create($data);
 
         Alert::alert('Gratulacje!', 'Wiadomość została wysłana', 'success');
@@ -85,7 +82,7 @@ Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc
             Log::info('Checked and the msg-attachment is uploaded fine');
             Log::info('Below I am adding msg-attachment to the media collection');
 
-            $messageToClient->addMediaFromRequest('msg-attachment')->toMediaCollection('msg-attachments');
+            $messageToClient->addMediaFromRequest("msg-attachment")->toMediaCollection("msg-attachment#$request->order_id");
         }
 
 

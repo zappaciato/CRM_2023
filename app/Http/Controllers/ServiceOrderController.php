@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderNotification;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ServiceOrderController extends Controller
 {
@@ -81,7 +83,38 @@ class ServiceOrderController extends Controller
 Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
 Log::debug($orderNotifications);
 Log::debug($messagesToClient);
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments'));
+$attachmentsLinks = [];
+       
+
+foreach($messagesToClient as $msg) {
+if($msg->getFirstMedia('msg-attachments') === null) {
+
+    
+
+
+} else {
+
+                $attachments = $msg->getMedia('msg-attachments');
+                Log::info('BELOW attachemtns:: ');
+                Log::debug($attachments);
+                $attachmentsLinks = [];
+                foreach ($attachments as $attachment) {
+                    Log::info('BELOW ::: single attachment $attachemnt');
+                    Log::debug($attachment);
+                    array_push($attachmentsLinks, $attachment->getUrl());
+                    // $attachmentsLinks = $attachments->getUrl();
+                }
+
+                Log::info('Attachment links below:::::');
+                Log::debug($attachmentsLinks);
+                
+}
+            
+            
+}
+        // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
+
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments', 'attachmentsLinks'));
     }
 
 
@@ -200,4 +233,45 @@ Log::debug($usersEmails);
         return redirect(route('service.orders'));
     }
     
+
+
+// scanning throu string email titles
+
+public function scanEmails() {
+    $emails = Email::all();
+
+    
+}
+
+public function displayAssignedFiles($id){
+
+    // $order = Order::find($id);
+
+    Log::info('I am in sidplayAssignedFiles');
+        $order = Order::find(7);
+        // $orders = MessageToClient::get();
+        // $orderFiles = [];
+        // Log::info('TESSSTY ');
+        // Log::debug($orders[6]->getFirstMedia('msg-attachments'));
+        // foreach($orders as $order) {
+        //         // $orderFiles = $order->getFirstMedia();
+        //         Log::debug($order->getFirstMedia('msg-attachments'));
+        //         Log::debug($order->getFirstMedia('msg-attachments'));
+        //         array_push($orderFiles, $order->getFirstMedia('msg-attachments'));
+
+        // }
+$title = "Pliki zwiazane ze zgłoszeniem";
+$breadcrumb = 'Pliki';
+        // $orderFiles = Media::all();
+        $orderFiles = Media::where('collection_name', 'file#order#'.$id)->get();
+        // dd($orderFiles);
+
+    Log::info('BELOW order files: ');
+    Log::debug($orderFiles);
+    
+    return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order'));
+
+}
+
+
 }

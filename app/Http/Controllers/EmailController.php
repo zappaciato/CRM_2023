@@ -151,4 +151,10 @@ Log::debug($email);
         }
 
 
+        public function displayAssignedEmails($id){
+            $emails = Email::where('id', $id)->get();
+Log::debug($emails);
+            return view('pages.orders.order-emails', compact('emails'));
+        }
+
 }

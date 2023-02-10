@@ -8,8 +8,10 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\MessageToClientController;
 use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderFileController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
+use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -116,6 +118,7 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::post('orders/service-order/', [OrderCommentController::class, 'store'])->middleware('auth')->name('order.comment.add');
 
 
+
 // companies
         Route::get('companies/companies-list', [CompanyController::class, 'index'])->middleware('auth')->name('company.list');
         
@@ -167,7 +170,10 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
-
+        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
+        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
+        //Order add more files to order files
+        Route::post('orders/service-order/add-file', [OrderFileController::class, 'store'])->middleware('auth')->name('add.file');
         // Messages to clients
         Route::post('orders/service-order/{id}/message', [MessageToClientController::class, 'store'])->middleware('auth')->name('message.to.client');
         /**
