@@ -282,7 +282,7 @@ public function displayAssignedFiles($id){
     // $order = Order::find($id);
 
     Log::info('I am in sidplayAssignedFiles');
-        $order = Order::find(7);
+        $order = Order::find($id);
         // $orders = MessageToClient::get();
         // $orderFiles = [];
         // Log::info('TESSSTY ');
