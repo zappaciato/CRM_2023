@@ -6,6 +6,7 @@ use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -17,10 +18,12 @@ class OrderFileController extends Controller
 
         // Order Id zawsze wybija jako 7... prawdopodobnie tzerba dodac parametr id i rowniez w web.route;
 
-
+$title = 'Files';
+$breadcrumb = "files";
         
         // $order = Order::where('id', $request->order_id)->get();
         $order = Order::find($request->order_id);
+        $orderId = $request->order_id;
         // $media = Media::find(1);
         // $messageToCLient = MessageToClient::where('id', 1)->get();
         Log::info('This is the request when adding a new file to collection. and ORDER details');
@@ -49,6 +52,7 @@ class OrderFileController extends Controller
 
         Alert::alert('Gratulacje!', 'Plik został dodany!', 'success');
         Log::info('I am about to finish the file upload');
-        return view(route('displayAssignedFiles', $order->id));
+        return redirect()->back();
+
     }
 }

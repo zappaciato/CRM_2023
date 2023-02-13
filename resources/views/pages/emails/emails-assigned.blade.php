@@ -44,10 +44,10 @@
                                     <div class="mail-sidebar-scroll">
 
                                         <ul class="nav nav-pills d-block" id="pills-tab" role="tablist">
-                                           @include('partials.emailpartials.email-side-tabs')
+                                            @include('partials.emailpartials.email-side-tabs')
                                         </ul>
 
-                                        <p class="group-section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> Groups</p>
+                                        {{-- <p class="group-section"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> Groups</p>
 
                                         <ul class="nav nav-pills d-block group-list" id="pills-tab2" role="tablist">
                                             <li class="nav-item">
@@ -62,7 +62,7 @@
                                             <li class="nav-item">
                                                 <a class="nav-link list-actions g-dot-danger" id="private"><span>Private</span></a>
                                             </li>
-                                        </ul>
+                                        </ul> --}}
 
                                     </div>
                                 </div>
@@ -122,8 +122,8 @@
                                 
                                 <div class="message-box-scroll" id="ct">
 {{-- list of emails --}}
-@if($emails->isNotEmpty())
-@foreach($emails as $email)
+@if($emailsAssigned->isNotEmpty())
+@foreach($emailsAssigned as $email)
                                     <div id="unread-promotion-page" class="mail-item mailInbox">
                                         <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
                                             <div class="mb-0">

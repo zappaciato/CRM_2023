@@ -21,7 +21,7 @@ class EmailFactory extends Factory
     {
 
       $email = Contact::select('email')->get();
-        Log::debug($email[1]->email);
+        // Log::debug($email[1]->email);
         return [
             'message_id' => md5(4).'@marex.pl',
             'headers_raw' => 'header_row_007',

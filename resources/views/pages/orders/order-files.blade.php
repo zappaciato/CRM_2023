@@ -29,6 +29,7 @@
 
     @csrf
         <input type="hidden" name="order_id" value="{{$order->id}}">
+        <input type="hidden" name="user_id" value="{{auth()->user()->id}}">
 
         <label for="new_file">
         <input type="file" name="new_file">

@@ -175,7 +175,8 @@ foreach ($prefixRouters as $prefixRouter) {
         //emails
         Route::get('emails/mailbox/inbox', [EmailController::class, 'index'])->middleware('auth')->name('email.inbox');
         Route::get('mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
-
+        Route::get('emails/mailbox/assigned', [EmailController::class, 'indexAssigned'])->middleware('auth')->name('emails.assigned');
+        
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         

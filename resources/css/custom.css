@@ -72,6 +72,11 @@
   /* width: 1900px; */
 }
 
+/* To display current active mailbox tab */
+.active-custom {
+  background-color: rgba(241, 204, 36, 0.753);
+}
+
 
 .custom-btn {
   width: 16rem;

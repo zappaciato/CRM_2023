@@ -279,26 +279,14 @@ public function scanEmails() {
 
 public function displayAssignedFiles($id){
 
-    // $order = Order::find($id);
-
     Log::info('I am in sidplayAssignedFiles');
         $order = Order::find($id);
-        // $orders = MessageToClient::get();
-        // $orderFiles = [];
-        // Log::info('TESSSTY ');
-        // Log::debug($orders[6]->getFirstMedia('msg-attachments'));
-        // foreach($orders as $order) {
-        //         // $orderFiles = $order->getFirstMedia();
-        //         Log::debug($order->getFirstMedia('msg-attachments'));
-        //         Log::debug($order->getFirstMedia('msg-attachments'));
-        //         array_push($orderFiles, $order->getFirstMedia('msg-attachments'));
 
-        // }
 $title = "Pliki zwiazane ze zgłoszeniem";
 $breadcrumb = 'Pliki';
-        // $orderFiles = Media::all();
+
         $orderFiles = Media::where('collection_name', 'file#order#'.$id)->get();
-        // dd($orderFiles);
+
 
     Log::info('BELOW order files: ');
     Log::debug($orderFiles);
@@ -306,6 +294,5 @@ $breadcrumb = 'Pliki';
     return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order'));
 
 }
-
 
 }
