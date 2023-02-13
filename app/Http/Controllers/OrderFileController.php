@@ -14,6 +14,11 @@ class OrderFileController extends Controller
 {
     public function store(Request $request)
     {
+
+        // Order Id zawsze wybija jako 7... prawdopodobnie tzerba dodac parametr id i rowniez w web.route;
+
+
+        
         // $order = Order::where('id', $request->order_id)->get();
         $order = Order::find($request->order_id);
         // $media = Media::find(1);

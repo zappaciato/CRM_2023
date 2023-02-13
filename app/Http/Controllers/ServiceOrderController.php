@@ -21,6 +21,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class ServiceOrderController extends Controller
 {
     public function index() {
+
+        Log::info('I am in serviceorder index');
         $title = "Zgłoszenia serwisowe";
         $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
@@ -38,6 +40,32 @@ class ServiceOrderController extends Controller
         
 
         return view('pages.orders.orders-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users'));
+    }
+
+
+    public function userIndex()
+    {
+        Log::info('I am in userIdex');
+        $title = "New Orders";
+        $breadcrumb = "Nowe Service Orders";
+        $users = User::select('id', 'name')->get(); 
+        $loggedUser = Auth::user();
+
+        $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->get();
+        $companies = Company::select('id', 'name')->get();
+        // foreach($orders as $order) {
+        //     if($user->id === $order->lead_person || $user->id === $order->involved_person) [
+
+        //         $assignedOrders = $order->where('')
+
+        //     ]
+        Log::info('I am debuggon orders for inividual user');
+        // dd($orders);
+        Log::debug($orders);
+        Log::debug($loggedUser->id);
+
+        return view('pages.orders.orders-user-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users', 'loggedUser'));
+      
     }
 
     protected function validator($data)
@@ -83,18 +111,24 @@ class ServiceOrderController extends Controller
 Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
 Log::debug($orderNotifications);
 Log::debug($messagesToClient);
+
+$files = 'file#order#'.$singleOrder->id;
+
+Log::info('Files associated:::::::');
+Log::debug(strval($files));
+
 $attachmentsLinks = [];
-       
+
 
 foreach($messagesToClient as $msg) {
-if($msg->getFirstMedia('msg-attachments') === null) {
+if($msg->getFirstMedia($files) === null) {
 
     
 
 
 } else {
 
-                $attachments = $msg->getMedia('msg-attachments');
+                $attachments = $msg->getMedia($files);
                 Log::info('BELOW attachemtns:: ');
                 Log::debug($attachments);
                 $attachmentsLinks = [];

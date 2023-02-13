@@ -20,7 +20,7 @@
 
 <p>{{$file->name}}</p>
 <p>{{$file->getUrl()}}</p>
-<a href="{{$file->getUrl()}}">{{$file->name}}</a>
+<a href="{{$file->getUrl()}}" target="_blank">{{$file->name}}</a>
 {{-- <p>{{$file->getMedia()}}</p> --}}
 
 @endforeach

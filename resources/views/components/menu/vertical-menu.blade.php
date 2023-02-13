@@ -48,8 +48,8 @@
                             {{-- <li class="{{ Request::routeIs('new.orders') ? 'active' : '' }}">
                                 <a class="notificationn" href="{{route('new.orders')}}"> Zgłoszenia nowe <span class="badgee">3 </span> </a>
                             </li> --}}
-                            <li class="{{ Request::routeIs('service.orders') ? 'active' : '' }}">
-                                <a class="notificationn" href="{{route('service.orders')}}"> Zgłosz. Serwisowe <span class="badgee">3 </span> </a>
+                            <li class="{{ Request::routeIs('user.service.orders') ? 'active' : '' }}">
+                                <a class="notificationn" href="{{route('user.service.orders')}}"> Zgłosz. Serwisowe <span class="badgee">3 </span> </a>
                             </li>
                         </ul>
                     </li>
@@ -61,16 +61,16 @@
 
     
 
-                 
+{{-- tutaj widok dla usera  Nie jest raczej potrzebny do widoku emaili. User ma przydzielone zadanie i dopiero w panelu order widzi emaile i powiazane z tym informacje również emaile --}}
 
-                    <li class="menu {{ Request::routeIs('email.inbox') ? 'active' : '' }}">
-                        <a href="{{route('email.inbox')}}" aria-expanded="false" class="dropdown-toggle">
+                    {{-- <li class="menu {{ Request::routeIs('user.email.inbox') ? 'active' : '' }}">
+                        <a href="{{route('user.email.inbox')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 <span>Email</span>
                             </div>
                         </a>
-                    </li>
+                    </li> --}}
 @endcan
 @can(['is-admin'])
 

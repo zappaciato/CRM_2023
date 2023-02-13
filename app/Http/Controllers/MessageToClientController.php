@@ -82,7 +82,7 @@ Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc
             Log::info('Checked and the msg-attachment is uploaded fine');
             Log::info('Below I am adding msg-attachment to the media collection');
 
-            $messageToClient->addMediaFromRequest("msg-attachment")->toMediaCollection("msg-attachment#$request->order_id");
+            $messageToClient->addMediaFromRequest("msg-attachment")->toMediaCollection("file#order#$request->order_id");
         }
 
 

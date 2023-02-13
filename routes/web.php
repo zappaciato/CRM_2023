@@ -11,6 +11,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderFileController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserEmailController;
 use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\User;
@@ -99,6 +100,14 @@ foreach ($prefixRouters as $prefixRouter) {
 
 //service orders
         Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
+
+
+        // user (not Admin!) email route
+        Route::get('orders/service-orders/user', [ServiceOrderController::class, 'userIndex'])->middleware('auth')->name('user.service.orders');
+        // Route::get('mailbox/mail/{id}', [])
+        
+
+
         Route::get('orders/service-order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
 
         Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
@@ -172,6 +181,11 @@ foreach ($prefixRouters as $prefixRouter) {
         
         Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
         Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
+
+
+
+
+
         //Order add more files to order files
         Route::post('orders/service-order/add-file', [OrderFileController::class, 'store'])->middleware('auth')->name('add.file');
         // Messages to clients
