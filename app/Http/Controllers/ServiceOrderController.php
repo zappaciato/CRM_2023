@@ -97,6 +97,24 @@ class ServiceOrderController extends Controller
         $messagesToClient = $singleOrder->messagesToClients;
         $orderNotifications = $singleOrder->orderNotifications;
         $comments = $singleOrder->orderComments;
+        
+
+        $emailsArray = [];//??
+        // find emails with type email_received from orderNotifications to proivide links in the timeline
+        foreach($orderNotifications as $notification)
+            if($notification->type === 'email_received') {
+                array_push($emailsArray, Email::where('id', $notification->subjectId)->get()[0]->id);
+            }
+            // strip it from the keys and leave only values like: [10,2,7]
+        $emailsAssignedIds = array_values($emailsArray);
+        Log::info('Here ARE EMAILS IDS TO BE SEARCHED FOR');
+        Log::debug($emailsAssignedIds);
+        $emailsAssigned = Email::findMany($emailsAssignedIds);
+        // $emailsAssigned = Email::where('id', $emailsAssignedIds)->get();
+        Log::info('THESE ARE $emailsAssigned');
+        // Log::debug($emailsAssigned);
+        // dd($emailsAssigned);
+        
 
         Log::debug($singleOrder);
         $users = User::select('id', 'name')->get();
@@ -148,7 +166,7 @@ if($msg->getFirstMedia($files) === null) {
 }
         // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
 
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments', 'attachmentsLinks'));
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
     }
 
 

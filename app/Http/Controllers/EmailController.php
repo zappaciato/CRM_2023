@@ -112,6 +112,14 @@ Log::debug($data);
         $email2order->user_id = $data['user_id'];
         $email2order->save();
 
+        $email = Email::findOrFail($request->email_id);
+        $email['emailstatus'] = 'assigned';
+        $email->update([$email['emailstatus'] => 'assigned']);
+        Log::info("Email status updated");
+
+        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
+        OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
+
 
         return redirect('/modern-dark-menu/emails/mailbox/inbox');
     }
@@ -183,7 +191,7 @@ Log::debug($email);
         $data['address'] = "jaki adres";
         
         $newOrder = Order::create($data);
-
+// To wywalic do funkcji bo powtórka
         $email = Email::findOrFail($request->email_id);
         $email['emailstatus'] = 'assigned';
         $email->update([$email['emailstatus']=> 'assigned']);

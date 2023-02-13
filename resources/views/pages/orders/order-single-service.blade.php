@@ -105,6 +105,10 @@
     </div>
 </div>
 
+@php
+    var_dump($emailsAssigned);
+@endphp
+
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
