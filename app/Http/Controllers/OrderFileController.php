@@ -49,6 +49,6 @@ class OrderFileController extends Controller
 
         Alert::alert('Gratulacje!', 'Plik został dodany!', 'success');
         Log::info('I am about to finish the file upload');
-        return back()->with('messsage', 'Your file has been added!');
+        return view(route('displayAssignedFiles', $order->id));
     }
 }

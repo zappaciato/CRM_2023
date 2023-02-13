@@ -13,6 +13,7 @@
         @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_miscellaneous.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
+    <a href="{{route('single.service.order' , $order->id)}}"><button>Wróć</button></a>
 <h1>Order Files</h1>
 <p>{{$orderFiles->count()}}</p>
 
