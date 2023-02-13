@@ -15,6 +15,7 @@ use App\Http\Controllers\UserEmailController;
 use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\User;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 
@@ -177,6 +178,9 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
         Route::get('emails/mailbox/assigned', [EmailController::class, 'indexAssigned'])->middleware('auth')->name('emails.assigned');
         
+        Route::get('emails/add2order/{id}', [EmailController::class, 'add2orderCreate'])->middleware('auth')->name('add.to.order');
+        Route::post('emails/add2order/{id}', [EmailController::class, 'add2order'])->middleware('auth');
+
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
