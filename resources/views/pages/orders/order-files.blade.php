@@ -13,19 +13,48 @@
         @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_miscellaneous.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
-    <a href="{{route('single.service.order' , $order->id)}}"><button>Wróć</button></a>
-<h1>Order Files</h1>
-<p>{{$orderFiles->count()}}</p>
 
+    <div class="layout-top-spacing ">
+    <a  href="{{route('single.service.order' , $order->id)}}"><button>Wróć</button></a>
+    </div>
+    <div class="card mt-2 p-5">
+    
+<h5>Pliki przypisane do zgłoszenia nr: {{$order->id}} tytuł: {{$order->title}}</h5>
+<h5>Liczba powiązanych plików: <span>{{$orderFiles->count()}}</span> </h5>
+</div>
+
+
+<table class="mt-2">
+    <tr>
+        <th>Nr</th>
+        <th>Nazwa pliku</th>
+        <th>Rozmiar</th>
+        <th>Data zapisu</th>
+        <th>Notatka</th>
+    </tr>
+    
+@php
+    $counter = 1;
+@endphp
 @foreach($orderFiles as $file)
-
-<p>{{$file->name}}</p>
-<p>{{$file->getUrl()}}</p>
-<a href="{{$file->getUrl()}}" target="_blank">{{$file->name}}</a>
-{{-- <p>{{$file->getMedia()}}</p> --}}
-
+        <tr>
+        <td>{{$counter}}</td>
+        <td> <a href="{{$file->getUrl()}}" target="_blank">{{$file->name}}</a> </td>
+        <td>{{$file->size}}</td>
+        <td>{{$file->created_at}}</td>
+        <td>Notatka do pliku</td>
+        </tr>
+@php
+    $counter++;
+@endphp
 @endforeach
-<form action="{{route('add.file')}}" method="POST" enctype="multipart/form-data">
+    
+
+</table>
+
+
+
+<form class="mt-5" action="{{route('add.file')}}" method="POST" enctype="multipart/form-data">
 
     @csrf
         <input type="hidden" name="order_id" value="{{$order->id}}">

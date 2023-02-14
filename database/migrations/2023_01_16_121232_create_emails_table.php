@@ -28,10 +28,10 @@ return new class extends Migration
             $table->text('reply_to')->nullable(); // 
             $table->longText('text_plain')->nullable(); // 
             $table->longText('text_html')->nullable();
-
+            $table->integer('order_id')->nullable();
 
             // $table->integer('user_id')->unsigned()->nullable(); // osoba odpowiedzialna
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
+            // $table->foreignId('order_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
             // $table->foreign('user_id')->references('id')->on('users');
 
 

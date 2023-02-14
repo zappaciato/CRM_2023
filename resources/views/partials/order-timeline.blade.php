@@ -29,14 +29,16 @@
                                         <p>{{$notification->content}}</p>
 
                                         @foreach($emailsAssigned as $email)
-                                        @if($email->id === $notification->subjectId)
-                                        <p>[" {{$email->subject}} "]</p>
-                                        @foreach($contacts as $contact)
-                                        @if($contact->email === $email->from_address)
-                                        <p>Email od <a href="{{ route('single.contact', $contact->id)}}">{{ $email->from_name }}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
-                                        @endif
-                                        @endforeach
-                                        @endif
+                                            @if($email->id === $notification->subjectId)
+                                                <p>[" {{$email->subject}} "]</p>
+                                                {{-- @foreach($contacts as $contact) --}}
+                                                    {{-- @if($contact->email === $email->from_address) --}}
+                                                        <p>Email od <a href="#">{{ $email->from_name }}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
+                                                        {{-- @else
+                                                        <p>Email od <a href="{{ route('single.contact', $contact->id)}}">Nie ma w bazie</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p> --}}
+                                                    {{-- @endif --}}
+                                                {{-- @endforeach --}}
+                                            @endif
                                         @endforeach
 
                                         {{-- <p>{{$notification->type}}</p> --}}

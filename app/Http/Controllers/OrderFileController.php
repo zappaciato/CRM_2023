@@ -16,7 +16,7 @@ class OrderFileController extends Controller
     public function store(Request $request)
     {
 
-        // Order Id zawsze wybija jako 7... prawdopodobnie tzerba dodac parametr id i rowniez w web.route;
+        // Adding a file manually to the order; 
 
 $title = 'Files';
 $breadcrumb = "files";

@@ -12,6 +12,7 @@ use App\Http\Controllers\OrderFileController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailController;
+use App\Http\Controllers\XSendEmailController;
 use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\User;
@@ -188,6 +189,9 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
 
 
+        // send dummy email
+        Route::get('sendemail', [XSendEmailController::class, 'create'])->name('create.email');
+        Route::post('sendemail', [XSendEmailController::class, 'sendEmail']);
 
 
 

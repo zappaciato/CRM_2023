@@ -11,6 +11,7 @@ use App\Models\OrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EmailController extends Controller
 {
@@ -106,6 +107,7 @@ Log::debug($orders);
         Log::debug($request);
         $data = $request->all();
 Log::debug($data);
+// create entry in the EmailsToORde db
         $email2order = new EmailsToOrder();
         $email2order->order_id = $data['order_id'];
         $email2order->email_id = $data['email_id'];
@@ -139,8 +141,22 @@ Log::debug($data);
         $email->update($email->emailstatus);
         // Email::update('status' => 'przecztany')->where('id', $id);
 
+        $email = Email::find($id);
+        $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
+
+        if($emailAttachments->isNotEmpty()) {
+
+        foreach($emailAttachments as $a){
+            Log::info('This is a url link');
+            Log::debug($a->getUrl());
+        };
+        
+    } else {
+        Log::info('No attachments!');
+        }
+
 Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email'));
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments'));
     }
 
 
@@ -215,6 +231,7 @@ Log::debug($email);
             $email = Email::findOrFail($id);
 
             $contacts = Contact::select('id','company_id', 'email', 'name', 'surname')->get();
+            
             foreach ($contacts as $contact) {
 
                 if($contact->email == $email->from_address) {

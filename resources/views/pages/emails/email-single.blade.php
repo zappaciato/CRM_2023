@@ -94,31 +94,24 @@
 
                                         <div class="attachments d-flex flex-column p-5 ms-5">
                                             <h6 class="attachments-section-title">Załączniki</h6>
-
+                                            @foreach($emailAttachments as $attachment)
+                                            @if($attachment->collection_name === 'file#email#'.$email->id)
                                             <div class="attachment file-pdf">
                                                 <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Confirm File.txt</p>
-                                                        <p class="file-size">450kb</p>
+                                                    
+
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                <div class="media-body">
+                                                                <a href="{{$attachment->getUrl()}}" target="_blank"><p class="file-name">{{$attachment->name}}</p></a>
+                                                                <p class="file-size">{{$attachment->size}}</p>                                                       
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div class="attachment file-folder">
-                                                <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Important Docs.xml</p>
-                                                        <p class="file-size">2.1MB</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                                        @else
+                                                                <p>Brak załączników</p>
+                                                            @endif
+                                                        @endforeach
                                         </div>
-
-
-
                                     </div>
                                 </div>
 

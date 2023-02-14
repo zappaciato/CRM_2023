@@ -6,6 +6,7 @@ use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
+use App\Models\EmailsToOrder;
 use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderNotification;
@@ -301,14 +302,35 @@ public function scanEmails() {
 
 public function displayAssignedFiles($id){
 
-    Log::info('I am in sidplayAssignedFiles');
+    Log::info('I am in show AssignedFiles');
         $order = Order::find($id);
 
 $title = "Pliki zwiazane ze zgłoszeniem";
 $breadcrumb = 'Pliki';
 
-        $orderFiles = Media::where('collection_name', 'file#order#'.$id)->get();
+// na razie działa tak jak jest jeśli nie to: 
+// 1. Sprawdzic ktore emaile sa podpiete do orderu
+// 2. wyciagnac id tych emaili
+// 3. przeszukac i wbic do array search data te pliki ktorych email id pasuje do tych przyłączonych
+// 4. Wyciągnać z bazy te pliki Media::
 
+$searchedEmails = [];
+$searchData = ['file#order#' . $id];
+//  1. && 2.
+$orderEmails = EmailsToOrder::where('order_id', $id)->get('id');
+//  3.
+foreach($orderEmails as $emailId) {
+    array_push($searchData, 'file#email#'.$emailId->id);
+}
+
+        Log::debug($searchData);
+//  4.
+
+
+
+        $orderFiles = Media::whereIn('collection_name', $searchData)->get();
+        // dd($orderFiles);
+        // dd($orderFiles);
 
     Log::info('BELOW order files: ');
     Log::debug($orderFiles);
