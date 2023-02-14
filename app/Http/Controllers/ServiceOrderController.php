@@ -90,36 +90,42 @@ class ServiceOrderController extends Controller
 
     public function show($id)
     {
-        // $singleOrder = Order::where('id', $id)->get();  to nie daje mi kolekcji we wlasciwym formacie
-        // $singleOrder = Order::findOrFail($id);
+
         $singleOrder = Order::where('id', $id)->firstOrFail();
-
+        // for this order
+        //Get all messages to client throu relations set in the model
         $messagesToClient = $singleOrder->messagesToClients;
+        //get the notifications for this single order. 
         $orderNotifications = $singleOrder->orderNotifications;
+        //get all comments 
         $comments = $singleOrder->orderComments;
-        
-
+        //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I foreach all;
+        $contacts = Contact::all();
+        // define emails array to get ids for the search for links for emails assigned to the order
         $emailsArray = [];//??
-        // find emails with type email_received from orderNotifications to proivide links in the timeline
+        // find emails with type email_received from orderNotifications for this single order to proivide links in the timeline
+
         foreach($orderNotifications as $notification)
             if($notification->type === 'email_received') {
+                //push the emails id to the array if the orderNotification has type emailreceived; 
                 array_push($emailsArray, Email::where('id', $notification->subjectId)->get()[0]->id);
             }
-            // strip it from the keys and leave only values like: [10,2,7]
+        // strip it from the keys and leave only values like: [10,2,7]
         $emailsAssignedIds = array_values($emailsArray);
+
         Log::info('Here ARE EMAILS IDS TO BE SEARCHED FOR');
         Log::debug($emailsAssignedIds);
-        $emailsAssigned = Email::findMany($emailsAssignedIds);
-        // $emailsAssigned = Email::where('id', $emailsAssignedIds)->get();
-        Log::info('THESE ARE $emailsAssigned');
-        // Log::debug($emailsAssigned);
-        // dd($emailsAssigned);
-        
 
+        // find the relevant emails 
+        $emailsAssigned = Email::findMany($emailsAssignedIds);
+
+        Log::info('THESE ARE $emailsAssigned');
         Log::debug($singleOrder);
+
+        // get all other data required for this order view
         $users = User::select('id', 'name')->get();
         //ponizej do zmiany eloqnet relationships to $contact
-        $contact = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
+        $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
         // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
@@ -129,33 +135,31 @@ class ServiceOrderController extends Controller
 Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
 Log::debug($orderNotifications);
 Log::debug($messagesToClient);
-
-$files = 'file#order#'.$singleOrder->id;
+        // set the media collection name where files are stored in media table
+        $files = 'file#order#'.$singleOrder->id;
 
 Log::info('Files associated:::::::');
 Log::debug(strval($files));
-
-$attachmentsLinks = [];
-
-
-foreach($messagesToClient as $msg) {
-if($msg->getFirstMedia($files) === null) {
-
-    
+        
+        //define array with attachment links
+        $attachmentsLinks = [];
 
 
-} else {
+        foreach($messagesToClient as $msg) {
+        if($msg->getFirstMedia($files) === null) {
+// do something
+        } else {
 
-                $attachments = $msg->getMedia($files);
-                Log::info('BELOW attachemtns:: ');
-                Log::debug($attachments);
-                $attachmentsLinks = [];
-                foreach ($attachments as $attachment) {
-                    Log::info('BELOW ::: single attachment $attachemnt');
-                    Log::debug($attachment);
-                    array_push($attachmentsLinks, $attachment->getUrl());
-                    // $attachmentsLinks = $attachments->getUrl();
-                }
+        $attachments = $msg->getMedia($files);
+        Log::info('BELOW attachemtns:: ');
+        Log::debug($attachments);
+        // $attachmentsLinks = [];
+        foreach ($attachments as $attachment) {
+            Log::info('BELOW ::: single attachment $attachemnt');
+            Log::debug($attachment);
+            array_push($attachmentsLinks, $attachment->getUrl());
+            // $attachmentsLinks = $attachments->getUrl();
+        }
 
                 Log::info('Attachment links below:::::');
                 Log::debug($attachmentsLinks);
@@ -166,7 +170,7 @@ if($msg->getFirstMedia($files) === null) {
 }
         // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
 
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications','contacts', 'contactPerson', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
     }
 
 

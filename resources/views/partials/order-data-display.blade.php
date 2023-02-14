@@ -25,7 +25,7 @@
                                         
                                     @endif
                                 @endforeach
-                                <td> <a class="text-black" href="{{ route('single.contact', $contact->id) }}">{{$contact->name}} {{$contact->surname}}</a>    </td>
+                                <td> <a class="text-black" href="{{ route('single.contact', $contactPerson->id) }}">{{$contactPerson->name}} {{$contactPerson->surname}}</a>    </td>
                             </tr>
                         </table>
                     </div>

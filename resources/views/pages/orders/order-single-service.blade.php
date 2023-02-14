@@ -105,9 +105,9 @@
     </div>
 </div>
 
-@php
+{{-- @php
     var_dump($emailsAssigned);
-@endphp
+@endphp --}}
 
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->

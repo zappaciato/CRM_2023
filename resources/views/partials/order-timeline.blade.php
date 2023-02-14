@@ -27,12 +27,18 @@
                                     </div>
                                     <div class="t-text">
                                         <p>{{$notification->content}}</p>
+
                                         @foreach($emailsAssigned as $email)
-                                        @if($email->id == $notification->subjectId)
-                                        <p>{{$email->subject}}</p>
-                                        <p>Wiadomość od <a href="{{$contact->email === $email->from_address ? route('single.contact', $contact->id) : "Email z kontaktu poza bazą danych!"}}">{{$contact->email === $email->from_address ? $email->from_name : "Kontakt poza bazą danych!"}}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
+                                        @if($email->id === $notification->subjectId)
+                                        <p>[" {{$email->subject}} "]</p>
+                                        @foreach($contacts as $contact)
+                                        @if($contact->email === $email->from_address)
+                                        <p>Email od <a href="{{ route('single.contact', $contact->id)}}">{{ $email->from_name }}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
                                         @endif
                                         @endforeach
+                                        @endif
+                                        @endforeach
+
                                         {{-- <p>{{$notification->type}}</p> --}}
                                         <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
                                     </div>

@@ -237,11 +237,15 @@ Log::debug($email);
             return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'emailPlain'));
         }
 
-
+// ponizej do zrobienia potem:: czyli wyświetlanie wszysktich emaili do danego orderu
         public function displayAssignedEmails($id){
             $emails = Email::where('id', $id)->get();
-Log::debug($emails);
+            Log::debug($emails);
             return view('pages.orders.order-emails', compact('emails'));
+        }
+
+        public function addEmailAttachments(){
+            
         }
 
 }
