@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderNotification;
@@ -15,10 +16,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ServiceOrderController extends Controller
 {
     public function index() {
+
+        Log::info('I am in serviceorder index');
         $title = "Zgłoszenia serwisowe";
         $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
@@ -36,6 +40,32 @@ class ServiceOrderController extends Controller
         
 
         return view('pages.orders.orders-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users'));
+    }
+
+
+    public function userIndex()
+    {
+        Log::info('I am in userIdex');
+        $title = "New Orders";
+        $breadcrumb = "Nowe Service Orders";
+        $users = User::select('id', 'name')->get(); 
+        $loggedUser = Auth::user();
+
+        $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->get();
+        $companies = Company::select('id', 'name')->get();
+        // foreach($orders as $order) {
+        //     if($user->id === $order->lead_person || $user->id === $order->involved_person) [
+
+        //         $assignedOrders = $order->where('')
+
+        //     ]
+        Log::info('I am debuggon orders for inividual user');
+        // dd($orders);
+        Log::debug($orders);
+        Log::debug($loggedUser->id);
+
+        return view('pages.orders.orders-user-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users', 'loggedUser'));
+      
     }
 
     protected function validator($data)
@@ -60,18 +90,42 @@ class ServiceOrderController extends Controller
 
     public function show($id)
     {
-        // $singleOrder = Order::where('id', $id)->get();  to nie daje mi kolekcji we wlasciwym formacie
-        // $singleOrder = Order::findOrFail($id);
+
         $singleOrder = Order::where('id', $id)->firstOrFail();
-
+        // for this order
+        //Get all messages to client throu relations set in the model
         $messagesToClient = $singleOrder->messagesToClients;
+        //get the notifications for this single order. 
         $orderNotifications = $singleOrder->orderNotifications;
+        //get all comments 
         $comments = $singleOrder->orderComments;
+        //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I foreach all;
+        $contacts = Contact::all();
+        // define emails array to get ids for the search for links for emails assigned to the order
+        $emailsArray = [];//??
+        // find emails with type email_received from orderNotifications for this single order to proivide links in the timeline
 
+        foreach($orderNotifications as $notification)
+            if($notification->type === 'email_received') {
+                //push the emails id to the array if the orderNotification has type emailreceived; 
+                array_push($emailsArray, Email::where('id', $notification->subjectId)->get()[0]->id);
+            }
+        // strip it from the keys and leave only values like: [10,2,7]
+        $emailsAssignedIds = array_values($emailsArray);
+
+        Log::info('Here ARE EMAILS IDS TO BE SEARCHED FOR');
+        Log::debug($emailsAssignedIds);
+
+        // find the relevant emails 
+        $emailsAssigned = Email::findMany($emailsAssignedIds);
+
+        Log::info('THESE ARE $emailsAssigned');
         Log::debug($singleOrder);
+
+        // get all other data required for this order view
         $users = User::select('id', 'name')->get();
         //ponizej do zmiany eloqnet relationships to $contact
-        $contact = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
+        $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
         // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
@@ -81,7 +135,42 @@ class ServiceOrderController extends Controller
 Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
 Log::debug($orderNotifications);
 Log::debug($messagesToClient);
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications', 'contact', 'messagesToClient', 'comments'));
+        // set the media collection name where files are stored in media table
+        $files = 'file#order#'.$singleOrder->id;
+
+Log::info('Files associated:::::::');
+Log::debug(strval($files));
+        
+        //define array with attachment links
+        $attachmentsLinks = [];
+
+
+        foreach($messagesToClient as $msg) {
+        if($msg->getFirstMedia($files) === null) {
+// do something
+        } else {
+
+        $attachments = $msg->getMedia($files);
+        Log::info('BELOW attachemtns:: ');
+        Log::debug($attachments);
+        // $attachmentsLinks = [];
+        foreach ($attachments as $attachment) {
+            Log::info('BELOW ::: single attachment $attachemnt');
+            Log::debug($attachment);
+            array_push($attachmentsLinks, $attachment->getUrl());
+            // $attachmentsLinks = $attachments->getUrl();
+        }
+
+                Log::info('Attachment links below:::::');
+                Log::debug($attachmentsLinks);
+                
+}
+            
+            
+}
+        // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
+
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications','contacts', 'contactPerson', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
     }
 
 
@@ -200,4 +289,32 @@ Log::debug($usersEmails);
         return redirect(route('service.orders'));
     }
     
+
+
+// scanning throu string email titles
+
+public function scanEmails() {
+    $emails = Email::all();
+
+    
+}
+
+public function displayAssignedFiles($id){
+
+    Log::info('I am in sidplayAssignedFiles');
+        $order = Order::find($id);
+
+$title = "Pliki zwiazane ze zgłoszeniem";
+$breadcrumb = 'Pliki';
+
+        $orderFiles = Media::where('collection_name', 'file#order#'.$id)->get();
+
+
+    Log::info('BELOW order files: ');
+    Log::debug($orderFiles);
+    
+    return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order'));
+
+}
+
 }

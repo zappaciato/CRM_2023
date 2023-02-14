@@ -37,6 +37,7 @@ class MessageToClientController extends Controller
             'subject' => 'required|min:3',
             'content' => 'required|min:3',
             'order_id' => 'required',
+            'msg-attachment' => 'nullable',
 
         ])->validate();
 
@@ -65,7 +66,6 @@ class MessageToClientController extends Controller
         Log::info('This is message to client data AFTER validation');
         Log::debug($data);
 
-        
         $messageToClient = ModelsMessageToClient::create($data);
 
         Alert::alert('Gratulacje!', 'Wiadomość została wysłana', 'success');
@@ -76,6 +76,16 @@ Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc
 
         //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
         OrderNotificationController::createNotification('message_sent', 'Wiadomość do klienta została wysłana: ' . $messageToClient['content'], $messageToClient['id'], $request->order_id);
+
+
+        if (isset($data['msg-attachment'])) {
+            Log::info('Checked and the msg-attachment is uploaded fine');
+            Log::info('Below I am adding msg-attachment to the media collection');
+
+            $messageToClient->addMediaFromRequest("msg-attachment")->toMediaCollection("file#order#$request->order_id");
+        }
+
+
 
 
         return Redirect::back();

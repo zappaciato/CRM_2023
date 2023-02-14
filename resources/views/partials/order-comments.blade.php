@@ -50,7 +50,7 @@
                                 <img alt="avatar" src="{{Vite::asset('resources/images/profile-2.jpeg')}}" class="rounded-circle" />
                             </div>
                             <div class="media-body" style="margin-bottom: -20px">
-                                
+                                {{-- tutaj cos jest nie tak... tylko admin widzi tak jak trzeba, pozostali users nie..wszedzie jest ten sam user ktory komentuje PRZEtESTOWAAC TO JESZCE TODO--}}
                                 @foreach($users as $user)
                                 @if($comment->user_id === $user->id)
                                 <h5 class="media-heading mb-1">{{$user->name }}</h5>

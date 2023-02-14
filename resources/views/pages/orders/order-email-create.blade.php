@@ -158,7 +158,7 @@
 {{-- end TODO date picker --}}
                                 <div class="col-md-8">
                                 <label for="order_content">Zawartość zgłoszenia</label>
-                                        <textarea type="text" class="form-control" id="order_content" name="order_content">{{$email->text_plain}} </textarea>
+                                        <textarea type="text" class="form-control" id="order_content" name="order_content">{{$emailPlain}} </textarea>
                                 </div>
 
                                 <div class="col-md-4">

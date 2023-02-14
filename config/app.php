@@ -181,6 +181,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+       
 
         /*
          * Package Service Providers...
@@ -199,6 +200,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
 
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        Spatie\MediaLibrary\MediaLibraryServiceProvider::class,
     ],
 
     /*
@@ -218,5 +220,6 @@ return [
 
     'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+    'Media' => Spatie\MediaLibrary\MediaCollections\Models\Media::class,
 
 ];

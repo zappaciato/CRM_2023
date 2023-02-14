@@ -84,7 +84,8 @@
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
-                                                <a href="{{route('create.order.email', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Utwórz zgłoszenie z emaila</button></a>
+                                                <a href="{{route('create.order.email', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                <a href="{{route('add.to.order', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Dodaj do istniejacego zgłoszenia</button></a>
                                             </div>
 
                                         </div>

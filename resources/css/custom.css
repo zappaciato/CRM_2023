@@ -72,6 +72,11 @@
   /* width: 1900px; */
 }
 
+/* To display current active mailbox tab */
+.active-custom {
+  background-color: rgba(241, 204, 36, 0.753);
+}
+
 
 .custom-btn {
   width: 16rem;
@@ -123,4 +128,42 @@
   width: 100% !important;
   height: 100%;
 
+}
+
+.btn-showemails {
+  background-color: cornflowerblue;
+  color: white;
+}
+
+.btn-showfiles {
+  background-color: rgb(3, 16, 59);
+  color: white;
+
+}
+
+.hover-to-bright {
+  color: black;
+}
+
+.hover-to-bright:hover {
+  color: white;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #ff0000;
+  border-radius: 4px;
+  text-align: center;
+  padding: 10px;
+  color: rgb(0, 0, 0);
+}
+
+tr:nth-child(even) {
+  counter-reset: white;
+  background-color: #00aaff3b;
 }

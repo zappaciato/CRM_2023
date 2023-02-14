@@ -11,7 +11,9 @@
         "laravel/framework": "^9.36",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "realrashid/sweet-alert": "^5.1"
+        "realrashid/sweet-alert": "^5.1",
+        "spatie/laravel-medialibrary": "^10.0.0",
+        "soundasleep/html2text": "~1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

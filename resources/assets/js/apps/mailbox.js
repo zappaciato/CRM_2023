@@ -43,22 +43,22 @@ $(document).ready(function() {
 		var get_DraftElementsCount = get_DraftParentsDiv.length;
 
 		// Get Badge Div(s)
-		var getBadgeMailInboxDiv = $('#mailInbox .mail-badge');
-		var getBadgeDraftMailDiv = $('#draft .mail-badge');
+		// var getBadgeMailInboxDiv = $('#mailInbox .mail-badge');
+		// var getBadgeDraftMailDiv = $('#draft .mail-badge');
 
-		if (mailCategoryCount === 'mailInbox') {
-			if (get_UnreadMailInboxElementsCount === 0) {
-				getBadgeMailInboxDiv.text('');
-				return;
-			}
-			getBadgeMailInboxDiv.text(get_UnreadMailInboxElementsCount);
-		} else if (mailCategoryCount === 'draftmail') {
-			if (get_DraftElementsCount === 0) {
-				getBadgeDraftMailDiv.text('');
-				return;
-			}
-			getBadgeDraftMailDiv.text(get_DraftElementsCount);
-		}
+		// if (mailCategoryCount === 'mailInbox') {
+		// 	if (get_UnreadMailInboxElementsCount === 0) {
+		// 		getBadgeMailInboxDiv.text('');
+		// 		return;
+		// 	}
+		// 	getBadgeMailInboxDiv.text(get_UnreadMailInboxElementsCount);
+		// } else if (mailCategoryCount === 'draftmail') {
+		// 	if (get_DraftElementsCount === 0) {
+		// 		getBadgeDraftMailDiv.text('');
+		// 		return;
+		// 	}
+		// 	getBadgeDraftMailDiv.text(get_DraftElementsCount);
+		// }
 	}
 
 	dynamicBadgeNotification('mailInbox');

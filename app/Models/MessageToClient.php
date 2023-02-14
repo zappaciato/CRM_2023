@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class MessageToClient extends Model
+class MessageToClient extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
 
@@ -18,6 +20,7 @@ class MessageToClient extends Model
         'subject',
         'content',
         'order_id',
+        // 'msg-attachment'
     ];
 
 

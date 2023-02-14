@@ -6,8 +6,10 @@ use App\Models\Company;
 use App\Models\Email;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Psy\CodeCleaner\FunctionContextPass;
 
 class OrderController extends Controller
 {
@@ -19,6 +21,13 @@ class OrderController extends Controller
 
         return view('pages.orders.orders-new-list', compact('title', 'breadcrumb', 'orders'));
     }
+
+    
+
+        
+
+
+    
 
     public function create () {
         $title = "Dodawanie zamówienia";

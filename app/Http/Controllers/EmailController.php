@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
+use App\Models\EmailsToOrder;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use Illuminate\Http\Request;
@@ -15,6 +16,27 @@ class EmailController extends Controller
 {
     
 
+    // public function exampleEmail() {
+    //     $email = [
+    //         'message_id' => 
+    //         'headers_raw'
+    //         'headers'
+    //         'from_name'
+    //         'from_address'
+    //         'subject'
+    //         'to'
+    //         'to_string'
+    //         'cc'
+    //         'bcc'
+    //         'replay_to'
+    //         'text_plain'
+    //         'text_html'
+    //         'user_id'
+    //         'date'
+    //         'emailstatus'
+    //     ]
+    // }
+
     public function index () {
 
         $title = "Emaile";
@@ -22,24 +44,84 @@ class EmailController extends Controller
 
         //email statuses
         $read = 'mailInbox';
+        $emailsAll = Email::all();
 
-        $emails = Email::get();
+
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
+
+        // Log::debug($emailsAll->id);
+        // Log::debug($emails);
+        Log::debug($emailsAssigned);
+
+        return view('pages.emails.emails-inbox', compact('title', 'breadcrumb', 'emails', 'emailsAssigned', 'read'));
+    }
+
+    public function indexAssigned() {
+        $title = "Emaile przypisane";
+        $breadcrumb = "Przypisane emaile";
+        $emailsAll = Email::all();
 
 
-// foreach ($emails as $email) {
-//         if($email->status = 'read') {
-//             $status = 'mailInbox';
-//         } else if ($email->status = 'unread') {
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
+        // $emailsAssigned = Email::where('emailstatus', 'assigned')->get();
 
-//                 $status = 'unread';
+        Log::info('I am about to display all assigned emails');
+        Log::debug($emailsAssigned);
+        // dd($emails);
 
-//         } 
+        return view('pages.emails.emails-assigned', compact('emailsAssigned', 'emails', 'title', 'breadcrumb'));
+    }
 
-//         return $status;
-// }
-        Log::debug($emails);
+    public function add2orderCreate($id) {
+Log::info("Is it the right IDDDDD?????????????????");
+Log::debug($id);
+        $title = "Dodawanie zamówienia z emaila";
+        $breadcrumb = "Dodawanie nowego zamówienia z emaila";
+        $email = Email::findOrFail($id);
+Log::info('Adding email to an order 1 email 2 order');
+Log::debug($email);
+        $orders = Order::select('title', 'id')->get();
+Log::debug($orders);
 
-        return view('pages.emails.emails-inbox', compact('title', 'breadcrumb', 'emails', 'read'));
+
+
+
+        return view('pages.emails.add-email-to-order', compact('orders', 'email'));
+
+    }
+
+    public function add2order(Request $request) {
+
+        // $notification = new OrderNotification();
+        // $notification->type = $type;
+        // $notification->content = $content;
+        // $notification->subjectId = $subjectId;
+        // $notification->order_id = $orderId;
+        // $notification->save();
+        // Log::debug($notification);
+
+        Log::info('This is teh request data from add2order');
+        Log::debug($request);
+        $data = $request->all();
+Log::debug($data);
+        $email2order = new EmailsToOrder();
+        $email2order->order_id = $data['order_id'];
+        $email2order->email_id = $data['email_id'];
+        $email2order->user_id = $data['user_id'];
+        $email2order->save();
+
+        $email = Email::findOrFail($request->email_id);
+        $email['emailstatus'] = 'assigned';
+        $email->update([$email['emailstatus'] => 'assigned']);
+        Log::info("Email status updated");
+
+        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
+        OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
+
+
+        return redirect('/modern-dark-menu/emails/mailbox/inbox');
     }
 
 
@@ -109,6 +191,11 @@ Log::debug($email);
         $data['address'] = "jaki adres";
         
         $newOrder = Order::create($data);
+// To wywalic do funkcji bo powtórka
+        $email = Email::findOrFail($request->email_id);
+        $email['emailstatus'] = 'assigned';
+        $email->update([$email['emailstatus']=> 'assigned']);
+        Log::info("Email status updated");
 
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
@@ -142,13 +229,23 @@ Log::debug($email);
                 }
             }
 
-        
+        $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
 
             Log::info('This is the final contact out of scope!');
             // Log::debug($contact);
             // Log::debug($company);
-            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact'));
+            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'emailPlain'));
         }
 
+// ponizej do zrobienia potem:: czyli wyświetlanie wszysktich emaili do danego orderu
+        public function displayAssignedEmails($id){
+            $emails = Email::where('id', $id)->get();
+            Log::debug($emails);
+            return view('pages.orders.order-emails', compact('emails'));
+        }
+
+        public function addEmailAttachments(){
+            
+        }
 
 }

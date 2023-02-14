@@ -8,10 +8,14 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\MessageToClientController;
 use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderFileController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserEmailController;
+use App\Models\Email;
 use App\Models\MessageToClient;
 use App\Models\User;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 
@@ -97,6 +101,14 @@ foreach ($prefixRouters as $prefixRouter) {
 
 //service orders
         Route::get('orders/service-orders', [ServiceOrderController::class, 'index'])->middleware('auth')->name('service.orders');
+
+
+        // user (not Admin!) email route
+        Route::get('orders/service-orders/user', [ServiceOrderController::class, 'userIndex'])->middleware('auth')->name('user.service.orders');
+        // Route::get('mailbox/mail/{id}', [])
+        
+
+
         Route::get('orders/service-order/{id}', [ServiceOrderController::class, 'show'])->middleware('auth')->name('single.service.order');
 
         Route::get('orders/service-order/edit/{id}', [ServiceOrderController::class, 'edit'])->middleware('auth')->name('single.service.order.edit');
@@ -114,6 +126,7 @@ foreach ($prefixRouters as $prefixRouter) {
 
         // Order comments
         Route::post('orders/service-order/', [OrderCommentController::class, 'store'])->middleware('auth')->name('order.comment.add');
+
 
 
 // companies
@@ -163,11 +176,23 @@ foreach ($prefixRouters as $prefixRouter) {
         //emails
         Route::get('emails/mailbox/inbox', [EmailController::class, 'index'])->middleware('auth')->name('email.inbox');
         Route::get('mailbox/mail/{id}', [EmailController::class, 'show'])->middleware('auth')->name('single.email');
+        Route::get('emails/mailbox/assigned', [EmailController::class, 'indexAssigned'])->middleware('auth')->name('emails.assigned');
+        
+        Route::get('emails/add2order/{id}', [EmailController::class, 'add2orderCreate'])->middleware('auth')->name('add.to.order');
+        Route::post('emails/add2order/{id}', [EmailController::class, 'add2order'])->middleware('auth');
 
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
+        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
+        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
 
+
+
+
+
+        //Order add more files to order files
+        Route::post('orders/service-order/add-file', [OrderFileController::class, 'store'])->middleware('auth')->name('add.file');
         // Messages to clients
         Route::post('orders/service-order/{id}/message', [MessageToClientController::class, 'store'])->middleware('auth')->name('message.to.client');
         /**
