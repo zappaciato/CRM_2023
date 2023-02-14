@@ -256,9 +256,26 @@ Log::debug($email);
 
 // ponizej do zrobienia potem:: czyli wyświetlanie wszysktich emaili do danego orderu
         public function displayAssignedEmails($id){
-            $emails = Email::where('id', $id)->get();
-            Log::debug($emails);
-            return view('pages.orders.order-emails', compact('emails'));
+            $order = Order::find($id);
+            $title = 'Emails assigned';
+            $breadcrumb = "Emails assigned";
+
+
+            $emailsAssigned = EmailsToOrder::where('order_id', $id)->get('email_id');
+
+            $emailsIds = [];
+
+            foreach($emailsAssigned as $singleEmail) {
+                array_push($emailsIds, $singleEmail->email_id);
+            };
+            Log::debug($emailsIds);
+            
+            //find the emails assigned
+            $emails = Email::findMany($emailsIds);
+
+            // $emails = Email::where('id', $id)->get();
+            // Log::debug($emails);
+            return view('pages.orders.order-emails', compact('emails', 'breadcrumb', 'title', 'order'));
         }
 
         public function addEmailAttachments(){
