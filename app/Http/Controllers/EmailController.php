@@ -258,33 +258,60 @@ $contactPerson = 0;
             $email = Email::findOrFail($id);
 
             $contacts = Contact::select('id','company_id', 'email', 'name', 'surname')->get();
-            
-            foreach ($contacts as $contact) {
 
-                //Jesli email jest od adresu ktory jest w bazie to przypisze firme automatycznie
-                if($contact->email == $email->from_address) {
-                Log::info('This is the company which sent this email!');
-                    $company  =  Company::where('id', $contact->company_id)->firstOrFail();
-                // $contact = Contact::where('id', $contact->id);
-                    Log::info("Below is 1 company and 2 contact!!!!!!!!!!!!!!!!!!!");
-                    Log::debug($company);
-                    Log::debug($contact);
-                    
-                    break;
-                } else {
-                    //Jesli email jest z adresu nieznanego to wyciagnij wszystkie firmy; 
-                    $company = Company::all();
-                }
 
-                // TODO: w tym miejkscu jest problem bo Ajax nie wywala adresów przy zmianie firmy; 
+        $contactPerson = 0;
+        Log::info('Poczatkowo $contact ma wartość: ');
+        Log::debug($contactPerson);
+
+        # I need to use break after the contact is found and matched otherwise it will check other contacts and give NO MATCH. Once the Match is found it has to stop!
+        foreach ($contacts as $contact) {
+            Log::info('All contacts no condition');
+            Log::debug($contact);
+            if ($contact->email !== $email->from_address) {
+                Log::info('NIE Mamy contact MATCH!');
+                Log::debug($contact);
+                $contactPerson = 0;
+                $company = Company::all();
+            } else {
+                Log::info('JEST! Mamy contact MATCH!');
+                $contactPerson = 1;
+                $company  =  Company::where('id', $contact->company_id)->firstOrFail();
+                break;
             }
+        }
+
+
+
+
+
+            
+            // foreach ($contacts as $contact) {
+
+            //     //Jesli email jest od adresu ktory jest w bazie to przypisze firme automatycznie
+            //     if($contact->email == $email->from_address) {
+            //     Log::info('This is the company which sent this email!');
+            //         $company  =  Company::where('id', $contact->company_id)->firstOrFail();
+            //     // $contact = Contact::where('id', $contact->id);
+            //         Log::info("Below is 1 company and 2 contact!!!!!!!!!!!!!!!!!!!");
+            //         Log::debug($company);
+            //         Log::debug($contact);
+                    
+            //         break;
+            //     } else {
+            //         //Jesli email jest z adresu nieznanego to wyciagnij wszystkie firmy; 
+            //         $company = Company::all();
+            //     }
+
+            //     // TODO: w tym miejkscu jest problem bo Ajax nie wywala adresów przy zmianie firmy; 
+            // }
 
         $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
 
             Log::info('This is the final contact out of scope!');
-            // Log::debug($contact);
-            // Log::debug($company);
-            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'emailPlain'));
+            Log::debug($contact);
+            Log::debug($company);
+            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'contactPerson','emailPlain'));
         }
 
 // ponizej do zrobienia potem:: czyli wyświetlanie wszysktich emaili do danego orderu

@@ -91,7 +91,14 @@
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
-                                                <a href="{{route('create.order.email', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                @if($contactPerson == false)
+                                                
+                                                <a aria-disabled="true" ><button class="btn btn-dark text-dark mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                <p>Przycisk niedostępny! </p>
+
+                                                @else
+                                                <a href="{{route('create.order.email', $email->id)}}" ><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                @endif
                                                 <a href="{{route('add.to.order', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Dodaj do istniejacego zgłoszenia</button></a>
                                             </div>
 
