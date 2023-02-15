@@ -27,6 +27,4 @@
 
                         </form>
 
-@foreach ($orders as $order )
-    <p>{{$order->title}}</p>
-@endforeach
+

@@ -99,10 +99,14 @@
                                                 @else
                                                 <a href="{{route('create.order.email', $email->id)}}" ><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
                                                 @endif
-                                                <a href="{{route('add.to.order', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Dodaj do istniejacego zgłoszenia</button></a>
+                                                {{-- this triggers modal "addtoorder" --}}
+
+                                                <button class="btn btn-success mt-4 custom-btn" data-bs-toggle="modal" data-bs-target="#modaladd2order">Dodaj do istniejacego zgłoszenia</button>
                                             </div>
 
                                         </div>
+                                        {{-- This assigns email to order --}}
+                                        @include('partials.emailpartials.email-single-modal-add2order')
 
 
 

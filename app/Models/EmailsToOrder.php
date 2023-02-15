@@ -12,6 +12,7 @@ class EmailsToOrder extends Model
     protected $fillable = [
         'order_id',
         'email_id',
-        'user_id'
+        'user_id',
+        'notes'
     ];
 }

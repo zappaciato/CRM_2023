@@ -9,8 +9,10 @@ use App\Models\EmailsToOrder;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EmailController extends Controller
@@ -95,14 +97,6 @@ Log::debug($orders);
 
     public function add2order(Request $request) {
 
-        // $notification = new OrderNotification();
-        // $notification->type = $type;
-        // $notification->content = $content;
-        // $notification->subjectId = $subjectId;
-        // $notification->order_id = $orderId;
-        // $notification->save();
-        // Log::debug($notification);
-
         Log::info('This is teh request data from add2order');
         Log::debug($request);
         $data = $request->all();
@@ -112,8 +106,10 @@ Log::debug($data);
         $email2order->order_id = $data['order_id'];
         $email2order->email_id = $data['email_id'];
         $email2order->user_id = $data['user_id'];
+        $email2order->notes = $request->input('notes');
         $email2order->save();
 
+        //zmiana statusu emaila powtarza sie DRY
         $email = Email::findOrFail($request->email_id);
         $email['emailstatus'] = 'assigned';
         $email->update([$email['emailstatus'] => 'assigned']);
@@ -122,6 +118,7 @@ Log::debug($data);
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
 
+        Alert::alert('Gratulacje!', 'Email został przypisany!', 'success');
 
         return redirect('/modern-dark-menu/emails/mailbox/inbox');
     }
@@ -133,7 +130,8 @@ Log::debug($data);
         Log::debug($id);
         $title = "Emaile";
         $breadcrumb = "Wybrany email";
-
+        // we need $orders for the modal where we assign email to order
+        $orders = Order::select('title', 'id')->get();
         // $email = Email::where('id', $id)->get();
         // $email = Email::findOrFail($id);
         $email = Email::find($id);
@@ -203,7 +201,7 @@ Log::debug($data);
         //koniec testowej logiki
 
         Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag'));
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag', 'orders'));
     }
 
 
@@ -225,6 +223,7 @@ Log::debug($data);
             'order_notes' => 'required',
             'deadline' => 'required',
             'status' => 'required',
+            // 'notes' => 'nullable'
 
         ])->validate();
 
@@ -260,6 +259,15 @@ Log::debug($data);
         $email->update([$email['emailstatus']=> 'assigned']);
         Log::info("Email status updated");
 
+        // create entry in the EmailsToORder db
+        $email2order = new EmailsToOrder();
+        $email2order->order_id = $newOrder->id;
+        $email2order->email_id = $data['email_id'];
+        $email2order->user_id = Auth::user()->id;
+        $email2order->save();
+
+
+
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
 
@@ -275,8 +283,15 @@ Log::debug($data);
         public function createFromEmail($id) {
             $title = "Dodawanie zamówienia z emaila";
             $breadcrumb = "Dodawanie nowego zamówienia z emaila";
+            //get the email data
             $email = Email::findOrFail($id);
-
+Log::info('This is the data regarding EMAIL');
+Log::debug($email);
+            //get the attachments for this email
+            $attachments = Media::where('collection_name', 'file#email#'.$id)->get();
+        // Log::info('This is the data regarding Attchaments');
+        // Log::debug($attachments);
+        // dd($attachments);
             $contacts = Contact::select('id','company_id', 'email', 'name', 'surname')->get();
 
 
@@ -301,36 +316,13 @@ Log::debug($data);
             }
         }
 
-
-
-
-
-            
-            // foreach ($contacts as $contact) {
-
-            //     //Jesli email jest od adresu ktory jest w bazie to przypisze firme automatycznie
-            //     if($contact->email == $email->from_address) {
-            //     Log::info('This is the company which sent this email!');
-            //         $company  =  Company::where('id', $contact->company_id)->firstOrFail();
-            //     // $contact = Contact::where('id', $contact->id);
-            //         Log::info("Below is 1 company and 2 contact!!!!!!!!!!!!!!!!!!!");
-            //         Log::debug($company);
-            //         Log::debug($contact);
-                    
-            //         break;
-            //     } else {
-            //         //Jesli email jest z adresu nieznanego to wyciagnij wszystkie firmy; 
-            //         $company = Company::all();
-            //     }
-
-            //     // TODO: w tym miejkscu jest problem bo Ajax nie wywala adresów przy zmianie firmy; 
-            // }
-
         $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
 
             Log::info('This is the final contact out of scope!');
             Log::debug($contact);
             Log::debug($company);
+
+            
             return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'contactPerson','emailPlain'));
         }
 
