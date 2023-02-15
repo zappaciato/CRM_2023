@@ -52,7 +52,7 @@
     <input type="hidden" name="emailstatus"placeholder="emailstatus" value="new">
     <input type="hidden" name="user_id" value="1">
     </div>
-    <input type="file" name="e-attachment" placeholder="Give me some files!" >
+    <input type="file" name="e_attachment" placeholder="Give me some files!" >
 </div>
     <button class="btn btn-lg btn-primary" type="submit">Wyślij</button>
 

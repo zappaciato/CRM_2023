@@ -31,9 +31,11 @@
                                         @foreach($emailsAssigned as $email)
                                             @if($email->id === $notification->subjectId)
                                                 <p>[" {{$email->subject}} "]</p>
+
+                                                {{-- tutaj powinna sie znaleźć funkcjonalnosc pozwalająca na kliknięcie na kontakt i przekierowanie do profilu. Za dużo zanieżdzen i nie wiem jak to obejść. Funkcjonalnosc nie jest krytyczna. Czasowo przekierowuje do listy kontaktów co częściowo rozwiązuje problem.  --}}
                                                 {{-- @foreach($contacts as $contact) --}}
                                                     {{-- @if($contact->email === $email->from_address) --}}
-                                                        <p>Email od <a href="#">{{ $email->from_name }}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
+                                                        <p>Email od <a href="{{route('contact.list')}}">{{ $email->from_name }}</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p>
                                                         {{-- @else
                                                         <p>Email od <a href="{{ route('single.contact', $contact->id)}}">Nie ma w bazie</a><a href="{{route('single.email',  $email->id)}}"> <button class="btn btn-danger">Pokaż</button></a></p></p> --}}
                                                     {{-- @endif --}}

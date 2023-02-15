@@ -29,6 +29,13 @@
 <div id="mailCollapseThree" class="p-5" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
                                     <div class="mail-content-container mailInbox" data-mailfrom="info@mail.com" data-mailto="linda@mail.com" data-mailcc="">
 
+      
+            @if($contactPerson == false)
+<div style="background-color: pink" class="card p-2 d-flex"><h3>Uwaga!</h3><h5>Kontakt poza bazą danych!</h5><h6>Upewnij się, że kontakt istnieje w bazie zanim utworzysz zgłoszenie.</h6>
+    <a href="{{route('contact.add')}}"><button class="btn btn-success">Dodaj kontakt</button></a>
+</div>
+        @endif
+     
                                         <div class="d-flex justify-content-between">
 
                                             <div class="d-flex user-info">
@@ -94,6 +101,8 @@
 
                                         <div class="attachments d-flex flex-column p-5 ms-5">
                                             <h6 class="attachments-section-title">Załączniki</h6>
+
+
                                             @foreach($emailAttachments as $attachment)
                                             @if($attachment->collection_name === 'file#email#'.$email->id)
                                             <div class="attachment file-pdf">
@@ -111,6 +120,7 @@
                                                                 <p>Brak załączników</p>
                                                             @endif
                                                         @endforeach
+
                                         </div>
                                     </div>
                                 </div>

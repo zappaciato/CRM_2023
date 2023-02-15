@@ -135,15 +135,40 @@ Log::debug($data);
         $breadcrumb = "Wybrany email";
 
         // $email = Email::where('id', $id)->get();
-        $email = Email::findOrFail($id);
-
-        $email->emailstatus = ['przeczytany']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i ""
+        // $email = Email::findOrFail($id);
+        $email = Email::find($id);
+        $email->emailstatus = ['przeczytany']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
         $email->update($email->emailstatus);
         // Email::update('status' => 'przecztany')->where('id', $id);
 
-        $email = Email::find($id);
+        
         $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
+        //Check id the contact is already in the database
+        $contacts = Contact::select('email')->get();
+$contactPerson = 0;
+        Log::info('Poczatkowo $contact ma wartość: ');
+        Log::debug($contactPerson);
+
+        # I need to use break after the contact is found and matched otherwise it will check other contacts and give NO MATCH. Once the Match is found it has to stop!
+        foreach($contacts as $contact) {
+            Log::info('All contacts no condition');
+            Log::debug($contact);
+            if($contact->email !== $email->from_address) {
+                Log::info('NIE Mamy contact MATCH!');
+                Log::debug($contact);
+                $contactPerson = 0;
+
+            } else {
+                Log::info('JEST! Mamy contact MATCH!');
+                $contactPerson = 1;
+                break;
+            }
+        }
+
+        Log::info('Ostatecznie $contact ma wartość: ');
+        Log::debug($contactPerson);
+        // ta czesc logiki była do testów.. usunąć potem bo juz znajduje sie w widoku
         if($emailAttachments->isNotEmpty()) {
 
         foreach($emailAttachments as $a){
@@ -155,8 +180,10 @@ Log::debug($data);
         Log::info('No attachments!');
         }
 
-Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments'));
+        //koniec testowej logiki
+
+        Log::debug($email);
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson'));
     }
 
 
@@ -234,6 +261,7 @@ Log::debug($email);
             
             foreach ($contacts as $contact) {
 
+                //Jesli email jest od adresu ktory jest w bazie to przypisze firme automatycznie
                 if($contact->email == $email->from_address) {
                 Log::info('This is the company which sent this email!');
                     $company  =  Company::where('id', $contact->company_id)->firstOrFail();
@@ -243,7 +271,12 @@ Log::debug($email);
                     Log::debug($contact);
                     
                     break;
+                } else {
+                    //Jesli email jest z adresu nieznanego to wyciagnij wszystkie firmy; 
+                    $company = Company::all();
                 }
+
+                // TODO: w tym miejkscu jest problem bo Ajax nie wywala adresów przy zmianie firmy; 
             }
 
         $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
@@ -269,7 +302,7 @@ Log::debug($email);
                 array_push($emailsIds, $singleEmail->email_id);
             };
             Log::debug($emailsIds);
-            
+
             //find the emails assigned
             $emails = Email::findMany($emailsIds);
 

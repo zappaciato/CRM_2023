@@ -21,11 +21,22 @@ class XSendEmailController extends Controller
 
         $theEmail = Email::create($data);
 
-        $theEmail->addMediaFromRequest("e-attachment")->toMediaCollection("file#email#$theEmail->id");
 
 
-        return redirect()->back();
+        Log::info('This is the email just sent internally. ');
+        Log::debug($theEmail->from_address);
+        if($theEmail->e_attachment !== null) {
+            $theEmail->addMediaFromRequest("e_attachment")->toMediaCollection("file#email#$theEmail->id");
+        } else {
+            
+            return redirect()->back();
 
+        }
+
+        
+
+
+        
 
     }
 }
