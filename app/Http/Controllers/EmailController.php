@@ -47,9 +47,9 @@ class EmailController extends Controller
         $read = 'mailInbox';
         $emailsAll = Email::all();
 
-
-        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
-        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
+//orderBy() doesn't work on eloquent collection should use sortBySec();
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned')->sortByDesc('created_at');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');;
 
         // Log::debug($emailsAll->id);
         // Log::debug($emails);
@@ -144,9 +144,29 @@ Log::debug($data);
         
         $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
+
+
+        //make a flag if there's anything fetched as $emailAttachments if it is empty then show that there are no attachments
+        $attachmentFlag = 0;
+
+        Log::info('$emailAttachments are:');
+        Log::debug($emailAttachments);
+
+        if(count($emailAttachments) == 0) {
+            $attachmentFlag = 0;
+        } else {
+            $attachmentFlag = 1;
+        }
+
+        Log::info('This is the value of the attachment FLAG');
+        Log::debug($attachmentFlag);
+
+
+
+
         //Check id the contact is already in the database
         $contacts = Contact::select('email')->get();
-$contactPerson = 0;
+        $contactPerson = 0;
         Log::info('Poczatkowo $contact ma wartość: ');
         Log::debug($contactPerson);
 
@@ -183,7 +203,7 @@ $contactPerson = 0;
         //koniec testowej logiki
 
         Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson'));
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag'));
     }
 
 
