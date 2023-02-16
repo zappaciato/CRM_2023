@@ -87,7 +87,13 @@
 
                                         </h1>
                                         </div>
+                                        {{-- $eflag == false if there is a match of email if with email_id in emailsToOrders --}}
+                                        @if($eFlag) 
+                                            <div class="d-flex flex-column ">
 
+                                            <h5>Email już przydzielony do zgłoszenia.</h5>
+                                            </div>
+                                        @else
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
@@ -103,7 +109,7 @@
 
                                                 <button class="btn btn-success mt-4 custom-btn" data-bs-toggle="modal" data-bs-target="#modaladd2order">Dodaj do istniejacego zgłoszenia</button>
                                             </div>
-
+                                        @endif
                                         </div>
                                         {{-- This assigns email to order --}}
                                         @include('partials.emailpartials.email-single-modal-add2order')

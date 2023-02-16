@@ -158,6 +158,32 @@ Log::debug($data);
         $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
 
+        //check if this email is already in emails to orders 
+        // 1. Get all email_id 's from emails-to-order and set up a flag
+        $allEmailIds = EmailsToOrder::select('id')->get();
+        $eFlag = 0;
+        // 2. Check if this email id is, and change the flag accordingly 
+        foreach($allEmailIds as $eId) {
+            if($eId->id == $id) {
+                Log::info('$eId has a match with $email->id');
+                Log::info("1.eId and 2 is id");
+                Log::debug($eId['id']);
+                Log::debug($id);
+                $eFlag = 1;
+                break;
+            } else {
+                Log::info('$eId has no match with $email->id, so it is a NEW unassigned Email');
+                $eFlag = 0;
+                Log::info('$eId has a match with $email->id');
+                Log::info("1.eId and 2 is id");
+                Log::debug($eId->id);
+                Log::debug($id);
+            }
+        }
+        // 3. Hide action buttons in single email if the flag is true(there is email id in emails-to-order)
+        Log::info('THIS IS $eFlag VALUE');
+        Log::debug($eFlag);
+
 
         //make a flag if there's anything fetched as $emailAttachments if it is empty then show that there are no attachments
         $attachmentFlag = 0;
@@ -216,7 +242,7 @@ Log::debug($data);
         //koniec testowej logiki
 
         Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag', 'orders'));
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag', 'eFlag', 'orders'));
     }
 
 
