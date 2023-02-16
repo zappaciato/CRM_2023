@@ -24,7 +24,8 @@ class Email extends Model implements HasMedia
         'bcc', 
         'text_plain',
         'text_html',
-        'order_id', 
+        'order_id',
+        // 'notes', 
 
         'date' ,
         'emailstatus',

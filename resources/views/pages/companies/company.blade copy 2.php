@@ -42,12 +42,10 @@
     <!-- /BREADCRUMB -->
 <div id="tabsSimple" class="col-xl-12 col-12 layout-spacing">
     <div class="statbox widget box box-shadow">
-        
                 <div class="widget-header">
                     <div class="row">
-                        <div class="col-xl-12 col-md-12 col-sm-12 col-12 p-2 d-flex justify-content-between">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12 p-2 d-flex">
                             <h4 class="p-2 me-5">{{$company->name}}</h4>
-                            <div class="d-flex">
                             <a class="me-5" href="{{route('company.list')}}"><button class="btn btn-success">Wróć</button></a>
 
                             <a href="{{route('company.edit', $company->id)}}"><button class="btn btn-warning">Edytuj</button></a>
@@ -59,7 +57,6 @@
                                 {{method_field('DELETE')}} 
                                 <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Usuń Firmę</button>
                             </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,7 +66,7 @@
 
             <div class="vertical-pill">
                         
-                <div class="d-flex align-items-start ms-2">
+                <div class="d-flex align-items-start">
                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Dane</button>
                         <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Adresy</button>
@@ -79,17 +76,17 @@
                     </div>
 
 
-<div class="tab-content" id="v-pills-tabContent">
-{{-- <div class="tab-pane fade show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"> --}}
-<div class="tab-pane fade show active w-100" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-                            {{-- <h4 class=" ">Dane firmy "<span>{{$company->name}}</span>"</h4> --}}
-                            {{-- the pills nav doesn't align properly. it depends on the pill content. TODO: go throu all the content and make it look the same --}}
-                                <div  class="card p-2 mt-2 ms-5 mb-5  col-9">
+                    <div class="tab-content" id="v-pills-tabContent">
+
+                        <div class="tab-pane fade show active " id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                            <h4 class=" p-2 ">Dane firmy "<span>{{$company->name}}</span>"</h4>
+                            <div class="row ">
+                                <div  class="card p-2 mt-2 ms-5 mb-5 col-9">
 
 <table  class="table">
   <tbody>
     <tr>
-      <th style="min-width:150px">Nazwa Firmy</th>
+      <th style="min-width: 150px">Nazwa Firmy</th>
       <td class="border-bottom border-danger" >{{$company->name}}</td>
 
     </tr>
@@ -118,26 +115,27 @@
 </table>
 </div>
 
-</div>
+
+                        </div>
 
 
-<div class="tab-pane fade w-100" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+<div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
 
-                        @if(!$addresses->isNotEmpty()) 
-                            <h5>Adresy:</h5>
-                            <h4>Adres nie został dodany do firmy. </h4>
-                {{-- TODO tu mozna zrobic jako modal - > form --}}
-                            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
-                        
-                        @else 
+        @if(!$addresses->isNotEmpty()) 
+            <h5>Adresy:</h5>
+            <h4>Adres nie został dodany do firmy. </h4>
+{{-- TODO tu mozna zrobic jako modal - > form --}}
+            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+        
+        @else 
 
-                        <h5>Adresy:</h5>
+        <h5>Adresy:</h5>
 
-                        {{-- TODO tu mozna zrobic jako modal - > form --}}
-                            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
-                        
-                        @foreach ($addresses as $address)
-                        <div class="card p-2 mt-2 ms-5 mb-5 address-card">
+        {{-- TODO tu mozna zrobic jako modal - > form --}}
+            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+        
+        @foreach ($addresses as $address)
+        <div class="card p-2 mt-2 ms-5 mb-5 address-card">
 
         <table class="table">
         <tbody>
@@ -181,7 +179,7 @@
 
 </div>
 
-                        <div class="tab-pane fade w-100" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">
+                        <div class="tab-pane fade" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">
                             {{-- export the below as a component TODO --}}
                             <div class=" widget box box-shadow" style="width:60vw">
                                 <div class="" >
@@ -327,7 +325,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
     

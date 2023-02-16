@@ -108,12 +108,12 @@
         @if (!Request::routeIs('blank'))  
         <!--  BEGIN NAVBAR  -->
 
-        @php
+        {{-- @php
             $ordersCount = count(App\Models\Order::all());
-        @endphp
+        @endphp --}}
         {{-- THis is my attempt to pass the data ablove (count()) to the componen: TODO --}}
         {{-- <x-navbar.style-vertical-menu :ordersCount="$ordersCount" classes="{{($isBoxed ? 'container-xxl' : '')}}"/> --}}
-        <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
+        <x-navbar.style-vertical-menu  classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
         
         <!--  END NAVBAR  -->
         @endif
@@ -126,7 +126,8 @@
 
             @if (!Request::routeIs('blank')) 
             <!--  BEGIN SIDEBAR  -->
-            <x-menu.vertical-menu/>
+            <x-menu.vertical-menu />
+            {{-- :emails="$emails" wrzucic w komponent.. TODO: find out how. --}}
             <!--  END SIDEBAR  -->   
             @endif
             

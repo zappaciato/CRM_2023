@@ -104,11 +104,15 @@
 
                  
 
-                    <li class="menu {{ Request::routeIs('email.inbox') || Request::routeIs('emails.assigned') ? 'active' : '' }}">
+                    <li class="menu {{ Request::routeIs('email.inbox') || Request::routeIs('single.email') ? 'active' : '' }}">
                         <a href="{{route('email.inbox')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                                 <span>Email</span>
+
+                                {{-- <span  class="mail-badge badge">{{$emails->count()}}</span> --}}
+
+
                             </div>
                         </a>
                     </li>
@@ -131,7 +135,7 @@
                         </a>
                     </li> --}}
 
-                    <li class="menu {{ Request::routeIs('company.list') ? 'active' : '' }}">
+                    <li class="menu {{ Request::routeIs('company.list') || Request::routeIs('single.company') ? 'active' : '' }}">
                         <a href="{{route('company.list')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -140,7 +144,7 @@
                         </a>
                     </li>
 
-                    <li class="menu {{ Request::routeIs('contact.list') ? 'active' : '' }}">
+                    <li class="menu {{ Request::routeIs('contact.list') || Request::routeIs('single.contact') ? 'active' : '' }}">
                         <a href="{{route('contact.list')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -149,7 +153,7 @@
                         </a>
                     </li>
 
-                    <li class="menu {{ Request::routeIs('user.list') ? 'active' : '' }}">
+                    <li class="menu {{ Request::routeIs('user.list') || Request::routeIs('single.user') ? 'active' : '' }}">
                         <a href="{{route('user.list')}}" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
@@ -249,7 +253,7 @@
                         </ul>
                     </li> --}}
 
-                    {{-- <li class="menu {{ Request::is('*/app/blog/*') ? "active" : "" }}">
+                    <li class="menu {{ Request::is('*/app/blog/*') ? "active" : "" }}">
                         <a href="#blog" data-bs-toggle="collapse" aria-expanded="{{ Request::is('*/app/blog/*') ? "true" : "false" }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pen-tool"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
@@ -276,7 +280,7 @@
                                 <a href="{{getRouterValue();}}/app/blog/edit"> Edit </a>
                             </li>
                         </ul>
-                    </li> --}}
+                    </li>
 {{-- 
                     <li class="menu menu-heading">
                         <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>USER INTERFACE</span></div>

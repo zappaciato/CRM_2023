@@ -7,6 +7,7 @@ use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\CompanyAddress;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -97,8 +98,8 @@ class CompanyController extends Controller
         $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
         $contacts = $company->contacts;
         // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; Problem w tym, ze czasem w tinkerze to nie dziala;
-        $orders = $company->orders;
-
+        $orders = $company->orders; 
+        // $users = User::select('id', 'name')->get(); 
         return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts', 'orders'));
     }
 

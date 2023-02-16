@@ -223,7 +223,7 @@ Log::debug($data);
             'order_notes' => 'required',
             'deadline' => 'required',
             'status' => 'required',
-            // 'notes' => 'nullable'
+            // 'notes' => 'nullable' add2order na razie nie ma walidacji!!!!!!!!!
 
         ])->validate();
 
@@ -264,6 +264,7 @@ Log::debug($data);
         $email2order->order_id = $newOrder->id;
         $email2order->email_id = $data['email_id'];
         $email2order->user_id = Auth::user()->id;
+        $email2order->notes = $data['order_notes'];
         $email2order->save();
 
 
