@@ -88,7 +88,7 @@
                                         </h1>
                                         </div>
                                         {{-- $eflag == false if there is a match of email if with email_id in emailsToOrders --}}
-                                        @if($eFlag) 
+                                        @if($eFlag !== 1) 
                                             <div class="d-flex flex-column ">
 
                                             <h5>Email już przydzielony do zgłoszenia.</h5>

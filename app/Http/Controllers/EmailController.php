@@ -68,8 +68,8 @@ class EmailController extends Controller
         $emailsAll = Email::all();
 
 
-        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
-        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned')->sortByDesc('created_at');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');
         // $emailsAssigned = Email::where('emailstatus', 'assigned')->get();
 
         Log::info('I am about to display all assigned emails');
@@ -150,39 +150,55 @@ Log::debug($data);
         // $email = Email::where('id', $id)->get();
         // $email = Email::findOrFail($id);
         $email = Email::find($id);
-        $email->emailstatus = ['przeczytany']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
-        $email->update($email->emailstatus);
+
+        $eFlag = 0;
+        // check if the email has already been assigned status if not update the status to 'open'
+        if($email->emailstatus !== 'assigned' || $email->emailstatus == 'new') {
+            Log::info('The email status has no assigned status');
+            Log::debug($email->emailstatus);
+            Log::debug($email->emailstatus !== 'assigned');
+            $email->emailstatus = ['read']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
+            $email->update($email->emailstatus);
+            // if email has status assigned nothing should be done with it.. this flag disables email action buttons
+            $eFlag = 1;
         // Email::update('status' => 'przecztany')->where('id', $id);
+        } else {
+            Log::info('The email status has assigned status');
+            Log::debug($email->emailstatus);
+            Log::debug($email->emailstatus == 'assigned');
+            $eFlag = 0;
+        }
+        
 
         
         $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
 
-        //check if this email is already in emails to orders 
-        // 1. Get all email_id 's from emails-to-order and set up a flag
-        $allEmailIds = EmailsToOrder::select('id')->get();
-        $eFlag = 0;
-        // 2. Check if this email id is, and change the flag accordingly 
-        foreach($allEmailIds as $eId) {
-            if($eId->id == $id) {
-                Log::info('$eId has a match with $email->id');
-                Log::info("1.eId and 2 is id");
-                Log::debug($eId['id']);
-                Log::debug($id);
-                $eFlag = 1;
-                break;
-            } else {
-                Log::info('$eId has no match with $email->id, so it is a NEW unassigned Email');
-                $eFlag = 0;
-                Log::info('$eId has a match with $email->id');
-                Log::info("1.eId and 2 is id");
-                Log::debug($eId->id);
-                Log::debug($id);
-            }
-        }
-        // 3. Hide action buttons in single email if the flag is true(there is email id in emails-to-order)
-        Log::info('THIS IS $eFlag VALUE');
-        Log::debug($eFlag);
+        // //check if this email is already in emails to orders 
+        // // 1. Get all email_id 's from emails-to-order and set up a flag
+        // $allEmailIds = EmailsToOrder::select('id')->get();
+        // $eFlag = 0;
+        // // 2. Check if this email id is, and change the flag accordingly 
+        // foreach($allEmailIds as $eId) {
+        //     if($eId->id === $id) {
+        //         Log::info('$eId has a match with $email->id');
+        //         Log::info("1.eId and 2 is id");
+        //         Log::debug($eId['id']);
+        //         Log::debug($id);
+        //         $eFlag = 1;
+        //         break;
+        //     } else {
+        //         Log::info('$eId has no match with $email->id, so it is a NEW unassigned Email');
+        //         $eFlag = 0;
+        //         Log::info('$eId has a match with $email->id');
+        //         Log::info("1.eId and 2 is id");
+        //         Log::debug($eId->id);
+        //         Log::debug($id);
+        //     }
+        // }
+        // // 3. Hide action buttons in single email if the flag is true(there is email id in emails-to-order)
+        // Log::info('THIS IS $eFlag VALUE');
+        // Log::debug($eFlag);
 
 
         //make a flag if there's anything fetched as $emailAttachments if it is empty then show that there are no attachments
