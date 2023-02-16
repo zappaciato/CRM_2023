@@ -9,6 +9,7 @@ use App\Models\Email;
 use App\Models\EmailsToOrder;
 use App\Models\MessageToClient;
 use App\Models\Order;
+use App\Models\OrderComment;
 use App\Models\OrderNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -91,15 +92,17 @@ class ServiceOrderController extends Controller
 
     public function show($id)
     {
-
+        //return a query only firstorfail() lets me query other tables with fk order_id relationship; however firstorfail() doesn't let me paginate later;
         $singleOrder = Order::where('id', $id)->firstOrFail();
         // for this order
         //Get all messages to client throu relations set in the model
         $messagesToClient = $singleOrder->messagesToClients;
         //get the notifications for this single order. 
         $orderNotifications = $singleOrder->orderNotifications;
-        //get all comments 
-        $comments = $singleOrder->orderComments;
+        //get all comments // paginate nie dziala jesli wyciagamy z collection. dziala tylko w query DB::where().
+        // $comments = $singleOrder->orderComments;
+        $comments = OrderComment::where('order_id', $id)->orderBy('created_at', 'desc')->paginate(2);
+
         //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I foreach all;
         $contacts = Contact::all();
         // define emails array to get ids for the search for links for emails assigned to the order
@@ -169,6 +172,8 @@ Log::debug(strval($files));
             
             
 }
+
+
         // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
 
         return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications','contacts', 'contactPerson', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));

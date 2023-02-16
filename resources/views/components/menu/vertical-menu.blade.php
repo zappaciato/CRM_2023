@@ -89,7 +89,7 @@
                             {{-- <li class="{{ Request::routeIs('new.orders') ? 'active' : '' }}">
                                 <a class="notificationn" href="{{route('new.orders')}}"> Zgłoszenia nowe <span class="badgee">3 </span> </a>
                             </li> --}}
-                            <li class="{{ Request::routeIs('service.orders') ? 'active' : '' }}">
+                            <li class="{{ Request::routeIs('service.orders') || Request::routeIs('single.service.order') ? 'active' : '' }}">
                                 <a class="notificationn" href="{{route('service.orders')}}"> Zgłosz. Serwisowe <span class="badgee">3 </span> </a>
                             </li>
                         </ul>
