@@ -67,6 +67,9 @@
                                                 <div class="message-content">
                                                      <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Treść:</p>
                                                     <textarea  class="" name="content" id="message-content" cols="58" rows="10" >Wiadomość odnosi sie do zgłoszenia: {{$singleOrder->title}}</textarea>
+                                                    @if ($errors->has('content'))
+                            <span class="text-danger">{{ $errors->first('content') }}</span>
+                        @endif
                                                 </div>
 
                                             
@@ -74,10 +77,14 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button id="btn-save" class="btn float-left btn-success"> Zapisz</button>
-                                    <button class="btn" data-bs-dismiss="modal"> <i class="flaticon-delete-1"></i> Anuluj</button>
+                                    {{-- <button id="btn-save" class="btn float-left btn-success"> Zapisz</button>
+                                    <button class="btn" data-bs-dismiss="modal"> <i class="flaticon-delete-1"></i> Anuluj</button> --}}
                                     <button type="submit" value="submit" id="btn-send" class="btn btn-primary"> Wyślij</button>
                                 </div>
+                                
+                                {{-- @php
+                                    dd($errors);
+                                @endphp --}}
                                 </form>
                             </div>
                         </div>

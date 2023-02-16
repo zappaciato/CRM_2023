@@ -12,7 +12,7 @@
                                 <div class="modal-body">
                                     <div class="compose-box">
                                         <div class="compose-content">
-                                            <form class="row g-3 needs-validation" action="{{route('add.to.order', $email->id)}}" method="POST" novalidate>
+                                <form class="row g-3 needs-validation" action="{{route('add.to.order', $email->id)}}" method="POST" novalidate>
                                             @csrf
                                                 <input type="hidden" name="email_id" value="{{$email->id}}">
                                                 <input type="hidden" name="user_id" value="{{auth()->user()->id}}">    

@@ -33,7 +33,7 @@ class MessageToClientController extends Controller
 
             'from' => 'required|min:3' ,
             'to' => 'required|min:3',
-            'cc' => 'required|min:3',
+            'cc' => 'nullable|min:3',
             'subject' => 'required|min:3',
             'content' => 'required|min:3',
             'order_id' => 'required',
@@ -66,12 +66,23 @@ class MessageToClientController extends Controller
         Log::info('This is message to client data AFTER validation');
         Log::debug($data);
 
+        if($data->fails())
+
         $messageToClient = ModelsMessageToClient::create($data);
 
         Alert::alert('Gratulacje!', 'Wiadomość została wysłana', 'success');
         Log::info('Below is the $message variable shoulbd be the same as $data;');
-Log::debug($messageToClient['from']);
-Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc']])->send(new MessageToClient($messageToClient));
+Log::debug($messageToClient);
+
+        if($messageToClient['to'] !== '' && $messageToClient['cc'] !== '') {
+
+            Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+
+        } else {
+
+            Mail::to([$messageToClient['from'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+            }
+
 
 
         //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );

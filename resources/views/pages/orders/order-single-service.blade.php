@@ -112,6 +112,14 @@
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+        {{-- mialo niby pomoc zeby nie scrollowalo w gore ale nie dziala przy paginacji --}}
+    <script>
+$('a[href="#highlights"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#highlights").offset().top
+    }, 1000);
+  });
+</script>
 
         <script src="{{asset('plugins/global/vendors.min.js')}}"></script>
         <script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>

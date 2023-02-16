@@ -35,6 +35,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap/bootstrap.min.css')}}">
     @vite(['resources/scss/light/assets/main.scss', 'resources/scss/dark/assets/main.scss'])
+    @vite(['resources/scss/light/assets/elements/alert.scss'])
+    @vite(['resources/scss/dark/assets/elements/alert.scss'])
 
     @if (
             !Request::routeIs('404') &&
@@ -92,6 +94,11 @@
     {{-- sweet alerts for notification: K.--}}
     @include('sweetalert::alert')
 
+    <div class="validation-messages">
+    @include('partials.validation_messages.validation-errors')
+    @include('partials.validation_messages.success')
+    </div>
+
     @if (
             !Request::routeIs('404') &&
             !Request::routeIs('maintenance') &&
@@ -133,7 +140,7 @@
             
             <!--  BEGIN CONTENT AREA  -->
             <div id="content" class="main-content {{(Request::routeIs('blank') ? 'ms-0 mt-0' : '')}}">
-
+    
                 @if ($scrollspy == 1)
                     <div class="container">
                         <div class="container">

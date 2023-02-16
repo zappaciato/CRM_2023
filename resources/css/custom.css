@@ -176,3 +176,24 @@ tr:nth-child(even) {
   background-color: #10fafab7;
   box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
 }
+
+
+.comment-text-area-custom {
+  background-color: #00ffdd34;
+  box-shadow: 2px 2px 24px 3px rgba(66, 68, 90, 1);
+}
+
+.comment-text-area-custom:focus {
+  background-color: #00ffdd34;
+  box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+}
+
+.validation-messages {
+  margin: 0;
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-42%, -50%);
+  z-index: 889;
+  width: 70%;
+}

@@ -48,12 +48,13 @@
 
                         <div class="section add-comment">
                             <div class="info">
-                                <h6>Dodaj swój <span class="text-success">komentarz</span> do tego zgłoszenia.</h6>
+                                
                                 
 
-                                <div class="row mt-4">
-
-                                        <div class="col-md-12">
+                                <div class="row mt-4 d-flex justify-content-center">
+                                        
+                                        <div class="col-md-7">
+                                            <h6>Dodaj swój <span class="text-success">komentarz</span> do tego zgłoszenia.</h6>
                                         <div class="mb-3">
                                             <form method="POST" action="{{route('order.comment.add')}}">
                                                 @csrf
@@ -61,14 +62,14 @@
                                                 <input type="hidden" name="order_id" value="{{$singleOrder->id}}">
                                                 
                                                 <label class="form-label">Napisz komentarz</label>
-                                                <textarea name="content" class="form-control" cols="30" rows="10"></textarea>
+                                                <textarea name="content" class="form-control comment-text-area-custom" cols="20" rows="5"></textarea>
                                             
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div class="text-end mt-4">
+                                <div style="margin: 300px;" class="text-end mt-4">
                                     <button type='submit'  class="btn btn-success">Dodaj</button>
                                 </div>
 

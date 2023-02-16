@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MessageToClient;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
@@ -11,6 +12,7 @@ use App\Models\OrderNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -117,6 +119,19 @@ Log::debug($data);
 
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
+        // Sending email notification to the relevant people;
+        
+        // Specify the message details or do sth about it;
+        $messageToClient = ['content' => 'Dupa dupa', 'subject' => 'jajca jajca', 'number' => 10, 'from' => 'mj@k.pl'];
+
+        if($email->cc !== '' && $email->bcc !==  '') {
+
+            Mail::to([$email->from_address, $email->cc, $email->bcc, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+
+        } else {
+            Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+        }
+        
 
         Alert::alert('Gratulacje!', 'Email został przypisany!', 'success');
 
