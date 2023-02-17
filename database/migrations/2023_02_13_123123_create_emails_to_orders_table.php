@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('order_id');
             $table->integer('email_id');
             $table->integer('user_id');
-            $table->string('notes');
+            $table->text('notes');
 
 
 

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('from');
             $table->string('to');
-            $table->string('cc');
+            $table->string('cc')->nullable();
             $table->string('subject');
-            $table->string('content');
+            $table->longText('content')->nullable();
 
 
             $table->timestamps();

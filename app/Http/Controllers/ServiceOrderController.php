@@ -29,7 +29,7 @@ class ServiceOrderController extends Controller
         $breadcrumb = "Zgłoszenia serwisowe";
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
         // tutaj rowniez mozemy skrocic kwerendę do wywloania jedynie firm i za pomoca relationships dostac sie do adresow i kontaktow oraz orders na razie nie zmieniam bo dziala. W razie oblozenia bazy danych mozna to zmienic. Pamietac o zmianie w widoku na inne zapisy
-        $orders = Order::all();
+        $orders = Order::all()->sortByDesc('created_at');
 
         // $orders = Order::with('company')->get();
 
@@ -53,7 +53,9 @@ class ServiceOrderController extends Controller
         $users = User::select('id', 'name')->get(); 
         $loggedUser = Auth::user();
 
-        $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->get();
+        //Show orders only for the loggegd in user; 
+        // Sorting orders does not work as it shows datatable which automatically orders them according to id.. 
+        $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->lazyByIdDesc();
         $companies = Company::select('id', 'name')->get();
         // foreach($orders as $order) {
         //     if($user->id === $order->lead_person || $user->id === $order->involved_person) [

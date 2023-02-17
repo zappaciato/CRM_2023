@@ -66,7 +66,7 @@ class MessageToClientController extends Controller
         Log::info('This is message to client data AFTER validation');
         Log::debug($data);
 
-        if($data->fails())
+        // if($data->fails())
 
         $messageToClient = ModelsMessageToClient::create($data);
 
