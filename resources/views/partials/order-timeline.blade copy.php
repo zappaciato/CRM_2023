@@ -1,11 +1,10 @@
 <div id="iconsAccordion" class="accordion-icons accordion">
     <div class="card">
         <div class="card-header" id="...">
-            <section class="mb-0 mt-0 d-flex justify-content-center bg-info">
+            <section class="mb-0 mt-0">
                 <div role="menu" class="collapsed" data-bs-toggle="collapse" data-bs-target="#iconAccordionOne" aria-expanded="true" aria-controls="iconAccordionOne">
                     <div class="accordion-icon"><svg> ... </svg></div>
-                    <h4 class="text-white">Timeline zdarzeń zgłoszenia [{{count($orderNotifications)}}]  </h4>
-                    <div class="icons"><svg> ... </svg></div>
+                    Collapsible Group Item #1  <div class="icons"><svg> ... </svg></div>
                 </div>
             </section>
         </div>
@@ -13,7 +12,53 @@
         <div id="iconAccordionOne" class="collapse" aria-labelledby="..." data-bs-parent="#iconsAccordion">
             <div class="card-body">
                 
-                <div class="mt-container mx-auto">
+                ..................
+                ..................
+
+            </div>
+        </div>
+  </div>
+
+    <div class="card">
+        <div class="card-header" id="...">
+            <section class="mb-0 mt-0">
+                <div role="menu" class="collapsed" data-bs-toggle="collapse" data-bs-target="#iconAccordionTwo" aria-expanded="false" aria-controls="iconAccordionTwo">
+                    <div class="accordion-icon"><svg> ... </svg></div>
+                    Collapsible Group Item #2  <div class="icons"><svg> ... </svg></div>
+                </div>
+            </section>
+        </div>
+        <div id="iconAccordionTwo" class="collapse" aria-labelledby="..." data-bs-parent="#iconsAccordion">
+            <div class="card-body">
+
+                ...................
+                ...................
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="...">
+            <section class="mb-0 mt-0">
+                <div role="menu" class="" data-bs-toggle="collapse" data-bs-target="#iconAccordionThree" aria-expanded="false" aria-controls="iconAccordionThree">
+                    <div class="accordion-icon"><svg> ... </svg></div>
+                    Collapsible Group Item #3 <div class="icons"><svg> ... </svg></div>
+                </div>
+            </section>
+        </div>
+        <div id="iconAccordionThree" class="collapse show" aria-labelledby="..." data-bs-parent="#iconsAccordion">
+        <div class="card-body">
+            
+            ..................
+            ..................
+
+        </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mt-container mx-auto">
                     <div class="timeline-line">
 
 
@@ -175,47 +220,3 @@
 
                     </div>                                    
                 </div>
-
-            </div>
-        </div>
-  </div>
-
-    {{-- <div class="card">
-        <div class="card-header" id="...">
-            <section class="mb-0 mt-0">
-                <div role="menu" class="collapsed" data-bs-toggle="collapse" data-bs-target="#iconAccordionTwo" aria-expanded="false" aria-controls="iconAccordionTwo">
-                    <div class="accordion-icon"><svg> ... </svg></div>
-                    Collapsible Group Item #2  <div class="icons"><svg> ... </svg></div>
-                </div>
-            </section>
-        </div>
-        <div id="iconAccordionTwo" class="collapse" aria-labelledby="..." data-bs-parent="#iconsAccordion">
-            <div class="card-body">
-
-                ...................
-                ...................
-
-            </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="...">
-            <section class="mb-0 mt-0">
-                <div role="menu" class="" data-bs-toggle="collapse" data-bs-target="#iconAccordionThree" aria-expanded="false" aria-controls="iconAccordionThree">
-                    <div class="accordion-icon"><svg> ... </svg></div>
-                    Collapsible Group Item #3 <div class="icons"><svg> ... </svg></div>
-                </div>
-            </section>
-        </div>
-        <div id="iconAccordionThree" class="collapse show" aria-labelledby="..." data-bs-parent="#iconsAccordion">
-        <div class="card-body">
-            
-            ..................
-            ..................
-
-        </div>
-        </div>
-    </div> --}}
-</div>
-
-
