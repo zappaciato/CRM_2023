@@ -322,12 +322,12 @@ $breadcrumb = 'Pliki';
 $searchedEmails = [];
 $searchData = ['file#order#' . $id];
 //  1. && 2.
-$orderEmails = EmailsToOrder::where('order_id', $id)->get('id');
+$orderEmails = EmailsToOrder::where('order_id', $id)->get(); //wypluwa id emailstoorder table; 
 //  3.
 foreach($orderEmails as $emailId) {
-    array_push($searchData, 'file#email#'.$emailId->id);
+    array_push($searchData, 'file#email#'.$emailId->email_id);
 }
-
+    Log::info('THIS IS FILES CONTROLLER AND BELOW is $searchData. It shows all attached files to file#email#id');
         Log::debug($searchData);
 //  4.
 
