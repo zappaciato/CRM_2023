@@ -187,6 +187,7 @@
         <script src="{{asset('plugins/mousetrap/mousetrap.min.js')}}"></script>
         <script src="{{asset('plugins/waves/waves.min.js')}}"></script>
         <script src="{{asset('plugins/highlight/highlight.pack.js')}}"></script>
+        
         @if ($scrollspy == 1) @vite(['resources/assets/js/scrollspyNav.js']) @endif
 
         @if (Request::is('modern-light-menu/*'))

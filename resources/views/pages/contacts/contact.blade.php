@@ -78,67 +78,61 @@
                     <div class="row card p-5">
                         <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
                                 <div class="info">
-                                    <h6 class="">Informacje ogólne kontaktu</h6>
+                                    {{-- <h6 class="">Informacje ogólne kontaktu</h6> --}}
                                     <div class="row">
                                         <div class="col-lg-11 mx-auto">
                                             <div class="row">
                                                 
+                                                 <div class="border border-custom border-info rounded p-5 ms-5 mt-2 col-xxl-8 col-xl-10 col-lg-10 col-md-10 col-sm-10 ">
+                            <a href="{{route('single.contact', $singleContact->id)}}">
+                                <h6 class="">Informacje ogólne kontaktu:</h6>
+                                <table class="table">
+                                <tbody>
+                                    <tr>
+                                    <th>Imię</th>
+                                    <td class="border-bottom border-danger font-weight-bold" >{{$singleContact->name}}</td>
 
-                                                <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
-                                                    <div class="form">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Imię: {{$singleContact->name}}</h5>
-                                                                    <h5>Nazwisko: {{$singleContact->surname}}</h5>
-                                                                </div>
-                                                            </div>
+                                    </tr>
+                                    <tr>
+                                    <th>Nazwisko</th>
+                                    <td class="border-bottom border-danger ">{{$singleContact->surname}}</td>
 
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Pozycja: {{$singleContact->position}}</h5>
-                                                                </div>
-                                                            </div>                                                          
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Email: {{$singleContact->email}}</h5>
-                                                                </div>
-                                                            </div> 
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Telefon: {{$singleContact->phone}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Telefon 2: {{$singleContact->phone_business}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            {{--Ntatka: to moze pojawic sie np w modalu --}}
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Notatka: {{$singleContact->notes}}</h5>
-                                                                </div>
-                                                            </div>
+                                    </tr>
+                                    <tr>
+                                    <th>Pozycja</th>
+                                    <td>{{$singleContact->position}}</td>
 
-                                                            {{-- <div class="col-md-12 mt-1">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" value="" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Make this my default address</label>
-                                                                </div>
-                                                            </div> --}}
+                                    </tr>
+                                    <tr>
+                                    <th>email</th>
+                                    <td>{{$singleContact->email}}</td>
 
-                                                            <div class="col-md-12 mt-1">
-                                                                <div class="form-group text-end">
-                                                                  <a href="{{route('contact.edit', $singleContact->id)}}"><button  class="btn btn-secondary">Edytuj kontakt</button></a>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
+                                    </tr>
+                                    <tr>
+                                    <th>Telefon</th>
+                                    <td>{{$singleContact->phone}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Telefon 2</th>
+                                    <td>{{$singleContact->phone_business}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Notatki</th>
+                                    <td class="text-wrap">{{$singleContact->notes}}</td>
+
+                                    </tr>
+                                </tbody>
+                                </table>
+                                </a>
+                                </div>
+
+                                                {{-- fdsfsdfsdfdsfdsfdsfds delete below --}}
+
+                                                {{-- delete above --}}
                                             </div>
                                         </div>
                                     </div>
@@ -153,81 +147,93 @@
                     <div class="row card p-5">
                             <div class="col-xl-12 col-lg-12 col-md-12 layout-spacing">
                                 <div class="info">
-                                    <h6 class="">Informacje o firmie</h6>
+                                    {{-- <h6 class="">Informacje o firmie</h6> --}}
                                     <div class="row">
                                         <div class="col-lg-11 mx-auto">
                                             <div class="row">
-                                                
+                                                {{-- delet below --}}
                                                 <div class="col-xl-10 col-lg-12 col-md-8 mt-md-0 mt-4">
                                                     <div class="">
                                                         <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Nazwa firmy: {{$company->name}}</h5>
-                                                                
-                                                                </div>
-                                                            </div>
+                                                           
+                            <a href="{{route('single.contact', $singleContact->id)}}">
+                                <h6 class="">Informacje o firmie:</h6>
+                                <table class="table">
+                                <tbody>
+                                    <tr>
+                                    <th>Nazwa</th>
+                                    <td class="border-bottom border-danger font-weight-bold" >{{$company->name}}</td>
 
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>NIP: {{$company->nip}}</h5>
-                                                                </div>
-                                                            </div>                                                          
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Główny adres Email: {{$company->email}}</h5>
-                                                                </div>
-                                                            </div> 
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Telefon: {{$company->phone}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Telefon stacjonarny: {{$company->phone_stationary}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Kraj: {{$company->country}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            {{--Ntatka: to moze pojawic sie np w modalu --}}
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Notatka: {{$singleContact->notes}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="info me-5">
-<h6 class="me-5">Adres</h6>
-</div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Ulica: {{$companyAddress->street}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Miasto: {{$companyAddress->city}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Kraj: {{$companyAddress->country}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="">
-                                                                    <h5>Notatka: {{$companyAddress->notes}}</h5>
-                                                                </div>
-                                                            </div>
-                                                            {{-- <div class="col-md-12 mt-1">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="checkbox" value="" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Make this my default address</label>
-                                                                </div>
-                                                            </div> --}}
+                                    </tr>
+                                    <tr>
+                                    <th>NIP</th>
+                                    <td class="border-bottom border-danger ">{{$company->nip}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>email główny</th>
+                                    <td>{{$company->email}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Kraj</th>
+                                    <td>{{$company->country}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Telefon</th>
+                                    <td>{{$company->phone}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Telefon 2</th>
+                                    <td>{{$company->phone_stationary}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Notatki</th>
+                                    <td class="text-wrap">{{$singleContact->notes}}</td>
+
+                                    </tr>
+                                </tbody>
+                                </table>
+                                </a>
+                                                            
+                                                            
+
+
+
+                                <h6 class="">Informacje o adresie:</h6>
+                                <table class="table">
+                                <tbody>
+                                    <tr>
+                                    <th>Ulica</th>
+                                    <td class="border-bottom border-danger font-weight-bold" >{{$companyAddress->street}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Miasto</th>
+                                    <td class="border-bottom border-danger ">{{$companyAddress->city}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Kraj</th>
+                                    <td>{{$companyAddress->country}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Notatki</th>
+                                    <td class="text-wrap">{{$companyAddress->notes}}</td>
+
+                                    </tr>
+                                </tbody>
+                                </table>
+
+
+                                                         
+                                                         
 
                                                             <div class="col-md-12 mt-1">
                                                                 <div class="text-end">
@@ -473,17 +479,7 @@ dd($errors);
 
 {{--  --}}
 
-<h1>Single contact {{$singleContact->name}} ::: {{$singleContact->surname}}</h1>
-@if($singleContact = '') 
-   <h3>Ten kontakt nie ma przypisanej firmy.</h3> 
-   <h4>Czy chcesz przypisac firmę do kontaktu?</h4>
-@else
-<h2>Ten kontakt należy do firmy: {{$company->name}}</h2>
-<h4>Firma {{$company->name}} znajduje się pod adresem: </h4>
-<h5> {{$companyAddress->name}}</h5>
-<h5>Ulica: {{$companyAddress->street}}</h5>
-<h5>Miasto: {{$companyAddress->city}}</h5>
-@endif
+
 
 {{-- <button><a href="{{route('contact.edit', $contact['id'])}}">Edytuj kontakt</a></button> --}}
 

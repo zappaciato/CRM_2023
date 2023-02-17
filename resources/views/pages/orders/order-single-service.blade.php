@@ -124,6 +124,10 @@ $('a[href="#highlights"]').click(function() {
   });
 </script>
 
+
+
+
+
         <script src="{{asset('plugins/global/vendors.min.js')}}"></script>
         <script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
         <script src="{{asset('plugins/glightbox/glightbox.min.js')}}"></script>
@@ -142,6 +146,32 @@ $('a[href="#highlights"]').click(function() {
         
         {{-- for order message --}}
         @vite(['resources/assets/js/apps/mailbox.js'])
+
+{{-- TODO: Tutaj chce zeby nie przeładowywalo okna modal przed skonczeniem validacji i podaniem błędów. Nie działa w ten sposonb;  --}}
+        <script>
+$('#message-to-client-form').submit(function(){
+
+var url = {{ route('message.to.client', $singleOrder->id) }};
+var data = $('#message-to-client-form').serialize();
+e.preventDefault();
+$.post(url, data, function(response){
+    if(response.success)
+    {
+        // Print success message and close modal
+    }
+    else
+    {
+        $('#message-to-client-form errorList').html(JSON.stringify(response.errors));
+    }
+});
+
+
+// return false to stop the normal submission
+return false;
+});
+</script>
+{{-- And of script for validation errors message no page refresh --}}
+
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

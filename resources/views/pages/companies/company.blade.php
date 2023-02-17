@@ -270,7 +270,7 @@
 
 
 
-                            <div class="border border-custom border-info rounded p-5 ms-5 mt-2 col-xxl-4 col-xl-4 col-lg-5 col-md-5 col-sm-6 ">
+                            <div class="border border-custom border-info rounded p-5 ms-5 mt-2 col-xxl-8 col-xl-10 col-lg-10 col-md-10 col-sm-10 ">
                             <a href="{{route('single.contact', $contact->id)}}">
                                 <table class="table">
                                 <tbody>

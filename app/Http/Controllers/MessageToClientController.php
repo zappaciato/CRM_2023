@@ -33,7 +33,7 @@ class MessageToClientController extends Controller
 
             'from' => 'required|min:3' ,
             'to' => 'required|min:3',
-            'cc' => 'nullable|min:3',
+            'cc' => 'nullable',
             'subject' => 'required|min:3',
             'content' => 'required|min:3',
             'order_id' => 'required',
@@ -66,9 +66,10 @@ class MessageToClientController extends Controller
         Log::info('This is message to client data AFTER validation');
         Log::debug($data);
 
-        // if($data->fails())
+        // if($data->())
 
         $messageToClient = ModelsMessageToClient::create($data);
+
 
         Alert::alert('Gratulacje!', 'Wiadomość została wysłana', 'success');
         Log::info('Below is the $message variable shoulbd be the same as $data;');
