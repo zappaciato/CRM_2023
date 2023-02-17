@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\CompanyAddress;
 use App\Models\Contact;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -19,8 +20,10 @@ class ContactController extends Controller
         $contacts = Contact::all();
 
         $companies = Company::select('id','name')->get();
+
+      
         Log::debug($companies);
-        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies'));
+        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies', ));
     }
 
 
@@ -112,9 +115,9 @@ class ContactController extends Controller
         $title = "Osoba kontaktowa";
         $breadcrumb = "Kontakt:  ";
 
-        
+        $contactOrders = Order::where('contact_person', $singleContact->id)->get();
         // dd($company);
-        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress'));
+        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress', 'contactOrders'));
     }
 
 

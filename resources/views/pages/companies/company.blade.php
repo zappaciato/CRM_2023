@@ -182,7 +182,7 @@
 </div>
 
                         <div class="tab-pane fade w-100" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">
-                            {{-- export the below as a component TODO --}}
+                            {{-- export the below as a component TODO and possibly in the controller make a service during the refactoring--}}
                             <div class=" widget box box-shadow" style="width:60vw">
                                 <div class="" >
 

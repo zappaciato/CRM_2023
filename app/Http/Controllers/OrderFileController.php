@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileComment;
 use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderFile;
@@ -31,7 +32,8 @@ $breadcrumb = "files";
         Log::debug($order);
         $data = $request->validate([
             'order_id' => 'required|numeric|exists:orders,id',
-            'new_file' => 'required', 
+            'new_file' => 'required',
+            'file_comment' => 'nullable', 
         ]);
         Log::info('Below DATA from inpit file upload');
         Log::debug($data);
@@ -42,9 +44,23 @@ $breadcrumb = "files";
             Log::info('Checked and the new_file is uploaded fine');
             Log::info('Below I am adding new_file to the media collection');
 
-            $order->addMediaFromRequest("new_file")->toMediaCollection("file#order#$request->order_id");
+            $newFile = $order->addMediaFromRequest("new_file")->toMediaCollection("file#order#$request->order_id");
         }
 
+        if($newFile) {
+        $fileComment = new FileComment();
+        //check if there's a comment given
+        if($data['file_comment']) {
+                $fileComment->file_comment = $data['file_comment'];
+        } else {
+                $fileComment->file_comment = 'Ten plik jest związany ze zgłoszeniem o tytule: ' . $order->title . ' i numerze Id: ' . $order->id;
+        }
+        
+        $fileComment->media_id = $newFile->id;
+        $fileComment->save();
+        } else {
+            return redirect()->back();
+        }
         // OrderComment::create(Arr::add($data, 'user_id', $request->user()->id));
 
         // Log::info('Below is the comment data after validation and upload to db.');

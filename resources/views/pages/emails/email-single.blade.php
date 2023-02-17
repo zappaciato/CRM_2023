@@ -78,7 +78,7 @@
 
                                         <div class="email-content-display-wrapper">
                                             <div class="">
-                                        <h1 
+                                        <h1 style="overflow: hidden;"
                                             class="email-content-display" 
                                             data-mailTitle="{{$email->subject}}" 
                                             data-maildescription='{"ops":[{"insert":"{{$email->text_plain}}"}]}'> 

@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
 use App\Models\EmailsToOrder;
+use App\Models\FileComment;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use Illuminate\Http\Request;
@@ -116,6 +117,19 @@ Log::debug($data);
         $email['emailstatus'] = 'assigned';
         $email->update([$email['emailstatus'] => 'assigned']);
         Log::info("Email status updated");
+
+
+        //get the attachments for this email
+        $attachments = Media::where('collection_name', 'file#email#' . $email->id)->get();
+
+        //Dla każdegoz tych plików dodaj defaultową notatkę
+        foreach ($attachments as $file) {
+
+            $fileComment = new FileComment();
+            $fileComment->media_id = $file->id;
+            $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"'. " o numerze id: " . $email->id . ". Dołączony do zgłoszenia nr: " . $email2order->order_id;
+            $fileComment->save();
+        }
 
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
@@ -347,6 +361,18 @@ Log::info('This is the data regarding EMAIL');
 Log::debug($email);
             //get the attachments for this email
             $attachments = Media::where('collection_name', 'file#email#'.$id)->get();
+
+            //Dla każdegoz tych plików dodaj defaultową notatkę
+            foreach($attachments as $file){
+
+                $fileComment = new FileComment();
+                $fileComment->media_id = $file->id;
+                $fileComment->file_comment = "Plik przesłany w emailu: ". '"' . $email->subject .'"' . " o numerze id: " . $email->id;
+                $fileComment->save();
+
+            }
+
+
         // Log::info('This is the data regarding Attchaments');
         // Log::debug($attachments);
         // dd($attachments);

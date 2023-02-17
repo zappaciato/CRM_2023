@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
 use App\Models\EmailsToOrder;
+use App\Models\FileComment;
 use App\Models\MessageToClient;
 use App\Models\Order;
 use App\Models\OrderComment;
@@ -336,13 +337,22 @@ foreach($orderEmails as $emailId) {
 
 
         $orderFiles = Media::whereIn('collection_name', $searchData)->get();
+
+
+        $fileComments = FileComment::select('file_comment', 'media_id', 'id')->get();
+
+
+
+        
         // dd($orderFiles);
         // dd($orderFiles);
 
-    Log::info('BELOW order files: ');
+    Log::info('BELOW order files: and COMMENTS ALL ');
     Log::debug($orderFiles);
+    Log::debug($fileComments);
     
-    return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order'));
+    
+    return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order', 'fileComments'));
 
 }
 

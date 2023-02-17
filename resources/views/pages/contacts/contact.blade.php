@@ -31,7 +31,11 @@
         @vite(['resources/scss/dark/assets/components/list-group.scss'])
         @vite(['resources/scss/dark/assets/users/account-setting.scss'])
 
-        
+                        <link rel="stylesheet" href="{{asset('plugins/table/datatable/datatables.css')}}">
+        @vite(['resources/scss/light/plugins/table/datatable/dt-global_style.scss'])
+        @vite(['resources/scss/light/plugins/table/datatable/custom_dt_miscellaneous.scss'])
+        @vite(['resources/scss/dark/plugins/table/datatable/dt-global_style.scss'])
+        @vite(['resources/scss/dark/plugins/table/datatable/custom_dt_miscellaneous.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -262,123 +266,65 @@
                 <div class="tab-pane fade show" id="animated-underline-orders" role="tabpanel" aria-labelledby="animated-underline-orders-tab">
                     <div class="row">
                         <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Choose Theme</h6>
-                                    <div class="d-sm-flex justify-content-around">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                            <label class="form-check-label" for="flexRadioDefault1">
-                                              <img class="ms-3" width="100" height="68" alt="settings-dark" src="{{Vite::asset('resources/images/settings-light.svg')}}">
-                                            </label>
-                                        </div>
-                                        
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                            <label class="form-check-label" for="flexRadioDefault2">
-                                                <img class="ms-3" width="100" height="68" alt="settings-light" src="{{Vite::asset('resources/images/settings-dark.svg')}}">
-                                            </label>
-                                        </div>
-                                    </div>
+
+                            {{-- export the below as a component TODO and possibly in the controller make a service during the refactoring--}}
+                            <div class=" widget box box-shadow" style="width:60vw">
+                                <div class="" >
+
+                                    @if(!$contactOrders->isNotEmpty())
+                                            <h4>Firma nie ma żadnych zgłoszeń w bazie!</h4>
+                                            @else
+
+                                            <table class="multi-table table dt-table-hover" >
+                                        <thead>
+                                            <tr>
+                                                <th>Nr</th>
+                                                <th>Tytuł</th>
+
+                                                <th>Typ</th>
+                                                <th>Termin</th>
+                                                <th class="text-center">Status</th>
+                                                <th class="text-center dt-no-sorting">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($contactOrders as $order)
+                                            <tr>
+                                                <td>{{$order->id}}</td>
+                                                
+                                                <td style="max-width: 200px; overflow:hidden">{{$order->title}}</td>
+
+                                                <td>inne</td>
+                                                <td>{{$order->deadline}}</td>
+                                                
+                                                <td>
+                                                    <span>{{$order->status}}</span>
+                                                </td>
+                                                <td class="text-center"> <a href="{{route('single.service.order', $order->id)}}"><button class="btn btn-primary">Otwórz</button></a>  </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Nr</th>
+                                                    <th>Tytuł</th>
+                                                    <th>Typ</th>
+                                                    <th>Termin</th>
+                                                    <th class="text-center">Status</th>
+                                                    <th class="text-center dt-no-sorting">Action</th>
+                                                </tr>
+                                            </tfoot>
+                                    </table>
+                                            @endif
+                                    
+                                    
                                 </div>
-                            </div>
+                            </div>  
+                            
                         </div>
 
-                        <div class="col-xl-6 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Activity data</h6>
-                                    <p>Download your Summary, Task and Payment History Data</p>
-                                    <div class="form-group mt-4">
-                                        <button class="btn btn-primary">Download Data</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Public Profile</h6>
-                                    <p>Your <span class="text-success">Profile</span> will be visible to anyone on the network.</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="publicProfile" checked>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Show my email</h6>
-                                    <p>Your <span class="text-success">Email</span> will be visible to anyone on the network.</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="showMyEmail">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Enable keyboard shortcuts</h6>
-                                    <p>When enabled, press <code class="text-success">ctrl</code> for help</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="EnableKeyboardShortcut">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Hide left navigation</h6>
-                                    <p>Sidebar will be <span class="text-success">hidden</span> by default</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="hideLeftNavigation">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Advertisements</h6>
-                                    <p>Display <span class="text-success">Ads</span> on your dashboard</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="advertisements">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-lg-12 col-md-12 layout-spacing">
-                            <div class="section general-info">
-                                <div class="info">
-                                    <h6 class="">Social Profile</h6>
-                                    <p>Enable your <span class="text-success">social</span> profiles on this network</p>
-                                    <div class="form-group mt-4">
-                                        <div class="switch form-switch-custom switch-inline form-switch-secondary mt-1">
-                                            <input class="switch-input" type="checkbox" role="switch" id="socialprofile" checked>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                                    
+                                                        
                     </div>
                 </div>
 {{-- some additional info --}}
@@ -464,7 +410,13 @@ dd($errors);
 
         </script>
 
-
+ <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+        <script src="{{asset('plugins/table/datatable/button-ext/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('plugins/table/datatable/button-ext/jszip.min.js')}}"></script>
+        <script src="{{asset('plugins/table/datatable/button-ext/buttons.html5.min.js')}}"></script>
+        <script src="{{asset('plugins/table/datatable/button-ext/buttons.print.min.js')}}"></script>
+        <script src="{{asset('plugins/table/datatable/custom_miscellaneous.js')}}"></script>
+        <script src="{{asset('plugins/apex/apexcharts.min.js')}}"></script>
         
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->

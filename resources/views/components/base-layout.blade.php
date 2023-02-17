@@ -182,11 +182,12 @@
             !Request::routeIs('login')
         )
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <script src="{{asset('plugins/bootstrap/bootstrap.bundle.min.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
         <script src="{{asset('plugins/mousetrap/mousetrap.min.js')}}"></script>
         <script src="{{asset('plugins/waves/waves.min.js')}}"></script>
         <script src="{{asset('plugins/highlight/highlight.pack.js')}}"></script>
+        {{-- <script src="{{asset('plugins/bootstrap/bootstrap.bundle.min.js')}}"></script> --}}
         
         @if ($scrollspy == 1) @vite(['resources/assets/js/scrollspyNav.js']) @endif
 
