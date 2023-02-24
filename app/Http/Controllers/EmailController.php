@@ -364,7 +364,8 @@ Log::debug($email);
 
             //Dla każdegoz tych plików dodaj defaultową notatkę
             foreach($attachments as $file){
-
+                Log::info('The attachments:::::::');
+                Log::debug($file);
                 $fileComment = new FileComment();
                 $fileComment->media_id = $file->id;
                 $fileComment->file_comment = "Plik przesłany w emailu: ". '"' . $email->subject .'"' . " o numerze id: " . $email->id;

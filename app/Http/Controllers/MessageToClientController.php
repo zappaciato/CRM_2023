@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MessageToClient;
+use App\Models\FileComment;
 use App\Models\MessageToClient as ModelsMessageToClient;
 use App\Models\OrderNotification;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageToClientController extends Controller
 {
@@ -75,6 +77,8 @@ class MessageToClientController extends Controller
         Log::info('Below is the $message variable shoulbd be the same as $data;');
 Log::debug($messageToClient);
 
+// wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
+
         if($messageToClient['to'] !== '' && $messageToClient['cc'] !== '') {
 
             Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
@@ -95,7 +99,21 @@ Log::debug($messageToClient);
             Log::info('Below I am adding msg-attachment to the media collection');
 
             $messageToClient->addMediaFromRequest("msg-attachment")->toMediaCollection("file#order#$request->order_id");
+
+            Log::info('The uploaded attachment::::::: is getting a default comment');
+
+            //add a defualt comment to the attachment
+            //get the last attachemnt just added
+            $attachment = Media::where('collection_name', 'file#order#' . $request->order_id)->latest()->first(); 
+            //add a default comment
+            $fileComment = new FileComment();
+            $fileComment->media_id = $attachment->id;
+            $fileComment->file_comment = "Plik przesłany w wiadomości do klienta: " . '"' . $messageToClient->subject . '"' . " o numerze id: " . $messageToClient->id;
+            $fileComment->save();
+
+
         }
+
 
 
 
