@@ -80,9 +80,22 @@ Log::debug($messageToClient);
 // wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
 
         if($messageToClient['to'] !== '' && $messageToClient['cc'] !== '') {
+            Log::info('Debuggin email address to000000000000000000000000');
+            Log::debug($messageToClient['to']);
+            $recipients = [$messageToClient['to'], $messageToClient['from'], env('ADMIN_EMAIL')];
 
-            Mail::to([$messageToClient['from'], $messageToClient['to'], $messageToClient['cc'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+            $multiRecipietsCC = explode(', ', $messageToClient['cc']); // divide the address so they are "addres", "address" NOT like "address, address"
+            //push it to the recipients array
+            foreach($multiRecipietsCC as $recipient) {
+                array_push($recipients, $recipient);
+            }
 
+            
+            Log::info('Debuggin email address RECIPIENTS    0000000000000000000');
+            Log::debug($recipients);
+
+            Mail::to($recipients)->send(new MessageToClient($messageToClient));
+            Mail::to(['kris@dupa.pl', 'daro@dick.pl', 'costam@facebok.com'])->send(new MessageToClient($messageToClient));
         } else {
 
             Mail::to([$messageToClient['from'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
