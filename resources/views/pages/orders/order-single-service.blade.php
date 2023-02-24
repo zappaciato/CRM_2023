@@ -68,6 +68,7 @@
 
     <!-- BREADCRUMB -->
 <div class="page-meta">
+
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
 
         {{-- Send message modal START --}}
@@ -76,17 +77,21 @@
     </nav>
 
         {{-- Action buttons --}}
-        <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
 
             @include('partials.order-action-btns')
 
-        </div>
+    </div>
 
-        <ol class="breadcrumb layout-top-spacing">
-            <li class="breadcrumb-item"><a href="#">  <h4 class="text-black bg-secondary rounded p-2 px-5">ZGŁOSZENIE NR {{$singleOrder->id}} # Firma: {{$company->name}}</h4> <h5 class="ms-5 text-black bg-warning rounded p-3 px-5"  >Tytuł:  "{{$singleOrder->title}}"</h5> </a></li>
-        </ol>
+    {{-- main single order info --}}
+    <div class="d-flex">
+            @include('partials.order-main-info')
+    </div>
+
 </div>
     <!-- /BREADCRUMB -->
+
+    
 <div class="row layout-top-spacing">
     <div class="col-md-12">
         <div class="row ">

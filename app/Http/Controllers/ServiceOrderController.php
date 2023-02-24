@@ -132,7 +132,8 @@ class ServiceOrderController extends Controller
         // get all other data required for this order view
         $users = User::select('id', 'name')->get();
         //ponizej do zmiany eloqnet relationships to $contact
-        $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
+        // $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
+        $contactPerson = Contact::where('id', $singleOrder->contact_person)->firstOrFail();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
         // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
