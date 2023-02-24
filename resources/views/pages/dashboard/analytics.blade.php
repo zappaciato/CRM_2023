@@ -25,9 +25,9 @@
         {{-- <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
             <x-widgets._w-six title="Statistics"/>
         </div> --}}
-        
+
         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
-            <x-widgets._w-card-four title="Expenses"/>
+            <x-widgets._w-card-four :outstandingUserOrders="$outstandingUserOrders" title="Zgłoszenia" />
         </div>  
     
         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
