@@ -14,13 +14,13 @@
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
 
-    <div class="layout-top-spacing ">
-    <a  href="{{route('single.service.order' , $order->id)}}"><button>Wróć</button></a>
+    <div class="layout-top-spacing mt-5">
+    <a  href="{{route('single.service.order' , $order->id)}}"><button class="btn btn-success">Wróć</button></a>
     </div>
-    <div class="card mt-2 p-5">
-    
-<h5>Emaile przypisane do zgłoszenia nr: {{$order->id}} tytuł: {{$order->title}}</h5>
-<h5>Liczba powiązanych emailu: <span>{{$emails->count()}}</span> </h5>
+
+<div class="border d-flex justify-content-evenly w-100 layout-top-spacing py-5 bg-dark text-bright rounded comment-text-area-custom">
+<h5 class="text-white">Emaile przypisane do zgłoszenia nr: {{$order->id}} tytuł: {{$order->title}}</h5>
+<h5 class="text-warning">Liczba powiązanych emaili: <span>{{$emails->count()}}</span> </h5>
 </div>
 
 
