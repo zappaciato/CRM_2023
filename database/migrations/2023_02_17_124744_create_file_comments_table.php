@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('file_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('media_id')->constrained()->onDelete('cascade');
+            $table->integer('order_id');
             $table->text('file_comment');
             $table->timestamps();
         });

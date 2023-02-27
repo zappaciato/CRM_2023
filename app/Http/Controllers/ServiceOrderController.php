@@ -348,11 +348,6 @@ foreach($orderEmails as $emailId) {
         $fileComments = FileComment::select('file_comment', 'media_id', 'id')->get();
 
 
-
-        
-        // dd($orderFiles);
-        // dd($orderFiles);
-
     Log::info('BELOW order files: and COMMENTS ALL ');
     Log::debug($orderFiles);
     Log::debug($fileComments);
@@ -363,8 +358,29 @@ foreach($orderEmails as $emailId) {
 }
 
 public function editAssignedFile($id){
-    $commentId = $id;
-    return view('pages.orders.order-files-edit', compact('commentId'));
+
+    $comment = FileComment::findOrFail($id);
+    
+    return view('pages.orders.order-files-edit', compact('comment'));
+}
+
+public function updateFileComment(Request $request, $id) {
+
+        Log::info('This is data FIleComment being updated');
+
+        Log::info('This is the File comment request');
+        Log::debug($request);
+        $singleComment = FileComment::findOrFail($id);
+
+        // $data = $this->validator($request->all());
+        $data['file_comment'] = $request->input('file_comment');
+
+        Log::debug($data);
+
+        $singleComment->update($data);
+
+        return $this->displayAssignedFiles($singleComment->order_id);
+
 }
 
 }

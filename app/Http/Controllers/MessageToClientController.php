@@ -122,6 +122,7 @@ Log::debug($messageToClient);
             $fileComment = new FileComment();
             $fileComment->media_id = $attachment->id;
             $fileComment->file_comment = "Plik przesłany w wiadomości do klienta: " . '"' . $messageToClient->subject . '"' . " o numerze id: " . $messageToClient->id;
+            $fileComment->order_id = $request->order_id;
             $fileComment->save();
 
 

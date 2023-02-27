@@ -13,6 +13,7 @@ class FileComment extends Model
     protected $fillable = [
         'file_comment', 
         'media_id', 
+        'order_id',
     ];
 
 }

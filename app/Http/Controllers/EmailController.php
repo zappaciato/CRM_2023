@@ -338,7 +338,21 @@ Log::debug($data);
         $email2order->notes = $data['order_notes'];
         $email2order->save();
 
+        // TU powinno sie znaleźc również wsad do bazy order files
 
+        //get the attachments for this email
+        $attachments = Media::where('collection_name', 'file#email#' . $request->email_id)->get();
+
+        //Dla każdegoz tych plików dodaj defaultową notatkę
+        foreach ($attachments as $file) {
+            Log::info('The attachments:::::::');
+            Log::debug($file);
+            $fileComment = new FileComment();
+            $fileComment->media_id = $file->id;
+            $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
+            $fileComment->order_id = $newOrder->id;
+            $fileComment->save();
+        }
 
         //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
         OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
@@ -359,19 +373,19 @@ Log::debug($data);
             $email = Email::findOrFail($id);
 Log::info('This is the data regarding EMAIL');
 Log::debug($email);
-            //get the attachments for this email
-            $attachments = Media::where('collection_name', 'file#email#'.$id)->get();
+            // //get the attachments for this email
+            // $attachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
-            //Dla każdegoz tych plików dodaj defaultową notatkę
-            foreach($attachments as $file){
-                Log::info('The attachments:::::::');
-                Log::debug($file);
-                $fileComment = new FileComment();
-                $fileComment->media_id = $file->id;
-                $fileComment->file_comment = "Plik przesłany w emailu: ". '"' . $email->subject .'"' . " o numerze id: " . $email->id;
-                $fileComment->save();
+            // //Dla każdegoz tych plików dodaj defaultową notatkę
+            // foreach($attachments as $file){
+            //     Log::info('The attachments:::::::');
+            //     Log::debug($file);
+            //     $fileComment = new FileComment();
+            //     $fileComment->media_id = $file->id;
+            //     $fileComment->file_comment = "Plik przesłany w emailu: ". '"' . $email->subject .'"' . " o numerze id: " . $email->id;
+            //     $fileComment->save();
 
-            }
+            // }
 
 
         // Log::info('This is the data regarding Attchaments');

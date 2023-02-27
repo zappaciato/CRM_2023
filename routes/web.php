@@ -204,7 +204,7 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
         Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
         Route::get('orders/files/edit/{id}', [ServiceOrderController::class, 'editAssignedFile'])->middleware('auth')->name('editAssignedFile');
-        Route::put('orders/files/edit/{id}', [ServiceOrderController::class, 'update'])->middleware('auth');
+        Route::put('orders/files/edit/{id}', [ServiceOrderController::class, 'updateFileComment'])->middleware('auth');
 
 
         // send dummy email
