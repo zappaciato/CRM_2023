@@ -26,7 +26,7 @@
 
     @csrf
         <input type="hidden" name="_method" value="PUT">
-        <textarea name="file_comment" class="form-control comment-text-area-custom mt-2" cols="20" rows="5" ></textarea>
+        <textarea name="file_comment" class="form-control comment-text-area-custom mt-2" cols="20" rows="5" >{{$comment->file_comment}}</textarea>
 
     <button class="btn btn-primary mt-2" type="submit">Zapisz</button>
 

@@ -33,6 +33,7 @@ $breadcrumb = "files";
         $data = $request->validate([
             'order_id' => 'required|numeric|exists:orders,id',
             'new_file' => 'required',
+            'order_id' => 'required',
             'file_comment' => 'nullable', 
         ]);
         Log::info('Below DATA from inpit file upload');
@@ -57,6 +58,7 @@ $breadcrumb = "files";
         }
         
         $fileComment->media_id = $newFile->id;
+        $fileComment->order_id = $request->order_id;
         $fileComment->save();
         } else {
             return redirect()->back();
