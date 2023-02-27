@@ -127,10 +127,6 @@ Log::debug($messageToClient);
 
         }
 
-
-
-
-
         return Redirect::back();
         // return redirect(route('contact.list', $contact->id));
     }

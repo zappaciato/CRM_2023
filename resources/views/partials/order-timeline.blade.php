@@ -114,6 +114,7 @@
                                         <p class="t-meta-time">{{$notification->updated_at->diffForHumans()}}<p>
                                     </div>
                                 </div>
+
             {{-- Modal start --}}
 
                                 <div class="modal fade" id="message-modal{{$notification->subjectId}}" tabindex="-1" aria-labelledby="message-modal-Label" aria-hidden="true">
@@ -133,15 +134,30 @@
                                             <div class="mb-3">
                                                 <p>Numer wiadomości: {{$msg->id}} </p>
                                             </div>
+                                            <hr>
+
                                             <div class="mb-3">
                                                 <p>{{$msg->content}}</p>
                                             </div>
-
+                                            <hr>
                                             <div class="mb-3">
-                                                @foreach ($attachmentsLinks as $link)
-                                                <p><a href="{{$link}}" target="_blank">{{$link}}</a></p>
+                                                @foreach ($attachmentsLinks as $key => $link)
+                                                
+                                                    @if($key === $msg->id)
+                                                <p>ZAŁĄCZNIKI:</p>
+                                                @php
+                                                        echo $key;
+                                                        echo $msg->id;
+                                                @endphp
+                                                <p><a href="{{$link[0]}}" target="_blank">{{$link[1]}} </a></p>
+                                                
+                                                    
+
+
+                                                    @endif
                                                 @endforeach
                                             </div>
+                                            <hr>
 
                                         </div>
                                         <div class="modal-footer">
@@ -155,6 +171,7 @@
 
                                 
             {{-- modal end --}}
+
                             @break
 
                             @default

@@ -20,7 +20,7 @@
                                                     <div class="col-md-12">
                                                         <div class="mb-4 mail-form">
                                                             <p>From:</p>
-                                                            <select class="form-control" id="m-form" name="from" required>
+                                                            <select class="form-control" id="m-form" name="from" required readonly="readonly">
                                                                 {{-- <option value="info@mail.com">Info &lt;info@mail.com&gt;</option> --}}
                                                                 <option value="{{auth()->user()->email}}">{{auth()->user()->name}} &lt;{{auth()->user()->email}} &gt;</option>
                                                             </select>
@@ -33,7 +33,15 @@
                                                         <div class="mb-4 mail-to">
                                                             <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Do:</p>
                                                             <div class="">
-                                                                <input type="email" id="m-to" name="to" class="form-control" value="{{$contactPerson->email}}" required>
+
+{{-- mozna sprobowac czegos takieg: https://www.youtube.com/watch?v=IBDKc1T5KQ8 --}}
+                                                                <select type='email' id="m-to" name="to" class="form-select"  >
+                                                                    
+                                                                    @foreach($contactPersons as $contact)
+                                                                    <option selected="">{{$contact->email}}</option>
+                                                                    @endforeach
+
+                                                                </select>
                                                                 <span class="validation-text"></span>
                                                             </div>
                                                         </div>

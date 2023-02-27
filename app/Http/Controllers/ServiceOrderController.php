@@ -134,6 +134,7 @@ class ServiceOrderController extends Controller
         //ponizej do zmiany eloqnet relationships to $contact
         // $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $contactPerson = Contact::where('id', $singleOrder->contact_person)->firstOrFail();
+        $contactPersons = Contact::where('company_id', $singleOrder->company_id)->get();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
         // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
@@ -149,38 +150,42 @@ Log::debug($messagesToClient);
 Log::info('Files associated:::::::');
 Log::debug(strval($files));
         
+
         //define array with attachment links
         $attachmentsLinks = [];
 
-
+// iterate over all messages to client for this ORDER
         foreach($messagesToClient as $msg) {
         if($msg->getFirstMedia($files) === null) {
-// do something
+// do something if there are not attachments for each message individually
         } else {
-
+//do this if there are some attachment for each message individually
         $attachments = $msg->getMedia($files);
         Log::info('BELOW attachemtns:: ');
         Log::debug($attachments);
-        // $attachmentsLinks = [];
+
         foreach ($attachments as $attachment) {
             Log::info('BELOW ::: single attachment $attachemnt');
             Log::debug($attachment);
-            array_push($attachmentsLinks, $attachment->getUrl());
+            $attachmentsLinks[$attachment->model_id] = [$attachment->getUrl(), $attachment->name, $msg->id];
+            // array_push($attachmentsLinks,  $attachment->getUrl());
             // $attachmentsLinks = $attachments->getUrl();
         }
 
-                Log::info('Attachment links below:::::');
+                Log::info('Attachment links in the foreach below:::::');
                 Log::debug($attachmentsLinks);
                 
 }
             
             
+            
 }
 
-
+        Log::info('Attachment links FINAL below:::::');
+        Log::debug($attachmentsLinks);
         // $attachments = MessageToClient::latest()->getFirstMedia('msg-attachments');
 
-        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications','contacts', 'contactPerson', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
+        return view('pages.orders.order-single-service', compact('title', 'breadcrumb', 'singleOrder', 'users', 'company', 'orderNotifications','contacts', 'contactPersons', 'contactPerson', 'messagesToClient', 'comments', 'attachmentsLinks', 'emailsAssigned'));
     }
 
 
