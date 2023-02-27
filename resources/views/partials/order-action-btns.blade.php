@@ -1,4 +1,5 @@
-<div class="d-flex ">
+
+<div class="d-flex">
 
                 <a href="{{route('service.orders')}}"><button class="btn btn-success btn-lg">Wróć</button></a>
                 <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning ms-5 btn-lg">Edytuj</button></a>

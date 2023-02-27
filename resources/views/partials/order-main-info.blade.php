@@ -1,7 +1,9 @@
-<ol class="breadcrumb layout-top-spacing">
-            <li class="breadcrumb-item"><a href="#">  <h4 class="text-black bg-secondary rounded p-2 px-5">ZGŁOSZENIE NR {{$singleOrder->id}} # Firma: {{$company->name}}</h4> <h5 class="ms-5 text-black bg-warning rounded p-3 px-5"  >Tytuł:  "{{$singleOrder->title}}"</h5> </a></li>
+<div class="border d-flex justify-content-evenly w-100 layout-top-spacing py-2 bg-dark rounded comment-text-area-custom">
+<ol class="breadcrumb ">
+            <li class="breadcrumb-item">  <h5 class="text-white bg-birght rounded p-2">ZGŁOSZENIE NR {{$singleOrder->id}} # Firma: {{$company->name}}</h5>  </li>
+            <li class="breadcrumb"><h6 class="ms-5 text-yellow bg-bright rounded p-2 "  >Tytuł:  "{{$singleOrder->title}}"</h6></li>
         </ol>
-        <ol class="breadcrumb layout-top-spacing">
+        <ol class="breadcrumb d-flex">
             
             @switch($singleOrder->status)
                 @case('closed')
@@ -19,3 +21,4 @@
             @endswitch
              
         </ol>
+</div>
