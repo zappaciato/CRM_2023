@@ -32,6 +32,7 @@
         <th>Rozmiar</th>
         <th>Data zapisu</th>
         <th>Notatka</th>
+        <th>Edycja</th>
     </tr>
     
 @php
@@ -48,7 +49,8 @@
         @foreach($fileComments as $comment)
             @if($comment->media_id == $file->id)
             
-        <td style="max-width: 500px; overflow: hidden; " >{{$comment->file_comment}} <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#commentModal{{$comment->id}}">Edytuj</button></td>
+        <td style="max-width: 500px; overflow: hidden; " >{{$comment->file_comment}} </td>
+        <td> <a href="{{route('editAssignedFile', $comment->id)}}"> <button class="btn btn-success" >Edytuj</button></td> </a>
         
             @else
             {{-- <td>Brak notatki!</td> --}}
@@ -59,56 +61,6 @@
     $counter++;
 @endphp
 
-
-{{-- MODAL NIE DZIALA.. cos zmienic jednak, uproscic; ! --}}
-
-        {{-- modal for editing file Coments to be put into partials --}}
-    {{-- THIS HAS TO GO TO PARTIALS LATGER MODAL FOR COMMENT FOR FILE; --}}
-        <div class="modal fade" id="#commentModal{{$comment->id}}" tabindex="-1" role="dialog" aria-hidden="true" aria-labelledby="exampleModalLabel">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title add-title" id="notesMailModalTitleeLabel">Dopisz komentarz do pliku</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    </button>
-                                </div>
-
-                                <div class="modal-body">
-                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-bs-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> -->
-                                    <div class="compose-box">
-                                        <div class="compose-content">
-                                            <form id="message-to-client-form" class="row g-3 needs-validation" action="#" method="POST" novalidate enctype="multipart/form-data">
-                                            @csrf    
-                                                
-                                                <div class="message-content">
-                                                     <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> Treść:</p>
-                                                    <textarea  class="" name="file_comment" id="message-content" cols="58" rows="10" required >Plik odnosi sie do zgłoszenia: {{$order->title}} {{$comment->file_comment}}</textarea>
-                                                    
-                                                </div>
-
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    {{-- <button id="btn-save" class="btn float-left btn-success"> Zapisz</button>
-                                    <button class="btn" data-bs-dismiss="modal"> <i class="flaticon-delete-1"></i> Anuluj</button> --}}
-                                    <button type="submit" value="submit" id="btn-send" class="btn btn-primary"> Wyślij</button>
-                                </div>
-                                
-                                {{-- @php
-                                    dd($errors);
-                                @endphp --}}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-        {{-- endof modal for edidty file comments --}}
-
-
-           
 @endforeach
     
 

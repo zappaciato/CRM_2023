@@ -362,4 +362,9 @@ foreach($orderEmails as $emailId) {
 
 }
 
+public function editAssignedFile($id){
+    $commentId = $id;
+    return view('pages.orders.order-files-edit', compact('commentId'));
+}
+
 }
