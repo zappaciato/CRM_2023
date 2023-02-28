@@ -31,6 +31,7 @@
         <th>Nadawca</th>
         <th>Data zapisu</th>
         <th>Notatka</th>
+        <th>Edycja</th>
     </tr>
     
 @php
@@ -42,7 +43,14 @@
         <td> <a href="{{route('single.email', $email->id)}}" target="_blank">{{$email->subject}}</a> </td>
         <td>{{$email->from_name}}</td>
         <td>{{$email->created_at}}</td>
-        <td>Notatka do pliku</td>
+        @foreach ($emailComments as $ecomment )
+        @if($email->id === $ecomment->email_id)
+            <td>{{$ecomment->notes}}</td>
+            <td> <a href="{{route('email.comment.edit', $ecomment->id)}}"> <button class="btn btn-success" >Edytuj</button></a></td> 
+        @endif
+        @endforeach
+        
+        
         </tr>
 @php
     $counter++;

@@ -4,8 +4,8 @@
                 <a href="{{route('service.orders')}}"><button class="btn btn-success btn-lg">Wróć</button></a>
                 <a href="{{route('single.service.order.edit', $singleOrder->id)}}"><button class="btn btn-warning ms-5 btn-lg">Edytuj</button></a>
                 <button type="button" class="btn btn-info btn-lg cancel-btn ms-5" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Wyślij wiadomość do klienta</button>
-                <a href="{{route('displayAssignedEmails', $singleOrder->id)}}"><button type="button" class="btn btn-showemails btn-lg  ms-2" >Powiązane Emaile</button></a>
-                <a href="{{route('displayAssignedFiles', $singleOrder->id)}}"><button type="button" class="btn btn-showfiles btn-lg  ms-2" >Powiązane pliki</button></a>
+                <a href="{{route('display.assigned.emails', $singleOrder->id)}}"><button type="button" class="btn btn-showemails btn-lg  ms-2" >Powiązane Emaile</button></a>
+                <a href="{{route('display.assigned.files', $singleOrder->id)}}"><button type="button" class="btn btn-showfiles btn-lg  ms-2" >Powiązane pliki</button></a>
                 
             </div>
             <div class="d-flex">

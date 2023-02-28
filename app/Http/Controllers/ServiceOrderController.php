@@ -213,7 +213,7 @@ Log::debug(strval($files));
         Log::debug($company->name);
         Log::debug($users);
         
-
+// Tutaj trzeba jeszcze wrzucic notyfikacje o zmianach!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         $title = 'Edycja zgłoszenia';
         $breadcrumb = 'Edycja zgłoszenia ' . $singleOrder->title;

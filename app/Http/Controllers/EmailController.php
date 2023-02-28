@@ -6,6 +6,7 @@ use App\Mail\MessageToClient;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Email;
+use App\Models\EmailComment;
 use App\Models\EmailsToOrder;
 use App\Models\FileComment;
 use App\Models\Order;
@@ -54,7 +55,8 @@ class EmailController extends Controller
 
 //orderBy() doesn't work on eloquent collection should use sortBySec();
         $emails = $emailsAll->where('emailstatus', '!=', 'assigned')->sortByDesc('created_at');
-        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');;
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');
+        
 
         // Log::debug($emailsAll->id);
         // Log::debug($emails);
@@ -338,6 +340,7 @@ Log::debug($data);
         $email2order->notes = $data['order_notes'];
         $email2order->save();
 
+
         // TU powinno sie znaleźc również wsad do bazy order files
 
         //get the attachments for this email
@@ -430,7 +433,7 @@ Log::debug($email);
             $order = Order::find($id);
             $title = 'Emails assigned';
             $breadcrumb = "Emails assigned";
-
+        
 
             $emailsAssigned = EmailsToOrder::where('order_id', $id)->get('email_id');
 
@@ -444,13 +447,43 @@ Log::debug($email);
             //find the emails assigned
             $emails = Email::findMany($emailsIds);
 
+        $emailComments = EmailsToOrder::where('order_id', $order->id)->get();
+
             // $emails = Email::where('id', $id)->get();
             // Log::debug($emails);
-            return view('pages.orders.order-emails', compact('emails', 'breadcrumb', 'title', 'order'));
+            return view('pages.orders.order-emails', compact('emails', 'breadcrumb', 'title', 'order', 'emailComments'));
         }
 
         public function addEmailAttachments(){
-            
+            //
         }
 
+
+
+        public function emailCommentEdit($id) {
+            
+            $emailComment = EmailsToOrder::findOrFail($id);
+
+            return view ('pages.orders.order-email-comment-edit', compact('emailComment'));
+        }
+
+        public function emailCommentUpdate(Request $request, $id) {
+        Log::info('This is EMAIL COMMENT is being updated and below is the Request data!');
+        $emailComment = EmailsToOrder::findOrFail($id);
+
+        $data = $request->all(); // Header may not contain more than a single header, new line detected
+        // $data['notes'] = $request->notes;
+
+        Log::debug($data);
+
+        $emailComment->update($data);
+
+        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
+        // OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
+
+        Alert::alert('Gratulacje!', 'Notatka emaila została zaktualizowana!', 'success');
+        // return redirect($this->displayAssignedEmails($emailComment->order_id));
+        // return view(route('display.assigned.emails'));
+        return redirect(route('display.assigned.emails', $emailComment->order_id));
+        }
 }

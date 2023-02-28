@@ -201,9 +201,13 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
-        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
-        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
-        Route::get('orders/files/edit/{id}', [ServiceOrderController::class, 'editAssignedFile'])->middleware('auth')->name('editAssignedFile');
+        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('display.assigned.emails');
+        Route::get('order/email/comment/{id}', [EmailController::class, 'emailCommentEdit'])->middleware('auth')->name('email.comment.edit');
+        Route::put('order/email/comment/{id}', [EmailController::class, 'emailCommentUpdate'])->middleware('auth');
+
+
+        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('display.assigned.files');
+        Route::get('orders/files/edit/{id}', [ServiceOrderController::class, 'editAssignedFile'])->middleware('auth')->name('edit.assigned.file');
         Route::put('orders/files/edit/{id}', [ServiceOrderController::class, 'updateFileComment'])->middleware('auth');
 
 

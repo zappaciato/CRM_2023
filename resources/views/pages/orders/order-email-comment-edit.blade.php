@@ -22,11 +22,12 @@
 
 
 
-<form class="mt-5" action="{{route('edit.assigned.file', $comment->id)}}" method="POST" enctype="multipart/form-data">
+<form class="mt-5" action="{{route('email.comment.edit', $emailComment->id)}}" method="POST" enctype="multipart/form-data">
 
     @csrf
         <input type="hidden" name="_method" value="PUT">
-        <textarea name="file_comment" class="form-control comment-text-area-custom mt-2" cols="20" rows="5" >{{$comment->file_comment}}</textarea>
+        
+        <textarea name="notes" class="form-control comment-text-area-custom mt-2" cols="20" rows="5" >{{$emailComment->notes}}</textarea>
 
     <button class="btn btn-primary mt-2" type="submit">Zapisz</button>
 
