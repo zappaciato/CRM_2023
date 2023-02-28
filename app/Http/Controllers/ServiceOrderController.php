@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\OrderChanged;
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Contact;
 use App\Models\Email;
 use App\Models\EmailsToOrder;
@@ -75,17 +76,27 @@ class ServiceOrderController extends Controller
 
     protected function validator($data)
     {
-        Log::info('I am validating the user record.');
+        Log::info('I am validating the order record.');
         Log::debug($data);
+
         $validated =  Validator::make($data, [
-            'name' => 'required|min:3',
-            'email' => 'required',
-            'role' => 'required',
-            'password' => 'required',
+            'title' => 'required',
+            'company_id' => 'required|integer',
+            'email_id' => 'required|integer',
+            'contact_person' => 'required',
+            'address' => 'required',
+            'lead_person' => 'required',
+            'involved_person' => 'required',
+            'priority' => 'required',
+            'order_content' => 'required',
+            'order_notes' => 'required',
+            'deadline' => 'required',
+            'status' => 'required',
+
         ])->validate();
 
 
-        Log::info('User Record has been validated!!');
+        Log::info('ORDER Record has been validated!!');
 
         // $validated = Arr::add($validated, 'published', 0);
         // $validated = Arr::add($validated, 'premium', 0);
@@ -191,17 +202,42 @@ Log::debug(strval($files));
 
     public function edit($id)
     {
+        Log::info('I am tryign to edit the order!');
         $singleOrder = Order::findOrFail($id);
-
+        $company = Company::findOrFail($singleOrder->company_id);
+        $contacts = Contact::where('company_id', $singleOrder->company_id)->get();
+        $users = User::select('name', 'id')->get();
+        $addresses = CompanyAddress::where('company_id', $company->id)->get();
         //dodawanie powiadomienia OrderNotification
-
+        Log::debug($singleOrder->id);
+        Log::debug($company->name);
+        Log::debug($users);
         
 
 
         $title = 'Edycja zgłoszenia';
         $breadcrumb = 'Edycja zgłoszenia ' . $singleOrder->title;
 
-        return view('pages.orders.order-single-service-edit', compact('title', 'breadcrumb', 'singleOrder'));
+        return view('pages.orders.order-single-service-edit', compact('title', 'breadcrumb', 'singleOrder', 'company', 'contacts', 'users', 'addresses'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        Log::info('This is data order being updated');
+        $singleOrder = Order::findOrFail($id);
+
+        $data = $this->validator($request->all());
+        // $data['status'] = $request->status;
+
+        Log::debug($data);
+
+        $singleOrder->update($data);
+
+        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
+        OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
+
+        Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
+        return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
     public function sendEmail($id) {
@@ -267,24 +303,7 @@ Log::debug($usersEmails);
     }
 
 
-    public function update(Request $request, $id)
-    {
-        Log::info('This is data order being updated');
-        $singleOrder = Order::findOrFail($id);
-
-        // $data = $this->validator($request->all());
-        $data['status'] = $request->status;
-        
-        Log::debug($data);
-
-        $singleOrder->update($data);
-
-        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
-        OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
-
-        Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
-        return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
-    }
+    
 
 
     /**
