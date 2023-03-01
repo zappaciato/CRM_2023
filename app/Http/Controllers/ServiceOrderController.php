@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use App\Services\Email2OrderService;
+use App\Services\EmailNotificationService;
 
 class ServiceOrderController extends Controller
 {
@@ -327,7 +329,7 @@ Log::debug($usersEmails);
 
 // scanning throu string email titles
 
-public function scanEmails() {
+static function scanEmails() {
 
         $emails = Email::all();
         $emailsTitles = [];
@@ -361,53 +363,27 @@ public function scanEmails() {
             Log::debug($matchedEmails);
         }
 
-        // key to oredr id:: '1 => 3',:: value to email id
+        // key is order_id:: '1 => 3',:: value is email_id
         // create entry in the EmailsToORder db refactor to service
         foreach ($matchedEmails as $orderId => $matchedEmailId) {
-            $email2order = new EmailsToOrder();
-            $email2order->order_id = $orderId;
-            $email2order->email_id = $matchedEmailId;
-            $email2order->user_id = 1;
-            $email2order->notes = "Email automatycznie przydzielony do zgłoszenia";
-            $email2order->save();
+
+
+            Email2OrderService::addEmail2Order($orderId, $matchedEmailId);
+            Email2OrderService::changeEmailStatus($matchedEmailId);
+
+            // (string $type, string $content, int $subjectId, int $orderId )
+            OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $matchedEmailId, $orderId);
+
+            EmailNotificationService::sendEmailNotification($matchedEmailId);
+
         }
 
+            
 
-        // //zmiana statusu emaila powtarza sie DRY extract to service;
-        // $email = Email::findOrFail($request->email_id);
-        // $email['emailstatus'] = 'assigned';
-        // $email->update([$email['emailstatus'] => 'assigned']);
-        // Log::info("Email status updated");
+        
 
 
-        // //get the attachments for this email
-        // $attachments = Media::where('collection_name', 'file#email#' . $email->id)->get();
-
-        // //for ech of the attachments add a default comment
-        // foreach ($attachments as $file) {
-
-        //     $fileComment = new FileComment();
-        //     $fileComment->media_id = $file->id;
-        //     $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id . ". Dołączony do zgłoszenia nr: " . $email2order->order_id;
-        //     $fileComment->save();
-        // }
-
-        // //add notification set as a static function in OrderNotificat: LIKE THIS: (string $type, string $content, int $subjectId, int $orderId )
-        // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
-
-        // // Sending email notification to the relevant people;
-        // // Specify the message details or do sth about it;
-        // $messageToClient = ['content' => 'Dupa dupa', 'subject' => 'jajca jajca', 'number' => 10, 'from' => 'mj@k.pl'];
-
-        // if ($email->cc !== '' && $email->bcc !==  '') {
-
-        //     Mail::to([$email->from_address, $email->cc, $email->bcc, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-        // } else {
-
-        //     Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-        // }
-
-    
+        return redirect(route('service.orders'));
 }
 
 public function displayAssignedFiles($id){

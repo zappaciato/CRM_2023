@@ -205,7 +205,9 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('order/email/comment/{id}', [EmailController::class, 'emailCommentEdit'])->middleware('auth')->name('email.comment.edit');
         Route::put('order/email/comment/{id}', [EmailController::class, 'emailCommentUpdate'])->middleware('auth');
 
+        Route::get('scan/emails', [ServiceOrderController::class, 'scanEmails'])->middleware('auth')->name('scan.emails');
 
+//associated files
         Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('display.assigned.files');
         Route::get('orders/files/edit/{id}', [ServiceOrderController::class, 'editAssignedFile'])->middleware('auth')->name('edit.assigned.file');
         Route::put('orders/files/edit/{id}', [ServiceOrderController::class, 'updateFileComment'])->middleware('auth');

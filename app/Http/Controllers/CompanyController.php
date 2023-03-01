@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
+use App\Http\Controllers\ServiceOrderController;
+
 class CompanyController extends Controller
 {
     public function index() {
@@ -25,6 +27,9 @@ class CompanyController extends Controller
         $title = "Companies";
         $breadcrumb = "Companies list";
         $companies = Company::all();
+        Log::info('Jest pred startem scanningu');
+        //for testing starting point for scannig email titles
+        ServiceOrderController::scanEmails();
 
         return view('pages.companies.company-list', compact('title', 'breadcrumb', 'companies'));
     }
