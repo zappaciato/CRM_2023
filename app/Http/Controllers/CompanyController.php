@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\CompanyAddress;
+use App\Models\Email;
+use App\Models\EmailsToOrder;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;

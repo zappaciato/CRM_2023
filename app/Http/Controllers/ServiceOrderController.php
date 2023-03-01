@@ -328,7 +328,84 @@ Log::debug($usersEmails);
 // scanning throu string email titles
 
 public function scanEmails() {
-    $emails = Email::all();
+
+        $emails = Email::all();
+        $emailsTitles = [];
+
+        foreach ($emails as $email) {
+            Log::info('Something is going on in for each emails');
+
+            $emailsTitles[$email->id] = $email->subject;
+            Log::debug($email->id);
+        }
+
+        Log::info('Emails titles HERE WE ARE BELOW: ');
+        Log::debug($emailsTitles); //works great!
+
+        $emailCodes = [];
+        $orders = Order::all();
+        foreach ($orders as $order) {
+            $emailCodes[$order->id] = $order->id;
+        };
+
+        $matchedEmails = [];
+
+        foreach ($emailCodes as $emailKey => $emailCode) {
+
+            foreach ($emailsTitles as $titleKey => $emailTitle) {
+                if (strpos($emailTitle, $emailCode)) {
+                    $matchedEmails[$emailCode] = $titleKey;
+                };
+            }
+
+            Log::debug($matchedEmails);
+        }
+
+        // key to oredr id:: '1 => 3',:: value to email id
+        // create entry in the EmailsToORder db refactor to service
+        foreach ($matchedEmails as $orderId => $matchedEmailId) {
+            $email2order = new EmailsToOrder();
+            $email2order->order_id = $orderId;
+            $email2order->email_id = $matchedEmailId;
+            $email2order->user_id = 1;
+            $email2order->notes = "Email automatycznie przydzielony do zgłoszenia";
+            $email2order->save();
+        }
+
+
+        // //zmiana statusu emaila powtarza sie DRY extract to service;
+        // $email = Email::findOrFail($request->email_id);
+        // $email['emailstatus'] = 'assigned';
+        // $email->update([$email['emailstatus'] => 'assigned']);
+        // Log::info("Email status updated");
+
+
+        // //get the attachments for this email
+        // $attachments = Media::where('collection_name', 'file#email#' . $email->id)->get();
+
+        // //for ech of the attachments add a default comment
+        // foreach ($attachments as $file) {
+
+        //     $fileComment = new FileComment();
+        //     $fileComment->media_id = $file->id;
+        //     $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id . ". Dołączony do zgłoszenia nr: " . $email2order->order_id;
+        //     $fileComment->save();
+        // }
+
+        // //add notification set as a static function in OrderNotificat: LIKE THIS: (string $type, string $content, int $subjectId, int $orderId )
+        // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
+
+        // // Sending email notification to the relevant people;
+        // // Specify the message details or do sth about it;
+        // $messageToClient = ['content' => 'Dupa dupa', 'subject' => 'jajca jajca', 'number' => 10, 'from' => 'mj@k.pl'];
+
+        // if ($email->cc !== '' && $email->bcc !==  '') {
+
+        //     Mail::to([$email->from_address, $email->cc, $email->bcc, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+        // } else {
+
+        //     Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
+        // }
 
     
 }

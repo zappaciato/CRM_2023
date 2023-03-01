@@ -66,6 +66,7 @@ class EmailController extends Controller
         $data = $request->all();
         Log::debug($data);
 
+        // OD tego miejsca to wyjecia refactoring
         // create entry in the EmailsToORder db refactor to service
         $email2order = new EmailsToOrder();
         $email2order->order_id = $data['order_id'];
@@ -74,7 +75,7 @@ class EmailController extends Controller
         $email2order->notes = $request->input('notes');
         $email2order->save();
 
-        //zmiana statusu emaila powtarza sie DRY service;
+        //zmiana statusu emaila powtarza sie DRY extract to service;
         $email = Email::findOrFail($request->email_id);
         $email['emailstatus'] = 'assigned';
         $email->update([$email['emailstatus'] => 'assigned']);
@@ -108,6 +109,7 @@ class EmailController extends Controller
 
             Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
         }
+        // do tego miejsca refactoring wyniesc to gdzie indziej
         
         Alert::alert('Gratulacje!', 'Email został przypisany!', 'success');
 
@@ -230,9 +232,10 @@ class EmailController extends Controller
         Log::debug($data);
 
         $data['address'] = "jaki adres";
-        
+        //here we create the new order; 
         $newOrder = Order::create($data);
-// To wywalic do funkcji bo powtórka
+
+        // To wywalic do funkcji bo powtórka
         $email = Email::findOrFail($request->email_id);
         $email['emailstatus'] = 'assigned';
         $email->update([$email['emailstatus']=> 'assigned']);
