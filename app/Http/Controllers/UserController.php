@@ -20,7 +20,6 @@ class UserController extends Controller
 
         $users = User::all();
 
-
         return view('pages.user.user-list', compact('title', 'breadcrumb', 'users'));
     }
 
@@ -37,12 +36,6 @@ class UserController extends Controller
             'image' => 'nullable|image|max:1024',
             'password' => 'required',
         ])->validate();
-
-
-        Log::info('User Record has been validated!!');
-
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
         
         return $validated;
     }
@@ -65,12 +58,6 @@ class UserController extends Controller
             $linkToAvatar = '#';
         }
 
-        // $userFiles = UserFile::where('user_id', $id)->get('path');
-Log::info('Show link to avatar avatttttar below:');
-        // Log::debug($userFiles);
-        // Log::info('Display beloow all current orders for this particular user which are not cancelled');
-        Log::debug($linkToAvatar);
-        // dd($company);
         return view('pages.user.user', compact('title', 'breadcrumb', 'user', 'userCurrentOrders', 'linkToAvatar'));
     }
 
@@ -94,29 +81,11 @@ Log::info('Show link to avatar avatttttar below:');
         Log::info('I am beginning to update the User record.');
         $user = User::findOrFail($id);
 
-        // $oldImage = $post->image;
-
         $data = $this->validator($request->all());
 
-
-Log::debug(isset($data['image']));//gives true
-Log::info('Before uploading an image');
-
-
         if (isset($data['image'])) {
-Log::info('Checked and the image file is uploaded fine');            
-Log::info('Below I am adding the image to the media collection');
-
             $user->addMediaFromRequest('image')->toMediaCollection('avatars');
-
-
-
         }
-
-
-        Log::info('Below debug of data in update method for user with or WITHOUT image or file!');
-Log::debug($data);
-
 
         $user->update($data);
 

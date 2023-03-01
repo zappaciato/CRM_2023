@@ -35,12 +35,3 @@ class OrderNotificationController extends Controller
     }
 }
 
-
-        //Add this event to OrderNotification table;
-        // $notification = new OrderNotification();
-        // $notification->type = 'order_created';
-        // $notification->content = 'Zgłoszenie zostało utowrzone' . $newOrder->name;
-        // $notification->subjectId = $newOrder->id;
-        // $notification->order_id = $newOrder->id;
-        // $notification->save();
-        // Log::debug($notification);

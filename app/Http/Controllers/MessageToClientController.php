@@ -16,13 +16,13 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MessageToClientController extends Controller
 {
-    public function index()
-    {
-// will index all messages sent to cients from ALL users!
+    public function index() {
+
         $title = "Contacts";
         $breadcrumb = "New Contacts";
         $messages = MessageToClient::all();
         return view('pages.contacts.contacts-list', compact('title', 'messages'));
+
     }
 
 
@@ -43,12 +43,6 @@ class MessageToClientController extends Controller
 
         ])->validate();
 
-
-        Log::info('Message to the client  has been validated!!');
-
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
-
         return $validated;
     }
 
@@ -63,21 +57,13 @@ class MessageToClientController extends Controller
     public function store(Request $request)
     {
         $data = $this->validator($request->all());
-        // $data['content'] = $request->input('content');
-
-        Log::info('This is message to client data AFTER validation');
-        Log::debug($data);
-
-        // if($data->())
 
         $messageToClient = ModelsMessageToClient::create($data);
 
 
         Alert::alert('Gratulacje!', 'Wiadomość została wysłana', 'success');
-        Log::info('Below is the $message variable shoulbd be the same as $data;');
-Log::debug($messageToClient);
 
-// wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
+        // wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
 
         if($messageToClient['to'] !== '' && $messageToClient['cc'] !== '') {
             Log::info('Debuggin email address to000000000000000000000000');
@@ -90,12 +76,9 @@ Log::debug($messageToClient);
                 array_push($recipients, $recipient);
             }
 
-            
-            Log::info('Debuggin email address RECIPIENTS    0000000000000000000');
-            Log::debug($recipients);
-
             Mail::to($recipients)->send(new MessageToClient($messageToClient));
             Mail::to(['kris@dupa.pl', 'daro@dick.pl', 'costam@facebok.com'])->send(new MessageToClient($messageToClient));
+
         } else {
 
             Mail::to([$messageToClient['from'], env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
@@ -115,7 +98,7 @@ Log::debug($messageToClient);
 
             Log::info('The uploaded attachment::::::: is getting a default comment');
 
-            //add a defualt comment to the attachment
+            //add a defualt comment to the attachment to be refactored to Service;
             //get the last attachemnt just added
             $attachment = Media::where('collection_name', 'file#order#' . $request->order_id)->latest()->first(); 
             //add a default comment
@@ -125,11 +108,10 @@ Log::debug($messageToClient);
             $fileComment->order_id = $request->order_id;
             $fileComment->save();
 
-
         }
 
         return Redirect::back();
-        // return redirect(route('contact.list', $contact->id));
+
     }
 
 }

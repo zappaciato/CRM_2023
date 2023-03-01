@@ -26,22 +26,15 @@ class ServiceOrderController extends Controller
 {
     public function index() {
 
-        Log::info('I am in serviceorder index');
         $title = "Zgłoszenia serwisowe";
         $breadcrumb = "Zgłoszenia serwisowe";
+
         // tutaj ma wyciagnac ordersy ale tylko te z statusem otearte czy przyjęte;
         // tutaj rowniez mozemy skrocic kwerendę do wywloania jedynie firm i za pomoca relationships dostac sie do adresow i kontaktow oraz orders na razie nie zmieniam bo dziala. W razie oblozenia bazy danych mozna to zmienic. Pamietac o zmianie w widoku na inne zapisy
         $orders = Order::all()->sortByDesc('created_at');
 
-        // $orders = Order::with('company')->get();
-
         $companies = Company::select('id', 'name')->get();
         $users = User::select('id', 'name')->get(); 
-        Log::info('BELOW $orders form Service Orders list and 2 x below the same $companies');
-        Log::debug($orders);
-
-        Log::debug($companies);
-        
 
         return view('pages.orders.orders-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users'));
     }
@@ -59,16 +52,6 @@ class ServiceOrderController extends Controller
         // Sorting orders does not work as it shows datatable which automatically orders them according to id.. 
         $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->lazyByIdDesc();
         $companies = Company::select('id', 'name')->get();
-        // foreach($orders as $order) {
-        //     if($user->id === $order->lead_person || $user->id === $order->involved_person) [
-
-        //         $assignedOrders = $order->where('')
-
-        //     ]
-        Log::info('I am debuggon orders for inividual user');
-        // dd($orders);
-        Log::debug($orders);
-        Log::debug($loggedUser->id);
 
         return view('pages.orders.orders-user-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users', 'loggedUser'));
       
@@ -76,9 +59,6 @@ class ServiceOrderController extends Controller
 
     protected function validator($data)
     {
-        Log::info('I am validating the order record.');
-        Log::debug($data);
-
         $validated =  Validator::make($data, [
             'title' => 'required',
             'company_id' => 'required|integer',
@@ -95,12 +75,6 @@ class ServiceOrderController extends Controller
 
         ])->validate();
 
-
-        Log::info('ORDER Record has been validated!!');
-
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
-
         return $validated;
     }
 
@@ -108,6 +82,7 @@ class ServiceOrderController extends Controller
     {
         //return a query only firstorfail() lets me query other tables with fk order_id relationship; however firstorfail() doesn't let me paginate later;
         $singleOrder = Order::where('id', $id)->firstOrFail();
+
         // for this order
         //Get all messages to client throu relations set in the model
         $messagesToClient = $singleOrder->messagesToClients;
@@ -117,10 +92,12 @@ class ServiceOrderController extends Controller
         // $comments = $singleOrder->orderComments;
         $comments = OrderComment::where('order_id', $id)->orderBy('created_at', 'desc')->paginate(2);
 
-        //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I foreach all;
+        //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I do foreach all;
         $contacts = Contact::all();
         // define emails array to get ids for the search for links for emails assigned to the order
         $emailsArray = [];//??
+
+        //timeline links part
         // find emails with type email_received from orderNotifications for this single order to proivide links in the timeline
 
         foreach($orderNotifications as $notification)
@@ -131,46 +108,34 @@ class ServiceOrderController extends Controller
         // strip it from the keys and leave only values like: [10,2,7]
         $emailsAssignedIds = array_values($emailsArray);
 
-        Log::info('Here ARE EMAILS IDS TO BE SEARCHED FOR');
-        Log::debug($emailsAssignedIds);
-
         // find the relevant emails 
         $emailsAssigned = Email::findMany($emailsAssignedIds);
 
-        Log::info('THESE ARE $emailsAssigned');
-        Log::debug($singleOrder);
-
         // get all other data required for this order view
         $users = User::select('id', 'name')->get();
+
         //ponizej do zmiany eloqnet relationships to $contact
         // $contactPerson = Contact::where('company_id', $singleOrder->company_id)->firstOrFail();
         $contactPerson = Contact::where('id', $singleOrder->contact_person)->firstOrFail();
         $contactPersons = Contact::where('company_id', $singleOrder->company_id)->get();
         $company = Company::where('id', $singleOrder->company_id)->firstOrFail();
-        // $messagesToClient = MessageToClient::where('order_id', $singleOrder->id)->get();
+
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
         $breadcrumb = 'Zgłoszenie nr: ' . $singleOrder->id;
 
-        // $orderNotifications = OrderNotification::where('order_id', $singleOrder->id)->get();
-Log::info('Below is 1 ORDER NOTIFICATIONS list and 2 messagesToClient');
-Log::debug($orderNotifications);
-Log::debug($messagesToClient);
-        // set the media collection name where files are stored in media table
+        // set the media collection name where files are stored in the media table
         $files = 'file#order#'.$singleOrder->id;
-
-Log::info('Files associated:::::::');
-Log::debug(strval($files));
-        
 
         //define array with attachment links
         $attachmentsLinks = [];
 
-// iterate over all messages to client for this ORDER
+        // iterate over all messages to client for this ORDER
         foreach($messagesToClient as $msg) {
         if($msg->getFirstMedia($files) === null) {
-// do something if there are not attachments for each message individually
+        // do something if there are not attachments for each message individually
+
         } else {
-//do this if there are some attachment for each message individually
+        //do this if there are some attachment for each message individually
         $attachments = $msg->getMedia($files);
         Log::info('BELOW attachemtns:: ');
         Log::debug($attachments);
@@ -186,7 +151,7 @@ Log::debug(strval($files));
                 Log::info('Attachment links in the foreach below:::::');
                 Log::debug($attachmentsLinks);
                 
-}
+            }
             
             
             
@@ -268,7 +233,7 @@ Log::debug(strval($files));
         $involved_person_name = $users[0]->name;
     }
 
-//zmienne do email template przekazujemy je w obiekcie OrderChanged
+        //zmienne do email template przekazujemy je w obiekcie OrderChanged
             Mail::to($recipients)->send(new OrderChanged($singleOrder, $lead_person_name, $involved_person_name));
         // }
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
@@ -393,19 +358,8 @@ foreach($orderEmails as $emailId) {
     Log::info('THIS IS FILES CONTROLLER AND BELOW is $searchData. It shows all attached files to file#email#id');
         Log::debug($searchData);
 //  4.
-
-
-
         $orderFiles = Media::whereIn('collection_name', $searchData)->get();
-
-
         $fileComments = FileComment::select('file_comment', 'media_id', 'id')->get();
-
-
-    Log::info('BELOW order files: and COMMENTS ALL ');
-    Log::debug($orderFiles);
-    Log::debug($fileComments);
-    
     
     return view('pages.orders.order-files', compact('orderFiles', 'title', 'breadcrumb', 'order', 'fileComments'));
 
@@ -420,13 +374,8 @@ public function editAssignedFile($id){
 
 public function updateFileComment(Request $request, $id) {
 
-        Log::info('This is data FIleComment being updated');
-
-        Log::info('This is the File comment request');
-        Log::debug($request);
         $singleComment = FileComment::findOrFail($id);
 
-        // $data = $this->validator($request->all());
         $data['file_comment'] = $request->input('file_comment');
 
         Log::debug($data);
