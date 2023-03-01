@@ -226,11 +226,6 @@ Log::debug(strval($files));
         Log::info('This is data order being updated');
         $singleOrder = Order::findOrFail($id);
 
-
-
-
-
-    
         $data = $this->validator($request->all());
         // $data['status'] = $request->status;
 
@@ -252,21 +247,30 @@ Log::debug(strval($files));
         // $userx = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get('email', 'name');
         array_push($recipients, $contact[0]['email']);
         array_push($recipients, env('ADMIN_EMAIL'));
+        if(count($users)>1) {
         foreach($users as $user) {
             array_push($recipients, $user['email']);
             if($user->id == $singleOrder->lead_person) {
+                Log::info('Lead person name');
+                
                 $lead_person_name = $user->name;
+                Log::debug($lead_person_name);
             } elseif ($user->id == $singleOrder->involved_person) {
+                Log::info('Involved person name');
+
                 $involved_person_name = $user->name;
+                Log::debug($involved_person_name);
             };
         }
+    } elseif(count($users) == 1) {
+        array_push($recipients, $users[0]['email']);
+        $lead_person_name = $users[0]->name;
+        $involved_person_name = $users[0]->name;
+    }
 
-            
 //zmienne do email template przekazujemy je w obiekcie OrderChanged
             Mail::to($recipients)->send(new OrderChanged($singleOrder, $lead_person_name, $involved_person_name));
         // }
-
-
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }

@@ -42,13 +42,13 @@
                             <tr>
                                 <th>Data otrzymania: </th>
                                 <th>Termin wykonania: </th>
-                                <th>Aktualny status: </th>
+
                                 <th>Typ zgłoszenia: </th>
                             </tr>
                             <tr>
                                 <td>{{$singleOrder->created_at}}</td>
                                 <td>{{$singleOrder->deadline }}</td>
-                                <td>{{$singleOrder->status }}</td>
+
                                 <td>rotacje</td>
                             </tr>
                     </table>
