@@ -19,19 +19,21 @@
     <div class="layout-top-spacing ">
     <a  href="{{url()->previous()}}"><button class="btn btn-success">Wróć</button></a>
     </div>
-
-
-
-<form class="mt-5" action="{{route('edit.assigned.file', $comment->id)}}" method="POST" enctype="multipart/form-data">
+<div class="border d-flex justify-content-evenly layout-top-spacing  bg-dark text-bright rounded comment-text-area-custom">  
+<h4 class="my-5 text-white">Dodaj komentarz do pliku:</h4>
+</div>
+<div class="d-flex justify-content-center">
+    
+<form class="mt-2" action="{{route('edit.assigned.file', $comment->id)}}" method="POST" enctype="multipart/form-data">
 
     @csrf
         <input type="hidden" name="_method" value="PUT">
-        <textarea name="file_comment" class="form-control comment-text-area-custom mt-2" cols="20" rows="5" >{{$comment->file_comment}}</textarea>
+        <textarea name="file_comment" class="form-control comment-text-area-custom mt-2" cols="80" rows="5" >{{$comment->file_comment}}</textarea>
 
     <button class="btn btn-primary mt-2" type="submit">Zapisz</button>
 
 </form>
-
+</div>
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
 

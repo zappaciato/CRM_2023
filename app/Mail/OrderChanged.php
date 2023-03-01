@@ -16,17 +16,23 @@ class OrderChanged extends Mailable
     use Queueable, SerializesModels;
 
 
-    // public $status;
+    public $singleOrder;
+    public $involved_person_name;
+    public $lead_person_name;
+    // public $contact;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($singleOrder, $involved_person_name, $lead_person_name)
     {
 
-        // $this->status = $status;
+        $this->singleOrder = $singleOrder;
+        $this->involved_person_name = $involved_person_name;
+        $this->lead_person_name = $lead_person_name;
+        // $this->contact = $contact;
     }
 
     /**
@@ -36,7 +42,7 @@ class OrderChanged extends Mailable
      */
     public function build()
     {
-        return $this->subject('Test Emaileeeeek')->view('emails.order-changed');
+        return $this->subject($this->singleOrder['title'])->view('emails.order-changed');
     }
 
     /**

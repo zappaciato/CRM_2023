@@ -226,6 +226,11 @@ Log::debug(strval($files));
         Log::info('This is data order being updated');
         $singleOrder = Order::findOrFail($id);
 
+
+
+
+
+    
         $data = $this->validator($request->all());
         // $data['status'] = $request->status;
 
@@ -235,6 +240,32 @@ Log::debug(strval($files));
 
         //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
         OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
+
+        //Notification to the client TO REFACTOR
+        //dane potrzebne do wstrzykniecia do zmiennych do emaila do klienta
+        // wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
+        $recipients = [];
+        $contact = Contact::where('id', $singleOrder->contact_person)->get('email', 'name', 'surname');
+        $users = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
+        // $lead_person_name = '';
+        // $involved_person_name = '';
+        // $userx = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get('email', 'name');
+        array_push($recipients, $contact[0]['email']);
+        array_push($recipients, env('ADMIN_EMAIL'));
+        foreach($users as $user) {
+            array_push($recipients, $user['email']);
+            if($user->id == $singleOrder->lead_person) {
+                $lead_person_name = $user->name;
+            } elseif ($user->id == $singleOrder->involved_person) {
+                $involved_person_name = $user->name;
+            };
+        }
+
+            
+//zmienne do email template przekazujemy je w obiekcie OrderChanged
+            Mail::to($recipients)->send(new OrderChanged($singleOrder, $lead_person_name, $involved_person_name));
+        // }
+
 
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');

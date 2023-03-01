@@ -50,7 +50,7 @@
             @if($comment->media_id == $file->id)
             
         <td style="max-width: 500px; overflow: hidden; " >{{$comment->file_comment}} </td>
-        <td> <a href="{{route('editAssignedFile', $comment->id)}}"> <button class="btn btn-success" >Edytuj</button></a></td> 
+        <td> <a href="{{route('edit.assigned.file', $comment->id)}}"> <button class="btn btn-success" >Edytuj</button></a></td> 
         
             @else
             {{-- <td>Brak notatki!</td> --}}

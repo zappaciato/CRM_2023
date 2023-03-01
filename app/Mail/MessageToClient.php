@@ -12,9 +12,11 @@ use Illuminate\Queue\SerializesModels;
 class MessageToClient extends Mailable
 {
 
-    public $messageToClient;
+    
     use Queueable, SerializesModels;
 
+
+    public $messageToClient;
     /**
      * Create a new message instance.
      *
