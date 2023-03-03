@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Email;
 use App\Models\EmailsToOrder;
 use App\Models\FileComment;
+use App\Models\Order;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -59,21 +60,7 @@ class Email2OrderService
         $email->update([$email['emailstatus'] => 'assigned']);
         Log::info("Email status updated");
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // private function sendEmailNotification(arr $content, arr $subject, arr ) {
-    //     // Sending email notification to the relevant people;
-    //     // Specify the message details or do sth about it;
-    //     $messageToClient = ['content' => 'Dupa dupa', 'subject' => 'jajca jajca', 'number' => 10, 'from' => 'mj@k.pl'];
 
-    //     if($email->cc !== '' && $email->bcc !==  '') {
 
-    //         Mail::to([$email->from_address, $email->cc, $email->bcc, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-
-    //     } else {
-
-    //         Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-    //     }
-    //     // do tego miejsca refactoring wyniesc to gdzie indziej
-    // }
 
 }

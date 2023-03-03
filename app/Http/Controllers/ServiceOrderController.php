@@ -25,6 +25,7 @@ use App\Services\Email2OrderService;
 use App\Services\EmailNotificationService;
 use App\Services\AttachmentsService;
 use App\Services\OrderNotificationsService;
+use Illuminate\Support\Env;
 
 class ServiceOrderController extends Controller
 {
@@ -99,7 +100,7 @@ class ServiceOrderController extends Controller
         //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I do foreach all;
         $contacts = Contact::all();
 
-//This is for the links to emails in order Timeline (that is why it is in the notifications)
+//This is for the links to emails in order Timeline (that is why it is in the notificationsService)
         $emailsAssigned = (new OrderNotificationsService)->getAssignedEmailsLinksForTimeline($orderNotifications);
 
         // get all other data required for this order view
@@ -149,54 +150,16 @@ class ServiceOrderController extends Controller
     {
         Log::info('This is data order being updated');
         $singleOrder = Order::findOrFail($id);
-
         $data = $this->validator($request->all());
-        // $data['status'] = $request->status;
-
         Log::debug($data);
-
         $singleOrder->update($data);
 
-        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
-        // OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
         (new OrderNotificationsService())->createNotification('order_update', 'Zgłoszenie zaktualizowane przez:' . Auth::user()->name, $singleOrder->email_id, $singleOrder->id);
 
-        //Notification to the client TO REFACTOR
-        //dane potrzebne do wstrzykniecia do zmiennych do emaila do klienta
-        // wysłanie wiadomosci email do klienta:: attempt to read property on null; TODO fix it
-        $recipients = [];
-        $contact = Contact::where('id', $singleOrder->contact_person)->get('email', 'name', 'surname');
-        $users = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
-        // $lead_person_name = '';
-        // $involved_person_name = '';
-        // $userx = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get('email', 'name');
-        array_push($recipients, $contact[0]['email']);
-        array_push($recipients, env('ADMIN_EMAIL'));
-        if(count($users)>1) {
-        foreach($users as $user) {
-            array_push($recipients, $user['email']);
-            if($user->id == $singleOrder->lead_person) {
-                Log::info('Lead person name');
-                
-                $lead_person_name = $user->name;
-                Log::debug($lead_person_name);
-            } elseif ($user->id == $singleOrder->involved_person) {
-                Log::info('Involved person name');
+        (new OrderNotificationsService())->sendEmailNotificationToClient($singleOrder);
 
-                $involved_person_name = $user->name;
-                Log::debug($involved_person_name);
-            };
-        }
-    } elseif(count($users) == 1) {
-        array_push($recipients, $users[0]['email']);
-        $lead_person_name = $users[0]->name;
-        $involved_person_name = $users[0]->name;
-    }
-
-        //zmienne do email template przekazujemy je w obiekcie OrderChanged
-            Mail::to($recipients)->send(new OrderChanged($singleOrder, $lead_person_name, $involved_person_name));
-        // }
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały zaktualizowane!', 'success');
+
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
@@ -244,21 +207,20 @@ Log::debug($usersEmails);
 
     public function cancelOrder($id) {
 
-                    Log::info('I am cancelling the order!');
-                    $singleOrder = Order::findOrFail($id);
-                    $data['status'] = 'anulowane';
-                    $singleOrder->update($data);
+        Log::info('I am cancelling the order!');
+        $singleOrder = Order::findOrFail($id);
+        $data['status'] = 'anulowane';
+        $singleOrder->update($data);
 
-                    Alert::alert('Gratulacje!', 'Zgłoszenie zostało anulowane!', 'success');
+        Alert::alert('Gratulacje!', 'Zgłoszenie zostało anulowane!', 'success');
 
-                    //send email as a notification to all required people
-                    $this->sendEmail($id);
+        //send email as a notification to all required people
+        $this->sendEmail($id);
 
+        (new OrderNotificationsService())->createNotification('order_update', 'Zgłoszenie anulowane przez:' . Auth::user()->name, $singleOrder->email_id, $singleOrder->id);
 
-        //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
-        OrderNotificationController::createNotification('order_status', $singleOrder->status, $singleOrder->id, $singleOrder->id);
+        (new OrderNotificationsService())->sendEmailNotificationToClient($singleOrder);
 
-        // Log::debug(new OrderChanged(['status' => $data['status']]));
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
@@ -278,6 +240,11 @@ Log::debug($usersEmails);
 
         $singleOrder->delete();
 
+
+        // (new OrderNotificationsService())->createNotification('order_update', 'Zgłoszenie skasowane przez:' . Auth::user()->name, $singleOrder->email_id, $singleOrder->id);
+
+        // (new OrderNotificationsService())->sendEmailNotificationToClient($singleOrder);
+
         Alert::alert('Gratulacje!', 'Dane zgłoszenia zostały usnięte!', 'success');
 
         return redirect(route('service.orders'));
@@ -287,78 +254,9 @@ Log::debug($usersEmails);
 
 // scanning throu string email titles
 
-static function scanEmails() {
+public function scanEmails() {
 
-        // $emails = Email::all();
-
-        //get all emails with status new or read (as the user can read email before the scan) 
-        $emails = Email::whereIn('emailstatus', ['new', 'read'])->get();
-        // create an array with all email titles eligible for the scan
-        $emailsTitles = [];
-
-        foreach ($emails as $email) {
-            Log::info('Something is going on in for each emails');
-            // create key - email_id and value email_subject
-            $emailsTitles[$email->id] = $email->subject;
-            Log::debug($email->id);
-        }
-
-        Log::info('Emails titles HERE WE ARE BELOW: ');
-        Log::debug($emailsTitles); //works great!
-
-        // create array of all orders with non archived status (add later filter for non archived), create the codes based on order id, and add key order Id and value $the email code [#order#id#3#]
-        $emailCodes = [];
-        $orders = Order::all();
-        foreach ($orders as $order) {
-            $emailCodes[$order->id] = "[#order#id#".$order->id."#]"; //it needs to be in this form for seaching purposes
-            // $emailCodes[$order->id] = $order->id;
-        };
-
-        Log::info('Here are Email Condes from Orders Titles BELOW:');
-        Log::debug($emailCodes);
-
-        $tytul = 'df[#order#id#2#] cos tam cos tam BEZ ZALCZNIKA 2';
-        $kod = '[#order#id#2#]';
-
-        Log::info('TeSSSSSST');
-        Log::debug(strpos($tytul, $kod));
-
-        $matchedEmails = [];
-        // foreach ($emailCodes as $emailKey => $emailCode) {
-        foreach ($emailsTitles as $titleKey => $emailTitle) {
-            Log::info('It iterates through emails titles');
-            foreach ($emailCodes as  $emailCode) {
-                Log::info('It iterates through email codes');
-                Log::info('Now $email title! BELOW::::');
-                Log::debug($emailTitle);
-                Log::info('Now $emailcode BELOW:::: ');
-                Log::debug($emailCode);
-                Log::debug(strpos($emailTitle, $emailCode));
-                if (strpos($emailTitle, $emailCode)) {
-                    Log::info('It has found an email!!! WOW!');
-                    $matchedEmails[$titleKey] = $emailCode;
-                    Log::debug($matchedEmails);
-                };
-            }
-
-            
-        }
-        Log::info('All matched emails with order titles!;');
-        Log::debug($matchedEmails);
-
-        // foreach ($emailCodes as $emailKey => $emailCode) {
-
-        //     foreach ($emailsTitles as $titleKey => $emailTitle) {
-        //         Log::info('It iterates through emailtitles');
-        //         if (strpos($emailTitle, $emailCode)) {
-        //             Log::info('It has found an email!!! WOW!');
-        //             $matchedEmails[$emailCode] = $titleKey;
-        //             Log::debug($matchedEmails);
-        //         };
-        //     }
-
-        //     Log::debug($matchedEmails);
-        // }
+        $matchedEmails = (new EmailNotificationService())->findMatchedEmails();
 
         // key is emailId (byl order):: '1 => 3',:: value is orderID (był email)
         //we need to strip the value od order ID
@@ -366,13 +264,8 @@ static function scanEmails() {
         // create entry in the EmailsToORder db refactor to service
         // 6=>2, 7=>2 oznacz ze email id leca od order numer 2
         foreach ($matchedEmails as $email_id => $matchedOrder_id) {
-            Log::info('NEED TO EXTRACT ONLY NUMBERS FROM THE CODE WHICH ARE ORDERS IDS');
-            Log::debug(preg_replace("/[^0-9]+/", "", $matchedOrder_id));  //działa wyciąga poparwnie!
+
             $matchedOrder_ids_stripped[$email_id] = preg_replace("/[^0-9]+/", "", $matchedOrder_id);
-            // $matchedOrder_id[$email_id] = preg_replace("/[^0-9]+/", "", $matchedOrder_id);
-            Log::info('JUST BEFORE USING ALL SERVICES');
-            // Email2OrderService::addEmail2Order($orderId, $matchedEmailId);
-            // Email2OrderService::changeEmailStatus($matchedEmailId);
 
             $emailAssigned = new Email2OrderService($email_id);
             $emailAssigned->addEmail2Order($matchedOrder_ids_stripped[$email_id]);
@@ -385,6 +278,12 @@ static function scanEmails() {
             Log::debug($newNotification);
 
             Log::debug($matchedEmails);
+
+            //NOW send email notification to all relevant peopl about the email automatic assignment
+            $messageToClient = ['content' => 'Państwa email został automatycznie dodany do zgłoszenia.', 'subject' => 'Email id'.$email_id . 'automatycznie dodany do zgłoszenia nr' . $matchedOrder_ids_stripped[$email_id], 'order_id' => $matchedOrder_ids_stripped[$email_id], 'from' => env('ADMIN_EMAIL')];
+    // public function sendEmailNotification(int $email_id, $notification_content, $notification_subject, $notification_from, int $order_id)
+Log::info('BEFORE SENDING EMAIL MESSAGE ABOUT AUTOMATIC ASSIGNMENT');
+    (new EmailNotificationService())->sendEmailNotificationOnAutomaticAssignment($messageToClient, $email_id);
             // (string $type, string $content, int $subjectId, int $orderId )
             // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $email_id, $matchedOrder_id);
             // $messageToClient = ['content' => "Email został odebrany i przypisany do zgłoszenia.", 'subject' => "Email odebrany i przypisany do zgłoszenia!", 'order_id' => 1, 'from' => "testowyemailKris@gmail.com"];
