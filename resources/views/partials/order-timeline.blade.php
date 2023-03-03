@@ -71,7 +71,7 @@
                                     <div class="t-dot t-dot-success">
                                     </div>
                                     <div class="t-text">
-                                        <p class="text-danger">Zgłoszenie zostało edytowane i zaktualizowane przez: </p>
+                                        <p class="text-danger">Zgłoszenie zostało edytowane i zaktualizowane! </p>
                                         <p class=""> <strong>{{$notification->content}}</strong></p>
                                         {{-- <p>{{$notification->content}}</p> --}}
                                         {{-- <p>{{$notification->type}}</p> --}}

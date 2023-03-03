@@ -20,18 +20,6 @@ class OrderNotificationController extends Controller
         return response()->json(['orderNotifications' => $orderNotifications]);
     }
 
-    static function createNotification(string $type, string $content, int $subjectId, int $orderId ) {
-
-        
-        //Add this event to OrderNotification table;
-        $notification = new OrderNotification();
-        $notification->type = $type;
-        $notification->content = $content;
-        $notification->subjectId = $subjectId;
-        $notification->order_id = $orderId;
-        $notification->save();
-        Log::debug($notification);
-
-    }
+    
 }
 

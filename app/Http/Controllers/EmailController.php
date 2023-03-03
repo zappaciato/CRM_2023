@@ -11,6 +11,8 @@ use App\Models\EmailsToOrder;
 use App\Models\FileComment;
 use App\Models\Order;
 use App\Models\OrderNotification;
+use App\Services\Email2OrderService;
+use App\Services\OrderNotificationsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -66,50 +68,19 @@ class EmailController extends Controller
         $data = $request->all();
         Log::debug($data);
 
-        // OD tego miejsca to wyjecia refactoring
-        // create entry in the EmailsToORder db refactor to service
-        $email2order = new EmailsToOrder();
-        $email2order->order_id = $data['order_id'];
-        $email2order->email_id = $data['email_id'];
-        $email2order->user_id = $data['user_id'];
-        $email2order->notes = $request->input('notes');
-        $email2order->save();
+        $emailAssigned = new Email2OrderService($data['email_id']);
+        $emailAssigned->addEmail2Order($data['order_id'], Auth::user()->id, $notes = 'Email ręcznie przydzielony do zgłoszenia');
+        $emailAssigned->saveFileComment($data['order_id']);
+        $emailAssigned->changeEmailStatus();
 
-        //zmiana statusu emaila powtarza sie DRY extract to service;
-        $email = Email::findOrFail($request->email_id);
-        $email['emailstatus'] = 'assigned';
-        $email->update([$email['emailstatus'] => 'assigned']);
-        Log::info("Email status updated");
+        $newNotification = (new OrderNotificationsService())->createNotification('email_received', 'Email w sprawie zgłoszenia ręcznie dodany!', $data['email_id'], $data['order_id']);
+        Log::info('New NOTIFICATION');
+        Log::debug($newNotification);
+        //Send email notification to all relevant persons
 
 
-        //get the attachments for this email
-        $attachments = Media::where('collection_name', 'file#email#' . $email->id)->get();
 
-        //for ech of the attachments add a default comment
-        foreach ($attachments as $file) {
-
-            $fileComment = new FileComment();
-            $fileComment->media_id = $file->id;
-            $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"'. " o numerze id: " . $email->id . ". Dołączony do zgłoszenia nr: " . $email2order->order_id;
-            $fileComment->save();
-        }
-
-        //add notification set as a static function in OrderNotificat: LIKE THIS: (string $type, string $content, int $subjectId, int $orderId )
-        OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
-
-        // Sending email notification to the relevant people;
-        // Specify the message details or do sth about it;
-        $messageToClient = ['content' => 'Dupa dupa', 'subject' => 'jajca jajca', 'number' => 10, 'from' => 'mj@k.pl'];
-
-        if($email->cc !== '' && $email->bcc !==  '') {
-
-            Mail::to([$email->from_address, $email->cc, $email->bcc, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-
-        } else {
-
-            Mail::to([$email->from_address, env('ADMIN_EMAIL')])->send(new MessageToClient($messageToClient));
-        }
-        // do tego miejsca refactoring wyniesc to gdzie indziej
+        
         
         Alert::alert('Gratulacje!', 'Email został przypisany!', 'success');
 
@@ -131,8 +102,18 @@ class EmailController extends Controller
         // check if the email has already been assigned status if not update the status to 'open'
         if($email->emailstatus !== 'assigned' || $email->emailstatus == 'new') {
             Log::info('The email status has no assigned status');
-            $email->emailstatus = ['read']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
-            $email->update($email->emailstatus);
+            // $email->emailstatus = ["read"]; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
+            // $email->update($email->emailstatus[0]);
+
+
+            //zmiana statusu emaila powtarza sie DRY extract to service;
+            $email['emailstatus'] = 'read';
+            $email->update([$email['emailstatus'] => 'read']);
+            Log::info("Email status updated");
+
+
+
+
             // if email has status assigned nothing should be done with it.. this flag disables email action buttons
             $eFlag = 1;
         // Email::update('status' => 'przecztany')->where('id', $id);

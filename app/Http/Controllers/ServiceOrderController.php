@@ -23,6 +23,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use App\Services\Email2OrderService;
 use App\Services\EmailNotificationService;
+use App\Services\AttachmentsService;
+use App\Services\OrderNotificationsService;
 
 class ServiceOrderController extends Controller
 {
@@ -96,22 +98,9 @@ class ServiceOrderController extends Controller
 
         //all the contacts for the company which owns the order. We expect emails exchange only from those addresses; If the contact is unknown it should be added. However it works only when I do foreach all;
         $contacts = Contact::all();
-        // define emails array to get ids for the search for links for emails assigned to the order
-        $emailsArray = [];//??
 
-        //timeline links part
-        // find emails with type email_received from orderNotifications for this single order to proivide links in the timeline
-
-        foreach($orderNotifications as $notification)
-            if($notification->type === 'email_received') {
-                //push the emails id to the array if the orderNotification has type emailreceived; 
-                array_push($emailsArray, Email::where('id', $notification->subjectId)->get()[0]->id);
-            }
-        // strip it from the keys and leave only values like: [10,2,7]
-        $emailsAssignedIds = array_values($emailsArray);
-
-        // find the relevant emails 
-        $emailsAssigned = Email::findMany($emailsAssignedIds);
+//This is for the links to emails in order Timeline (that is why it is in the notifications)
+        $emailsAssigned = (new OrderNotificationsService)->getAssignedEmailsLinksForTimeline($orderNotifications);
 
         // get all other data required for this order view
         $users = User::select('id', 'name')->get();
@@ -124,40 +113,8 @@ class ServiceOrderController extends Controller
 
         $title = 'Zgłoszenie nr: ' . $singleOrder->id;
         $breadcrumb = 'Zgłoszenie nr: ' . $singleOrder->id;
-
-        // set the media collection name where files are stored in the media table
-        $files = 'file#order#'.$singleOrder->id;
-
-        //define array with attachment links
-        $attachmentsLinks = [];
-
-        // iterate over all messages to client for this ORDER
-        foreach($messagesToClient as $msg) {
-        if($msg->getFirstMedia($files) === null) {
-        // do something if there are not attachments for each message individually
-
-        } else {
-        //do this if there are some attachment for each message individually
-        $attachments = $msg->getMedia($files);
-        Log::info('BELOW attachemtns:: ');
-        Log::debug($attachments);
-
-        foreach ($attachments as $attachment) {
-            Log::info('BELOW ::: single attachment $attachemnt');
-            Log::debug($attachment);
-            $attachmentsLinks[$attachment->model_id] = [$attachment->getUrl(), $attachment->name, $msg->id];
-            // array_push($attachmentsLinks,  $attachment->getUrl());
-            // $attachmentsLinks = $attachments->getUrl();
-        }
-
-                Log::info('Attachment links in the foreach below:::::');
-                Log::debug($attachmentsLinks);
-                
-            }
-            
-            
-            
-}
+        // ////////////////////////// to ponizej wywalilem do getattachmentlinks
+        $attachmentsLinks = (new AttachmentsService())->getAttachmentsLinks($singleOrder->id, $messagesToClient);
 
         Log::info('Attachment links FINAL below:::::');
         Log::debug($attachmentsLinks);
@@ -201,7 +158,8 @@ class ServiceOrderController extends Controller
         $singleOrder->update($data);
 
         //add notification set as a static function in OrderNotificat like this: OrderNotificationController::createNotification (string $type, string $content, int $subjectId, int $orderId );
-        OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
+        // OrderNotificationController::createNotification('order_update', Auth::user()->name, $singleOrder->id, $singleOrder->id);
+        (new OrderNotificationsService())->createNotification('order_update', 'Zgłoszenie zaktualizowane przez:' . Auth::user()->name, $singleOrder->email_id, $singleOrder->id);
 
         //Notification to the client TO REFACTOR
         //dane potrzebne do wstrzykniecia do zmiennych do emaila do klienta
@@ -331,12 +289,16 @@ Log::debug($usersEmails);
 
 static function scanEmails() {
 
-        $emails = Email::all();
+        // $emails = Email::all();
+
+        //get all emails with status new or read (as the user can read email before the scan) 
+        $emails = Email::whereIn('emailstatus', ['new', 'read'])->get();
+        // create an array with all email titles eligible for the scan
         $emailsTitles = [];
 
         foreach ($emails as $email) {
             Log::info('Something is going on in for each emails');
-
+            // create key - email_id and value email_subject
             $emailsTitles[$email->id] = $email->subject;
             Log::debug($email->id);
         }
@@ -344,41 +306,98 @@ static function scanEmails() {
         Log::info('Emails titles HERE WE ARE BELOW: ');
         Log::debug($emailsTitles); //works great!
 
+        // create array of all orders with non archived status (add later filter for non archived), create the codes based on order id, and add key order Id and value $the email code [#order#id#3#]
         $emailCodes = [];
         $orders = Order::all();
         foreach ($orders as $order) {
-            $emailCodes[$order->id] = $order->id;
+            $emailCodes[$order->id] = "[#order#id#".$order->id."#]"; //it needs to be in this form for seaching purposes
+            // $emailCodes[$order->id] = $order->id;
         };
 
+        Log::info('Here are Email Condes from Orders Titles BELOW:');
+        Log::debug($emailCodes);
+
+        $tytul = 'df[#order#id#2#] cos tam cos tam BEZ ZALCZNIKA 2';
+        $kod = '[#order#id#2#]';
+
+        Log::info('TeSSSSSST');
+        Log::debug(strpos($tytul, $kod));
+
         $matchedEmails = [];
-
-        foreach ($emailCodes as $emailKey => $emailCode) {
-
-            foreach ($emailsTitles as $titleKey => $emailTitle) {
+        // foreach ($emailCodes as $emailKey => $emailCode) {
+        foreach ($emailsTitles as $titleKey => $emailTitle) {
+            Log::info('It iterates through emails titles');
+            foreach ($emailCodes as  $emailCode) {
+                Log::info('It iterates through email codes');
+                Log::info('Now $email title! BELOW::::');
+                Log::debug($emailTitle);
+                Log::info('Now $emailcode BELOW:::: ');
+                Log::debug($emailCode);
+                Log::debug(strpos($emailTitle, $emailCode));
                 if (strpos($emailTitle, $emailCode)) {
-                    $matchedEmails[$emailCode] = $titleKey;
+                    Log::info('It has found an email!!! WOW!');
+                    $matchedEmails[$titleKey] = $emailCode;
+                    Log::debug($matchedEmails);
                 };
             }
 
-            Log::debug($matchedEmails);
-        }
-
-        // key is order_id:: '1 => 3',:: value is email_id
-        // create entry in the EmailsToORder db refactor to service
-        foreach ($matchedEmails as $orderId => $matchedEmailId) {
-
-
-            Email2OrderService::addEmail2Order($orderId, $matchedEmailId);
-            Email2OrderService::changeEmailStatus($matchedEmailId);
-
-            // (string $type, string $content, int $subjectId, int $orderId )
-            OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $matchedEmailId, $orderId);
-
-            EmailNotificationService::sendEmailNotification($matchedEmailId);
-
-        }
-
             
+        }
+        Log::info('All matched emails with order titles!;');
+        Log::debug($matchedEmails);
+
+        // foreach ($emailCodes as $emailKey => $emailCode) {
+
+        //     foreach ($emailsTitles as $titleKey => $emailTitle) {
+        //         Log::info('It iterates through emailtitles');
+        //         if (strpos($emailTitle, $emailCode)) {
+        //             Log::info('It has found an email!!! WOW!');
+        //             $matchedEmails[$emailCode] = $titleKey;
+        //             Log::debug($matchedEmails);
+        //         };
+        //     }
+
+        //     Log::debug($matchedEmails);
+        // }
+
+        // key is emailId (byl order):: '1 => 3',:: value is orderID (był email)
+        //we need to strip the value od order ID
+        $matchedOrder_ids_stripped = [];
+        // create entry in the EmailsToORder db refactor to service
+        // 6=>2, 7=>2 oznacz ze email id leca od order numer 2
+        foreach ($matchedEmails as $email_id => $matchedOrder_id) {
+            Log::info('NEED TO EXTRACT ONLY NUMBERS FROM THE CODE WHICH ARE ORDERS IDS');
+            Log::debug(preg_replace("/[^0-9]+/", "", $matchedOrder_id));  //działa wyciąga poparwnie!
+            $matchedOrder_ids_stripped[$email_id] = preg_replace("/[^0-9]+/", "", $matchedOrder_id);
+            // $matchedOrder_id[$email_id] = preg_replace("/[^0-9]+/", "", $matchedOrder_id);
+            Log::info('JUST BEFORE USING ALL SERVICES');
+            // Email2OrderService::addEmail2Order($orderId, $matchedEmailId);
+            // Email2OrderService::changeEmailStatus($matchedEmailId);
+
+            $emailAssigned = new Email2OrderService($email_id);
+            $emailAssigned->addEmail2Order($matchedOrder_ids_stripped[$email_id]);
+            $emailAssigned->changeEmailStatus();
+            $emailAssigned->saveFileComment($matchedOrder_ids_stripped[$email_id]);
+
+
+            $newNotification = (new OrderNotificationsService())->createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $email_id, $matchedOrder_ids_stripped[$email_id]);
+            Log::info('New NOTIFICATION');
+            Log::debug($newNotification);
+
+            Log::debug($matchedEmails);
+            // (string $type, string $content, int $subjectId, int $orderId )
+            // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $email_id, $matchedOrder_id);
+            // $messageToClient = ['content' => "Email został odebrany i przypisany do zgłoszenia.", 'subject' => "Email odebrany i przypisany do zgłoszenia!", 'order_id' => 1, 'from' => "testowyemailKris@gmail.com"];
+            // $content = "Email został odebrany i przypisany do zgłoszenia.";
+            // $subject = ['subject' => "Email odebrany i przypisany do zgłoszenia!"]; //tu jest gdzies błąd musi byc inaczej zapisane. zdebugowac w porownaniu z ta metoda gdzie indziej. 
+            // $from = ['from' => "testowyemailKris@gmail.com"];
+            // $order_id = $orderId;
+            // (int $email_id, $notification_content, $notification_subject, $notification_from, int $order_id) 
+            // EmailNotificationService::sendEmailNotification($matchedEmailId, $content, $subject, $from, $order_id);
+            Log::info('FINISHED USIGN SERVICES');
+        }
+
+            Log::debug($matchedOrder_ids_stripped);
 
         
 

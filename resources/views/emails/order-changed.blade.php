@@ -198,7 +198,7 @@
                                     <tr>
                                         <td align="center" style="font-size:0px;padding:10px 25px;padding-bottom:40px;word-break:break-word;">
                                             <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;text-align:left;color:#555;">
-                                            <h5>Temat: {{$singleOrder['title']}}</h5>
+                                            <h3>Temat: {{$singleOrder['title']}}</h3>
                                             </div>
                                         </td>
                                     </tr>

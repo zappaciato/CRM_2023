@@ -117,7 +117,7 @@
                                     <div id="unread-promotion-page" class="mail-item mailInbox">
                                         <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingThree">
                                             <div class="mb-0">
-                                                <div class="mail-item-heading social collapsed {{($email->emailstatus !== '["przeczytany"]') ? 'email-row-unread' : 'email-row-read'}}"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
+                                                <div class="mail-item-heading social collapsed {{($email->emailstatus !== 'read') ? 'email-row-unread' : 'email-row-read'}}"  data-bs-toggle="collapse" role="navigation" data-bs-target="#mailCollapse{{$email->id}}" aria-expanded="false">
 
                                                     <div class="mail-item-inner">
 
