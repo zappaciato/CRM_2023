@@ -13,6 +13,7 @@ class Order extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'code',
         'company_id',
         'email_id',
         'contact_person',

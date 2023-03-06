@@ -13,6 +13,7 @@ use App\Models\FileComment;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use App\Services\Email2OrderService;
+use App\Services\EmailNotificationService;
 use App\Services\FilesService;
 use App\Services\OrderNotificationsService;
 use Illuminate\Http\Request;
@@ -68,19 +69,35 @@ class EmailController extends Controller
 
 
         $data = $request->all();
+        Log::info('DANE add2order emaila przypisywanego ręcznie');
         Log::debug($data);
 
-        $emailAssigned = new Email2OrderService($data['email_id']);
-        $emailAssigned->addEmail2Order($data['order_id'], Auth::user()->id, $notes = 'Email ręcznie przydzielony do zgłoszenia');
-        $emailAssigned->saveFileComment($data['order_id']);
-        $emailAssigned->changeEmailStatus();
+        $newEmailAssigned = new Email2OrderService($data['email_id']);
+        $newEmailAssigned->addEmail2Order($data['order_id'], Auth::user()->id, $notes = 'Email ręcznie przydzielony do zgłoszenia');
+        $newEmailAssigned->saveFileComment($data['order_id']);
+        $status = 'assigned';
+        $newEmailAssigned->changeEmailStatus($status);
 
-        $newNotification = (new OrderNotificationsService())->createNotification('email_received', 'Email w sprawie zgłoszenia ręcznie dodany!', $data['email_id'], $data['order_id']);
+
+        $orderNotifications = new OrderNotificationsService();
+        $newNotification = $orderNotifications->createNotification('email_received', 'Email w sprawie zgłoszenia ręcznie dodany!', $data['email_id'], $data['order_id']);
+        
         Log::info('New NOTIFICATION');
         Log::debug($newNotification);
+        $emailNotifications = new EmailNotificationService();
+
+
         //Send email notification to all relevant persons
+        $assignedEmail = Email::findOrFail($data['email_id']);
+        //provide all necessary details in the message;
+        $messageToClient = [
+            'content' => 'Utworzono zgłoszenie na podstawie Twojego emaila.' . 'Tytuł emaila: ' . $assignedEmail->subject . ' dodany do zgłoszenia kodem zgłoszenia ' . $data['order_id'], 
+            'subject' => '', 
+            'order_id' => $data['order_id'], 
+            'from' => env('ADMIN_EMAIL')
+        ];
 
-
+        $emailNotifications->sendEmailNotificationOnOrderCreate($messageToClient, $data['email_id']);
 
         
         
@@ -182,6 +199,7 @@ class EmailController extends Controller
 
         $validated =  Validator::make($data, [
             'title' => 'required',
+            'code' => 'nullable',
             'company_id' => 'required|integer',
             'email_id' => 'required|integer',
             'contact_person' => 'required',
@@ -213,18 +231,26 @@ class EmailController extends Controller
         $data = $this->validator($request->all());
         Log::info('I am trying to debug the data to store - ORDER!');
         Log::debug($data);
-
+        // count orders and add +1 to the new order code;
+        $ordersCount = Order::select('id')->orderBy('id', 'desc')->first();
         // Get the name of the address based on the id from $request->address
         $address = CompanyAddress::findOrFail($request->address);
         $data['address'] = $address->name;
+        
+        //check if there are any orders in the db
+        if ($ordersCount !== null) {
+            // add the order code for recognition and scanning
+            $data['code'] = '[#order#id#' . $ordersCount->id + 1 . '#]';
+            $data['title'] = $data['title'] . '[#order#id#' . $ordersCount->id + 1 . '#]';
 
+        } else {
+            $data['code'] = '[#order#id#' . 1 . '#]';
+            $data['title'] = $data['title'] . '[#order#id#' . 1 . '#]';
+        }
+        
         //here we create the new order; 
-
-        // add the order code for recognition and scanning
-        $ordersCount = Order::select('id')->orderBy('id', 'desc')->first()->id;
-        $data['title'] = $data['title'] . '[#order#id#'. $ordersCount+1 .'#]';
-
         $newOrder = Order::create($data);
+        
         // Assign the original email to the order and change emails status to assigned;
         $newEmailAssigned = new Email2OrderService($request->email_id);
 

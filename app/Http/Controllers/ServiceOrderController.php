@@ -280,10 +280,15 @@ public function scanEmails() {
             Log::debug($matchedEmails);
 
             //NOW send email notification to all relevant peopl about the email automatic assignment
-            $messageToClient = ['content' => 'Państwa email został automatycznie dodany do zgłoszenia.', 'subject' => 'Email id'.$email_id . 'automatycznie dodany do zgłoszenia nr' . $matchedOrder_ids_stripped[$email_id], 'order_id' => $matchedOrder_ids_stripped[$email_id], 'from' => env('ADMIN_EMAIL')];
+            $messageToClient = [
+                'content' => 'Państwa email został automatycznie dodany do zgłoszenia.', 
+                'subject' => 'Email id'.$email_id . 'automatycznie dodany do zgłoszenia nr' . $matchedOrder_ids_stripped[$email_id], 
+                'order_id' => $matchedOrder_ids_stripped[$email_id], 
+                'from' => env('ADMIN_EMAIL')
+            ];
     // public function sendEmailNotification(int $email_id, $notification_content, $notification_subject, $notification_from, int $order_id)
-Log::info('BEFORE SENDING EMAIL MESSAGE ABOUT AUTOMATIC ASSIGNMENT');
-    (new EmailNotificationService())->sendEmailNotificationOnAutomaticAssignment($messageToClient, $email_id);
+            Log::info('BEFORE SENDING EMAIL MESSAGE ABOUT AUTOMATIC ASSIGNMENT');
+            (new EmailNotificationService())->sendEmailNotificationOnAutomaticAssignment($messageToClient, $email_id);
             // (string $type, string $content, int $subjectId, int $orderId )
             // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $email_id, $matchedOrder_id);
             // $messageToClient = ['content' => "Email został odebrany i przypisany do zgłoszenia.", 'subject' => "Email odebrany i przypisany do zgłoszenia!", 'order_id' => 1, 'from' => "testowyemailKris@gmail.com"];
@@ -297,9 +302,6 @@ Log::info('BEFORE SENDING EMAIL MESSAGE ABOUT AUTOMATIC ASSIGNMENT');
         }
 
             Log::debug($matchedOrder_ids_stripped);
-
-        
-
 
         return redirect(route('service.orders'));
 }
