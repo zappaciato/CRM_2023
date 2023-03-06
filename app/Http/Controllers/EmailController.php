@@ -238,21 +238,13 @@ class EmailController extends Controller
         $attachments = Media::where('collection_name', 'file#email#' . $request->email_id)->get();
 
         //Dla każdegoz tych plików dodaj defaultową notatkę
-        foreach ($attachments as $file) {
-            Log::info('The attachments:::::::');
-            Log::debug($file);
-            $fileComment = new FileComment();
-            $fileComment->media_id = $file->id;
-            $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
-            $fileComment->order_id = $newOrder->id;
-            $fileComment->save();
-        }
+       
         foreach ($attachments as $file) {
             //add default comment to the file
         $commentData = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
         $fileComment = new FilesService();
         $fileComment->addFileComment($commentData, $file, $newOrder);
-        
+
         }
 
 
