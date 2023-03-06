@@ -25,17 +25,22 @@ class OrderFileController extends Controller
         $data = $file->fileDataValidation($request);
 
         if (isset($data['new_file'])) {
-
-            $newFile = $order->addMediaFromRequest("new_file")->toMediaCollection("file#order#$request->order_id");
+// save in the database MediaLibrary;
+            $newStoredFile = $order->addMediaFromRequest("new_file")->toMediaCollection("file#order#$request->order_id");
         }
 
-        if($newFile) {
+        if($newStoredFile && $request['file_comment']) {
 
-            $file->addFileComment($data, $newFile, $request, $order);
+            $commentData = $request['file_comment'];
 
-            } else {
-                
-                return redirect()->back();
+            $file->addFileComment($commentData, $newStoredFile, $order);
+
+        } else {
+
+            $commentData = 'Ten plik jest związany ze zgłoszeniem o tytule: ' . $order->title . ' i numerze Id: ' . $order->id;
+
+            $file->addFileComment($commentData, $newStoredFile, $order);
+
         }
 
         Alert::alert('Gratulacje!', 'Plik został dodany!', 'success');

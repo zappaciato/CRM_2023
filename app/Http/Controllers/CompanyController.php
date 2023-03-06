@@ -29,7 +29,8 @@ class CompanyController extends Controller
         $companies = Company::all();
         Log::info('Jest pred startem scanningu');
         //for testing starting point for scannig email titles
-        ServiceOrderController::scanEmails();
+
+        // ServiceOrderController::scanEmails();
 
         return view('pages.companies.company-list', compact('title', 'breadcrumb', 'companies'));
     }

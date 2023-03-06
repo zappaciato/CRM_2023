@@ -61,6 +61,6 @@ class Email2OrderService
         Log::info("Email status updated");
     }
 
-
+    
 
 }

@@ -56,6 +56,7 @@ class MessageToClientService
 
             Mail::to($recipients)->send(new MessageToClient($this->messageToClient));
             Mail::to(['kris@dupa.pl', 'daro@dick.pl', 'costam@facebok.com'])->send(new MessageToClient($this->messageToClient));
+            
         } else {
 
             Mail::to([$this->messageToClient['from'], env('ADMIN_EMAIL')])->send(new MessageToClient($this->messageToClient));

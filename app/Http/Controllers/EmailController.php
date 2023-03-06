@@ -12,6 +12,7 @@ use App\Models\FileComment;
 use App\Models\Order;
 use App\Models\OrderNotification;
 use App\Services\Email2OrderService;
+use App\Services\FilesService;
 use App\Services\OrderNotificationsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -246,10 +247,19 @@ class EmailController extends Controller
             $fileComment->order_id = $newOrder->id;
             $fileComment->save();
         }
+        foreach ($attachments as $file) {
+        //add default comment to the file
+        $fileComment = new FilesService();
+        $fileComment->addFileComment()
+        $fileComment->media_id = $file->id;
+        $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
+        $fileComment->order_id = $newOrder->id;
+        $fileComment->save();
+        }
 
-        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
-        OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
 
+        (new OrderNotificationsService)->createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
+        
         return redirect(route('service.orders'));
     }
 
@@ -335,4 +345,15 @@ class EmailController extends Controller
 
             return redirect(route('display.assigned.emails', $emailComment->order_id));
         }
+
+
+    public function showScanReport()
+    {
+        // get all newly assigned emails
+        //get all modified orders
+        //
+    }
+
+
+
 }
