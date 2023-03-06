@@ -52,12 +52,12 @@ class Email2OrderService
         return $email2order;
     }
 
-    public function changeEmailStatus() {
+    public function changeEmailStatus($status) {
         //zmiana statusu emaila powtarza sie DRY extract to service;
         Log::info('I am chainging the email status');
         $email = Email::findOrFail($this->email_id);
-        $email['emailstatus'] = 'assigned';
-        $email->update([$email['emailstatus'] => 'assigned']);
+        $email['emailstatus'] = $status;
+        $email->update([$email['emailstatus'] => $status]);
         Log::info("Email status updated");
     }
 

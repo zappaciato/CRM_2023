@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\MessageToClient;
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Contact;
 use App\Models\Email;
 use App\Models\EmailComment;
@@ -184,7 +185,7 @@ class EmailController extends Controller
             'company_id' => 'required|integer',
             'email_id' => 'required|integer',
             'contact_person' => 'required',
-            'address' => 'nullable',
+            'address' => 'required',
             'lead_person' => 'required',
             'involved_person' => 'required',
             'priority' => 'required',
@@ -213,40 +214,37 @@ class EmailController extends Controller
         Log::info('I am trying to debug the data to store - ORDER!');
         Log::debug($data);
 
-        $data['address'] = "jaki adres";
+        // Get the name of the address based on the id from $request->address
+        $address = CompanyAddress::findOrFail($request->address);
+        $data['address'] = $address->name;
+
         //here we create the new order; 
+
+        // add the order code for recognition and scanning
+        $ordersCount = Order::select('id')->orderBy('id', 'desc')->first()->id;
+        $data['title'] = $data['title'] . '[#order#id#'. $ordersCount+1 .'#]';
+
         $newOrder = Order::create($data);
+        // Assign the original email to the order and change emails status to assigned;
+        $newEmailAssigned = new Email2OrderService($request->email_id);
 
-        // To wywalic do funkcji bo powtórka
-        $email = Email::findOrFail($request->email_id);
-        $email['emailstatus'] = 'assigned';
-        $email->update([$email['emailstatus']=> 'assigned']);
-        Log::info("Email status updated");
-
-        // create entry in the EmailsToORder db to be refactored second in the same class Emails COntroler; !!!!!!!!!!!!!
-        $email2order = new EmailsToOrder();
-        $email2order->order_id = $newOrder->id;
-        $email2order->email_id = $data['email_id'];
-        $email2order->user_id = Auth::user()->id;
-        $email2order->notes = $data['order_notes'];
-        $email2order->save();
-
-
-        // TU powinno sie znaleźc również wsad do bazy order files
+        $status = 'assigned';
+        $newEmailAssigned->changeEmailStatus($status);
+        $newEmailAssigned->addEmail2Order($newOrder->id, Auth::user()->id, $data['order_notes']);
 
         //get the attachments for this email
         $attachments = Media::where('collection_name', 'file#email#' . $request->email_id)->get();
 
-        //Dla każdegoz tych plików dodaj defaultową notatkę
-       
+        //add default comment to each of the files
         foreach ($attachments as $file) {
-            //add default comment to the file
+
+        $email = Email::findOrFail($request->email_id);
+
         $commentData = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
         $fileComment = new FilesService();
         $fileComment->addFileComment($commentData, $file, $newOrder);
 
         }
-
 
         (new OrderNotificationsService)->createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
         
