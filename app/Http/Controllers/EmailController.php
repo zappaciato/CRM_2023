@@ -89,10 +89,13 @@ class EmailController extends Controller
 
         //Send email notification to all relevant persons
         $assignedEmail = Email::findOrFail($data['email_id']);
+        $theOrder = Order::findOrFail($data['order_id']);
         //provide all necessary details in the message;
         $messageToClient = [
-            'content' => 'Utworzono zgłoszenie na podstawie Twojego emaila.' . 'Tytuł emaila: ' . $assignedEmail->subject . ' dodany do zgłoszenia kodem zgłoszenia ' . $data['order_id'], 
-            'subject' => '', 
+            'content' =>    '<h3 style="color: red">Utworzono zgłoszenie na podstawie Twojego emaila.</h3>
+                            <h2>Tytuł emaila: </h2><h4>"' . $assignedEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $theOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>', 
+            'subject' => 'Email dodany do zgłoszenia!  ->  ' . $theOrder->code, 
             'order_id' => $data['order_id'], 
             'from' => env('ADMIN_EMAIL')
         ];

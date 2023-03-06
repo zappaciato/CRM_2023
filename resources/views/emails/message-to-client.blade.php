@@ -207,12 +207,13 @@
 
                                             <div style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:22px;text-align:left;color:#555;">
                                                 Dzień dobry!<br></br>
-                                                {{$messageToClient['content']}}
+                                                {!!$messageToClient['content']!!}
                                             </div>
 
                                         </td>
                                     </tr>
 {{-- action button --}}
+
                                     {{-- <tr>
                                         <td align="center" style="font-size:0px;padding:10px 25px;padding-top:30px;padding-bottom:50px;word-break:break-word;">
 
