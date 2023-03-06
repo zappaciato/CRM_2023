@@ -248,13 +248,11 @@ class EmailController extends Controller
             $fileComment->save();
         }
         foreach ($attachments as $file) {
-        //add default comment to the file
+            //add default comment to the file
+        $commentData = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
         $fileComment = new FilesService();
-        $fileComment->addFileComment()
-        $fileComment->media_id = $file->id;
-        $fileComment->file_comment = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
-        $fileComment->order_id = $newOrder->id;
-        $fileComment->save();
+        $fileComment->addFileComment($commentData, $file, $newOrder);
+        
         }
 
 
