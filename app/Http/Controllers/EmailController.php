@@ -100,7 +100,7 @@ class EmailController extends Controller
             'from' => env('ADMIN_EMAIL')
         ];
 
-        $emailNotifications->sendEmailNotificationOnOrderCreate($messageToClient, $data['email_id']);
+        $emailNotifications->sendEmailNotification($messageToClient, $data['email_id']);
 
         
         

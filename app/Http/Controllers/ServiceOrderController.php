@@ -269,7 +269,8 @@ public function scanEmails() {
 
             $emailAssigned = new Email2OrderService($email_id);
             $emailAssigned->addEmail2Order($matchedOrder_ids_stripped[$email_id]);
-            $emailAssigned->changeEmailStatus();
+            $status = 'assigned';
+            $emailAssigned->changeEmailStatus($status);
             $emailAssigned->saveFileComment($matchedOrder_ids_stripped[$email_id]);
 
 
@@ -278,17 +279,23 @@ public function scanEmails() {
             Log::debug($newNotification);
 
             Log::debug($matchedEmails);
-
+            $theEmail = Email::findOrFail($email_id);
+            $theOrder = Order::findOrFail($matchedOrder_ids_stripped[$email_id]);
             //NOW send email notification to all relevant peopl about the email automatic assignment
             $messageToClient = [
-                'content' => 'Państwa email został automatycznie dodany do zgłoszenia.', 
-                'subject' => 'Email id'.$email_id . 'automatycznie dodany do zgłoszenia nr' . $matchedOrder_ids_stripped[$email_id], 
+                'content' => '<h3 style="color: red">Twój email został automatycznie przydzielony do właściwego zgłoszenia!</h3>
+                            <h2>Tytuł emaila: </h2><h4>"' . $theEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $theOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>',
+
+
+
+                'subject' =>  'Twój email został dodany do zgłoszenia nr: ' . $theOrder->code, 
                 'order_id' => $matchedOrder_ids_stripped[$email_id], 
                 'from' => env('ADMIN_EMAIL')
             ];
     // public function sendEmailNotification(int $email_id, $notification_content, $notification_subject, $notification_from, int $order_id)
             Log::info('BEFORE SENDING EMAIL MESSAGE ABOUT AUTOMATIC ASSIGNMENT');
-            (new EmailNotificationService())->sendEmailNotificationOnAutomaticAssignment($messageToClient, $email_id);
+            (new EmailNotificationService())->sendEmailNotification($messageToClient, $email_id);
             // (string $type, string $content, int $subjectId, int $orderId )
             // OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia został automatycznie dodany!', $email_id, $matchedOrder_id);
             // $messageToClient = ['content' => "Email został odebrany i przypisany do zgłoszenia.", 'subject' => "Email odebrany i przypisany do zgłoszenia!", 'order_id' => 1, 'from' => "testowyemailKris@gmail.com"];
