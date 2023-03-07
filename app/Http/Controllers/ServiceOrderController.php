@@ -163,47 +163,47 @@ class ServiceOrderController extends Controller
         return redirect(route('single.service.order', $singleOrder->id))->with('message', 'Your have finished editing and the selected company is now updated!');
     }
 
-    public function sendEmail($id) {
+    // public function sendEmail($id) {
 // ta metoda jest jedynie do testu.. trzeba ja zmienic refaktor i wyciagnac ja do message to client Controller np.. ale działa
-        $singleOrder = Order::findOrFail($id);
-        Log::info('Below is the 1 single order data 2 usersemails 3 cntact emails');
-        Log::debug($singleOrder);
-        // do kogo email?
-        // to lead person involved and the email from the contact for this particular order
-        $usersEmails = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
-        // $contactEmails = Contact::whereIn('id', [$singleOrder->contact_person])->firstOrFail();
-        $contactEmails = Contact::select('email')->where('id', $singleOrder->contact_person)->get();
-Log::debug($usersEmails);
-        Log::debug($contactEmails);
+//         $singleOrder = Order::findOrFail($id);
+//         Log::info('Below is the 1 single order data 2 usersemails 3 cntact emails');
+//         Log::debug($singleOrder);
+//         // do kogo email?
+//         // to lead person involved and the email from the contact for this particular order
+//         $usersEmails = User::whereIn('id', [$singleOrder->lead_person, $singleOrder->involved_person])->get();
+//         // $contactEmails = Contact::whereIn('id', [$singleOrder->contact_person])->firstOrFail();
+//         $contactEmails = Contact::select('email')->where('id', $singleOrder->contact_person)->get();
+// Log::debug($usersEmails);
+//         Log::debug($contactEmails);
 
-        // $usersEmails = User::select('email')->where('id', $singleOrder->lead_person)->get();        // $recipients = ['k@k.pl', 'test@go.pl'];
-        // $recipients = [$usersEmails->email, $contactEmails];
+//         // $usersEmails = User::select('email')->where('id', $singleOrder->lead_person)->get();        // $recipients = ['k@k.pl', 'test@go.pl'];
+//         // $recipients = [$usersEmails->email, $contactEmails];
 
-        $recipients = [];
-        foreach ($usersEmails as $email) {
-            Log::debug($email);
-            array_push($recipients, $email);
-        }
+//         $recipients = [];
+//         foreach ($usersEmails as $email) {
+//             Log::debug($email);
+//             array_push($recipients, $email);
+//         }
 
-        foreach ($contactEmails as $email) {
-            Log::debug($email);
-            array_push($recipients, $email);
-        }
+//         foreach ($contactEmails as $email) {
+//             Log::debug($email);
+//             array_push($recipients, $email);
+//         }
 
 
-        // $recipients['email'] =+  $usersEmails->email;
-        // $recipients['email'] =+ $contactEmails->email;
-        Log::info('Below the RECIPIENTS ALL');
-        Log::debug($recipients);
-        // Log::debug($contactEmails->email);
-        foreach ($recipients as $recipient) {
-            Log::info('Below the RECIPIENTS ine by ONE');
-            Log::debug($recipient->email);
-            return Mail::to($recipient->email)->send(new OrderChanged());
-        }
+//         // $recipients['email'] =+  $usersEmails->email;
+//         // $recipients['email'] =+ $contactEmails->email;
+//         Log::info('Below the RECIPIENTS ALL');
+//         Log::debug($recipients);
+//         // Log::debug($contactEmails->email);
+//         foreach ($recipients as $recipient) {
+//             Log::info('Below the RECIPIENTS ine by ONE');
+//             Log::debug($recipient->email);
+//             return Mail::to($recipient->email)->send(new OrderChanged());
+//         }
 
                 
-}
+// }
 
     public function cancelOrder($id) {
 
@@ -283,7 +283,7 @@ public function scanEmails() {
             $theOrder = Order::findOrFail($matchedOrder_ids_stripped[$email_id]);
             //NOW send email notification to all relevant peopl about the email automatic assignment
             $messageToClient = [
-                'content' => '<h3 style="color: red">Twój email został automatycznie przydzielony do właściwego zgłoszenia!</h3>
+                'content' => '<h3 style="color: red">Twój email został automatycznie przydzielony do zgłoszenia!</h3>
                             <h2>Tytuł emaila: </h2><h4>"' . $theEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
                             <h1 style="color: rgb(255, 81, 0)">"' . $theOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>',
 

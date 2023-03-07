@@ -38,8 +38,8 @@ return new class extends Migration
 
             // $table->foreign('company_id')->references('id')->on('companies');
             // $table->foreign('email_id')->references('id')->on('emails');
-
-            $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
+            $table->integer('email_id');
+            // $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
             $table->foreignId('email_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
         });
     }

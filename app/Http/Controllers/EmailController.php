@@ -16,6 +16,7 @@ use App\Services\Email2OrderService;
 use App\Services\EmailNotificationService;
 use App\Services\FilesService;
 use App\Services\OrderNotificationsService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -92,7 +93,7 @@ class EmailController extends Controller
         $theOrder = Order::findOrFail($data['order_id']);
         //provide all necessary details in the message;
         $messageToClient = [
-            'content' =>    '<h3 style="color: red">Utworzono zgłoszenie na podstawie Twojego emaila.</h3>
+            'content' =>    '<h3 style="color: red">Twój email został dodany do zgłoszenia.</h3>
                             <h2>Tytuł emaila: </h2><h4>"' . $assignedEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
                             <h1 style="color: rgb(255, 81, 0)">"' . $theOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>', 
             'subject' => 'Email dodany do zgłoszenia!  ->  ' . $theOrder->code, 
@@ -195,28 +196,10 @@ class EmailController extends Controller
         return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag', 'eFlag', 'orders'));
     }
 
-
     protected function validator($data) {
         Log::info('I am validating the order record.');
         Log::debug($data);
-
-        $validated =  Validator::make($data, [
-            'title' => 'required',
-            'code' => 'nullable',
-            'company_id' => 'required|integer',
-            'email_id' => 'required|integer',
-            'contact_person' => 'required',
-            'address' => 'required',
-            'lead_person' => 'required',
-            'involved_person' => 'required',
-            'priority' => 'required',
-            'order_content' => 'required',
-            'order_notes' => 'required',
-            'deadline' => 'required',
-            'status' => 'required',
-            // 'notes' => 'nullable' add2order na razie nie ma walidacji!!!!!!!!!
-
-        ])->validate();
+        $validated = (new OrderService())->validator($data); 
 
         Log::info('ORDER Record has been validated!!');
 
@@ -232,30 +215,27 @@ class EmailController extends Controller
     public function store(Request $request)
     {
         $data = $this->validator($request->all());
-        Log::info('I am trying to debug the data to store - ORDER!');
-        Log::debug($data);
-        // count orders and add +1 to the new order code;
-        $ordersCount = Order::select('id')->orderBy('id', 'desc')->first();
-        // Get the name of the address based on the id from $request->address
+        
+        
+        // Get the name of the correct address based on the id from $request->address
         $address = CompanyAddress::findOrFail($request->address);
         $data['address'] = $address->name;
         
-        //check if there are any orders in the db
-        if ($ordersCount !== null) {
-            // add the order code for recognition and scanning
-            $data['code'] = '[#order#id#' . $ordersCount->id + 1 . '#]';
-            $data['title'] = $data['title'] . '[#order#id#' . $ordersCount->id + 1 . '#]';
-
-        } else {
-            $data['code'] = '[#order#id#' . 1 . '#]';
-            $data['title'] = $data['title'] . '[#order#id#' . 1 . '#]';
-        }
-        
-        //here we create the new order; 
-        $newOrder = Order::create($data);
-        
         // Assign the original email to the order and change emails status to assigned;
         $newEmailAssigned = new Email2OrderService($request->email_id);
+
+        $orderCode = (new OrderService())->generateCode();
+
+        Log::info('Generated code BELOW');
+        Log::debug($orderCode);
+
+        $data['code'] = $orderCode;
+        $data['title'] = $data['title'] .'..'. $orderCode;
+
+        Log::info('I am trying to debug the FINAL data to store - ORDER!');
+        Log::debug($data);
+        //here we create the new order; 
+        $newOrder = Order::create($data);
 
         $status = 'assigned';
         $newEmailAssigned->changeEmailStatus($status);
@@ -276,6 +256,24 @@ class EmailController extends Controller
         }
 
         (new OrderNotificationsService)->createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
+
+        //Sent email notification on creating the order
+
+        $emailNotifications = new EmailNotificationService();
+        //Send email notification to all relevant persons
+        $assignedEmail = Email::findOrFail($newOrder->email_id);
+        // $theOrder = Order::findOrFail($newOrder->id);
+        //provide all necessary details in the message;
+        $messageToClient = [
+            'content' =>    '<h3 style="color: red">Utworzono zgłoszenie na podstawie Twojego emaila.</h3>
+                            <h2>Tytuł emaila: </h2><h4>"' . $assignedEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $newOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>',
+            'subject' => 'Zgłoszenie utworzone! :: ' . $newOrder->code,
+            'order_id' => $newOrder->id,
+            'from' => env('ADMIN_EMAIL')
+        ];
+
+        $emailNotifications->sendEmailNotification($messageToClient, $data['email_id']);
         
         return redirect(route('service.orders'));
     }

@@ -8,7 +8,7 @@
                 <div class="info-box-3-content-wrapper hover-to-bright">
                     <h3 class="info-box-3-title">Podmioty powiązane:</h3>
                     <div class="">
-                        <table>
+                        <table class="custom-table">
                             <tr>
                                 <th>Os. Odpowiedzialna</th>
                                 <th>Os. zaangażowana</th>

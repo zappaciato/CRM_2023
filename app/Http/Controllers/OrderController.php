@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Email;
 use App\Models\Order;
+use App\Services\EmailNotificationService;
+use App\Services\OrderNotificationsService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -47,27 +51,12 @@ class OrderController extends Controller
 
     protected function validator($data)
     {
-        Log::info('I am validating the order record.');
+        Log::info('I am validating the order record. Manual Create');
         Log::debug($data);
 
-        $validated =  Validator::make($data, [
-            'title' => 'required',
-            'company_id' => 'required|integer',
-            'email_id' => 'required|integer',
-            'contact_person' => 'required',
-            'address' => 'required',
-            'lead_person' => 'required',
-            'involved_person' => 'required',
-            'priority' => 'required',
-            'order_content' => 'required',
-            'order_notes' => 'required',
-            'deadline' => 'required',
-            'status' => 'required',
+        $validated = (new OrderService())->validator($data); 
 
-        ])->validate();
-
-
-        Log::info('ORDER Record has been validated!!');
+        Log::info('Manually created ORDER Record has been validated!!');
 
         // $validated = Arr::add($validated, 'published', 0);
         // $validated = Arr::add($validated, 'premium', 0);
@@ -83,17 +72,46 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $title = '';
-        $breadcrumb = '';
-        Log::info('I am tryign to store the data and redirect');
         $data = $this->validator($request->all());
-        Log::info('I am trying to debug the data to store - ORDER!');
-Log::debug($data);
 
-Order::create($data);
 
-        // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
+        // Get the name of the correct address based on the id from $request->address
+        $address = CompanyAddress::findOrFail($request->address); 
+        $data['address'] = $address->name;
 
-        return redirect(route('new.orders'));
+
+        $orderCode = (new OrderService())->generateCode();
+
+        Log::info('Generated code BELOW');
+        Log::debug($orderCode);
+
+        $data['code'] = $orderCode;
+        $data['title'] = $data['title'] .'..'. $orderCode;
+
+        Log::info('I am trying to debug the FINAL data to store - ORDER!');
+        Log::debug($data);
+        //here we create the new order; 
+        $newOrder = Order::create($data);
+
+        (new OrderNotificationsService)->createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
+
+        //Sent email notification on creating the order
+
+        $emailNotifications = new EmailNotificationService();
+        //Send email notification to all relevant persons
+        // $theOrder = Order::findOrFail($newOrder->id);
+        //provide all necessary details in the message;
+        $messageToClient = [
+            'content' =>    '<h3 style="color: red">Utworzono zgłoszenie dotyczące Twojej prośby.</h3>
+                            <h3> Kod zgłoszenia to: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $newOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>',
+            'subject' => 'Zgłoszenie utworzone! :: ' . $newOrder->code,
+            'order_id' => $newOrder->id,
+            'from' => env('ADMIN_EMAIL')
+        ];
+
+        $emailNotifications->sendEmailNotification($messageToClient, $data['email_id']);
+
+        return redirect(route('service.orders'));
     }
 }
