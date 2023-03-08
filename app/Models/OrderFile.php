@@ -10,4 +10,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class OrderFile extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
+    // This model only interacts with Media table; 
+
+    
 }

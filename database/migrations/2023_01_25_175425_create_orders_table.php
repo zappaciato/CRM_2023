@@ -22,6 +22,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('email_id');
             // $table->foreignIdFor(Company::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('title');
+            $table->string('code');
             $table->string('contact_person');
             $table->string('address');
             $table->string('lead_person');
@@ -37,9 +38,9 @@ return new class extends Migration
 
             // $table->foreign('company_id')->references('id')->on('companies');
             // $table->foreign('email_id')->references('id')->on('emails');
-
+            $table->integer('email_id');
             $table->foreignId('company_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
-            $table->foreignId('email_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
+            // $table->foreignId('email_id')->constrained()->onDelete('cascade'); //ta wersja zadziałała;
         });
     }
 

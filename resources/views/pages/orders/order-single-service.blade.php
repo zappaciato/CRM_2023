@@ -59,12 +59,16 @@
         @vite(['resources/scss/dark/plugins/sweetalerts2/custom-sweetalert.scss'])
 
         @vite(['resources/scss/light/assets/elements/infobox.scss', 'resources/scss/dark/assets/elements/infobox.scss'])
+
+        @vite(['resources/scss/light/assets/components/accordions.scss'])
+        @vite(['resources/scss/dark/assets/components/accordions.scss'])
         <!--  END CUSTOM STYLE FILE  -->
     </x-slot>
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BREADCRUMB -->
 <div class="page-meta">
+
     <nav class="breadcrumb-style-one" aria-label="breadcrumb">
 
         {{-- Send message modal START --}}
@@ -73,17 +77,21 @@
     </nav>
 
         {{-- Action buttons --}}
-        <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between">
 
             @include('partials.order-action-btns')
 
-        </div>
+    </div>
 
-        <ol class="breadcrumb layout-top-spacing">
-            <li class="breadcrumb-item"><a href="#">  <h4 class="text-black bg-secondary rounded p-2 px-5">ZGŁOSZENIE NR {{$singleOrder->id}} # Firma: {{$company->name}}</h4> <h5 class="ms-5 text-black bg-warning rounded p-3 px-5"  >Tytuł:  "{{$singleOrder->title}}"</h5> </a></li>
-        </ol>
+    {{-- main single order info --}}
+    <div class="d-flex">
+            @include('partials.order-main-info')
+    </div>
+
 </div>
     <!-- /BREADCRUMB -->
+
+    
 <div class="row layout-top-spacing">
     <div class="col-md-12">
         <div class="row ">
@@ -112,6 +120,18 @@
     
     <!--  BEGIN CUSTOM SCRIPTS FILE  -->
     <x-slot:footerFiles>
+        {{-- mialo niby pomoc zeby nie scrollowalo w gore ale nie dziala przy paginacji --}}
+    <script>
+$('a[href="#highlights"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#highlights").offset().top
+    }, 1000);
+  });
+</script>
+
+
+
+
 
         <script src="{{asset('plugins/global/vendors.min.js')}}"></script>
         <script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
@@ -131,6 +151,32 @@
         
         {{-- for order message --}}
         @vite(['resources/assets/js/apps/mailbox.js'])
+
+{{-- TODO: Tutaj chce zeby nie przeładowywalo okna modal przed skonczeniem validacji i podaniem błędów. Nie działa w ten sposonb;  --}}
+        <script>
+$('#message-to-client-form').submit(function(){
+
+var url = {{ route('message.to.client', $singleOrder->id) }};
+var data = $('#message-to-client-form').serialize();
+e.preventDefault();
+$.post(url, data, function(response){
+    if(response.success)
+    {
+        // Print success message and close modal
+    }
+    else
+    {
+        $('#message-to-client-form errorList').html(JSON.stringify(response.errors));
+    }
+});
+
+
+// return false to stop the normal submission
+return false;
+});
+</script>
+{{-- And of script for validation errors message no page refresh --}}
+
     </x-slot>
     <!--  END CUSTOM SCRIPTS FILE  -->
 </x-base-layout>

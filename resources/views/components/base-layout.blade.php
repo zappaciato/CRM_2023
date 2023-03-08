@@ -35,6 +35,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap/bootstrap.min.css')}}">
     @vite(['resources/scss/light/assets/main.scss', 'resources/scss/dark/assets/main.scss'])
+    @vite(['resources/scss/light/assets/elements/alert.scss'])
+    @vite(['resources/scss/dark/assets/elements/alert.scss'])
 
     @if (
             !Request::routeIs('404') &&
@@ -92,6 +94,11 @@
     {{-- sweet alerts for notification: K.--}}
     @include('sweetalert::alert')
 
+    <div class="validation-messages">
+    @include('partials.validation_messages.validation-errors')
+    @include('partials.validation_messages.success')
+    </div>
+
     @if (
             !Request::routeIs('404') &&
             !Request::routeIs('maintenance') &&
@@ -108,12 +115,12 @@
         @if (!Request::routeIs('blank'))  
         <!--  BEGIN NAVBAR  -->
 
-        @php
+        {{-- @php
             $ordersCount = count(App\Models\Order::all());
-        @endphp
+        @endphp --}}
         {{-- THis is my attempt to pass the data ablove (count()) to the componen: TODO --}}
         {{-- <x-navbar.style-vertical-menu :ordersCount="$ordersCount" classes="{{($isBoxed ? 'container-xxl' : '')}}"/> --}}
-        <x-navbar.style-vertical-menu classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
+        <x-navbar.style-vertical-menu  classes="{{($isBoxed ? 'container-xxl' : '')}}"/>
         
         <!--  END NAVBAR  -->
         @endif
@@ -126,13 +133,14 @@
 
             @if (!Request::routeIs('blank')) 
             <!--  BEGIN SIDEBAR  -->
-            <x-menu.vertical-menu/>
+            <x-menu.vertical-menu />
+            {{-- :emails="$emails" wrzucic w komponent.. TODO: find out how. --}}
             <!--  END SIDEBAR  -->   
             @endif
             
             <!--  BEGIN CONTENT AREA  -->
             <div id="content" class="main-content {{(Request::routeIs('blank') ? 'ms-0 mt-0' : '')}}">
-
+    
                 @if ($scrollspy == 1)
                     <div class="container">
                         <div class="container">
@@ -174,11 +182,13 @@
             !Request::routeIs('login')
         )
         <!-- BEGIN GLOBAL MANDATORY STYLES -->
-        <script src="{{asset('plugins/bootstrap/bootstrap.bundle.min.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
         <script src="{{asset('plugins/mousetrap/mousetrap.min.js')}}"></script>
         <script src="{{asset('plugins/waves/waves.min.js')}}"></script>
         <script src="{{asset('plugins/highlight/highlight.pack.js')}}"></script>
+        {{-- <script src="{{asset('plugins/bootstrap/bootstrap.bundle.min.js')}}"></script> --}}
+        
         @if ($scrollspy == 1) @vite(['resources/assets/js/scrollspyNav.js']) @endif
 
         @if (Request::is('modern-light-menu/*'))

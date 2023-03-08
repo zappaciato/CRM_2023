@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Email extends Model
+class Email extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'message_id', 
@@ -22,7 +24,8 @@ class Email extends Model
         'bcc', 
         'text_plain',
         'text_html',
-        'user_id', 
+        'order_id',
+        // 'notes', 
 
         'date' ,
         'emailstatus',

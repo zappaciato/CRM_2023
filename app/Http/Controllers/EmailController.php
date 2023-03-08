@@ -2,124 +2,110 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MessageToClient;
 use App\Models\Company;
+use App\Models\CompanyAddress;
 use App\Models\Contact;
 use App\Models\Email;
+use App\Models\EmailComment;
 use App\Models\EmailsToOrder;
+use App\Models\FileComment;
 use App\Models\Order;
 use App\Models\OrderNotification;
+use App\Services\Email2OrderService;
+use App\Services\EmailNotificationService;
+use App\Services\FilesService;
+use App\Services\OrderNotificationsService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EmailController extends Controller
 {
-    
-
-    // public function exampleEmail() {
-    //     $email = [
-    //         'message_id' => 
-    //         'headers_raw'
-    //         'headers'
-    //         'from_name'
-    //         'from_address'
-    //         'subject'
-    //         'to'
-    //         'to_string'
-    //         'cc'
-    //         'bcc'
-    //         'replay_to'
-    //         'text_plain'
-    //         'text_html'
-    //         'user_id'
-    //         'date'
-    //         'emailstatus'
-    //     ]
-    // }
 
     public function index () {
 
         $title = "Emaile";
         $breadcrumb = "Nowe emaile";
 
-        //email statuses
+        //email status assigned or not
         $read = 'mailInbox';
         $emailsAll = Email::all();
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned')->sortByDesc('created_at');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');
 
-
-        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
-        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
-
-        // Log::debug($emailsAll->id);
-        // Log::debug($emails);
         Log::debug($emailsAssigned);
 
         return view('pages.emails.emails-inbox', compact('title', 'breadcrumb', 'emails', 'emailsAssigned', 'read'));
     }
 
     public function indexAssigned() {
+        //show individually assigned emails;
         $title = "Emaile przypisane";
         $breadcrumb = "Przypisane emaile";
+
         $emailsAll = Email::all();
-
-
-        $emails = $emailsAll->where('emailstatus', '!=', 'assigned');
-        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned');
-        // $emailsAssigned = Email::where('emailstatus', 'assigned')->get();
-
-        Log::info('I am about to display all assigned emails');
-        Log::debug($emailsAssigned);
-        // dd($emails);
+        $emails = $emailsAll->where('emailstatus', '!=', 'assigned')->sortByDesc('created_at');
+        $emailsAssigned = $emailsAll->where('emailstatus', '=', 'assigned')->sortByDesc('created_at');
 
         return view('pages.emails.emails-assigned', compact('emailsAssigned', 'emails', 'title', 'breadcrumb'));
     }
 
     public function add2orderCreate($id) {
-Log::info("Is it the right IDDDDD?????????????????");
-Log::debug($id);
+
         $title = "Dodawanie zamówienia z emaila";
         $breadcrumb = "Dodawanie nowego zamówienia z emaila";
         $email = Email::findOrFail($id);
-Log::info('Adding email to an order 1 email 2 order');
-Log::debug($email);
         $orders = Order::select('title', 'id')->get();
-Log::debug($orders);
-
-
-
 
         return view('pages.emails.add-email-to-order', compact('orders', 'email'));
-
     }
 
     public function add2order(Request $request) {
 
-        // $notification = new OrderNotification();
-        // $notification->type = $type;
-        // $notification->content = $content;
-        // $notification->subjectId = $subjectId;
-        // $notification->order_id = $orderId;
-        // $notification->save();
-        // Log::debug($notification);
 
-        Log::info('This is teh request data from add2order');
-        Log::debug($request);
         $data = $request->all();
-Log::debug($data);
-        $email2order = new EmailsToOrder();
-        $email2order->order_id = $data['order_id'];
-        $email2order->email_id = $data['email_id'];
-        $email2order->user_id = $data['user_id'];
-        $email2order->save();
+        Log::info('DANE add2order emaila przypisywanego ręcznie');
+        Log::debug($data);
 
-        $email = Email::findOrFail($request->email_id);
-        $email['emailstatus'] = 'assigned';
-        $email->update([$email['emailstatus'] => 'assigned']);
-        Log::info("Email status updated");
+        $newEmailAssigned = new Email2OrderService($data['email_id']);
+        $newEmailAssigned->addEmail2Order($data['order_id'], Auth::user()->id, $notes = 'Email ręcznie przydzielony do zgłoszenia');
+        $newEmailAssigned->saveFileComment($data['order_id']);
+        $status = 'assigned';
+        $newEmailAssigned->changeEmailStatus($status);
 
-        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
-        OrderNotificationController::createNotification('email_received', 'Email w sprawie zgłoszenia!', $request->email_id, $email2order->order_id);
 
+        $orderNotifications = new OrderNotificationsService();
+        $newNotification = $orderNotifications->createNotification('email_received', 'Email w sprawie zgłoszenia ręcznie dodany!', $data['email_id'], $data['order_id']);
+        
+        Log::info('New NOTIFICATION');
+        Log::debug($newNotification);
+        $emailNotifications = new EmailNotificationService();
+
+
+        //Send email notification to all relevant persons
+        $assignedEmail = Email::findOrFail($data['email_id']);
+        $theOrder = Order::findOrFail($data['order_id']);
+        //provide all necessary details in the message;
+        $messageToClient = [
+            'content' =>    '<h3 style="color: red">Twój email został dodany do zgłoszenia.</h3>
+                            <h2>Tytuł emaila: </h2><h4>"' . $assignedEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $theOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>', 
+            'subject' => 'Email dodany do zgłoszenia!  ->  ' . $theOrder->code, 
+            'order_id' => $data['order_id'], 
+            'from' => env('ADMIN_EMAIL')
+        ];
+
+        $emailNotifications->sendEmailNotification($messageToClient, $data['email_id']);
+
+        
+        
+        Alert::alert('Gratulacje!', 'Email został przypisany!', 'success');
 
         return redirect('/modern-dark-menu/emails/mailbox/inbox');
     }
@@ -131,45 +117,91 @@ Log::debug($data);
         Log::debug($id);
         $title = "Emaile";
         $breadcrumb = "Wybrany email";
+        // we need $orders for the modal where we assign email to order
+        $orders = Order::select('title', 'id')->get();
+        $email = Email::find($id);
 
-        // $email = Email::where('id', $id)->get();
-        $email = Email::findOrFail($id);
+        $eFlag = 0;
+        // check if the email has already been assigned status if not update the status to 'open'
+        if($email->emailstatus !== 'assigned' || $email->emailstatus == 'new') {
+            Log::info('The email status has no assigned status');
+            // $email->emailstatus = ["read"]; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i "" zmienic an ENGLISH
+            // $email->update($email->emailstatus[0]);
 
-        $email->emailstatus = ['przeczytany']; //pyta sie o array a ja tu dawalem string.. jednak do bazy wpisyje z bracketami i ""
-        $email->update($email->emailstatus);
+
+            //zmiana statusu emaila powtarza sie DRY extract to service;
+            $email['emailstatus'] = 'read';
+            $email->update([$email['emailstatus'] => 'read']);
+            Log::info("Email status updated");
+
+
+
+
+            // if email has status assigned nothing should be done with it.. this flag disables email action buttons
+            $eFlag = 1;
         // Email::update('status' => 'przecztany')->where('id', $id);
+        } else {
+            Log::info('The email status has assigned status');
+            $eFlag = 0;
+        }
+               
+        $emailAttachments = Media::where('collection_name', 'file#email#'.$id)->get();
 
-Log::debug($email);
-        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email'));
+        //make a flag if there's anything fetched as $emailAttachments if it is empty then show that there are no attachments
+        $attachmentFlag = 0;
+
+        Log::info('$emailAttachments are:');
+        Log::debug($emailAttachments);
+
+        if(count($emailAttachments) == 0) {
+            $attachmentFlag = 0;
+        } else {
+            $attachmentFlag = 1;
+        }
+
+        //Check id the contact is already in the database
+        $contacts = Contact::select('email')->get();
+        $contactPerson = 0;
+        Log::info('Poczatkowo $contact ma wartość: ');
+        Log::debug($contactPerson);
+
+        # I need to use break after the contact is found and matched otherwise it will check other contacts and give NO MATCH. Once the Match is found it has to stop!
+        foreach($contacts as $contact) {
+
+            if($contact->email !== $email->from_address) {
+
+                $contactPerson = 0;
+
+            } else {
+
+                $contactPerson = 1;
+                break;
+            }
+        }
+
+        // ta czesc logiki była do testów.. usunąć potem bo juz znajduje sie w widoku
+        if($emailAttachments->isNotEmpty()) {
+
+        foreach($emailAttachments as $a){
+            Log::info('This is a url link');
+            Log::debug($a->getUrl());
+        };
+        
+    } else {
+        Log::info('No attachments!');
+        }
+
+        //koniec testowej logiki
+
+        return view('pages.emails.email-single', compact('title', 'breadcrumb', 'email', 'emailAttachments', 'contactPerson', 'attachmentFlag', 'eFlag', 'orders'));
     }
 
-
-    protected function validator($data)
-    {
+    protected function validator($data) {
         Log::info('I am validating the order record.');
         Log::debug($data);
-
-        $validated =  Validator::make($data, [
-            'title' => 'required',
-            'company_id' => 'required|integer',
-            'email_id' => 'required|integer',
-            'contact_person' => 'required',
-            'address' => 'nullable',
-            'lead_person' => 'required',
-            'involved_person' => 'required',
-            'priority' => 'required',
-            'order_content' => 'required',
-            'order_notes' => 'required',
-            'deadline' => 'required',
-            'status' => 'required',
-
-        ])->validate();
-
+        $validated = (new OrderService())->validator($data); 
 
         Log::info('ORDER Record has been validated!!');
-
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
 
         return $validated;
     }
@@ -182,29 +214,67 @@ Log::debug($email);
      */
     public function store(Request $request)
     {
-        $title = '';
-        $breadcrumb = '';
-        Log::info('I am tryign to store the data and redirect');
         $data = $this->validator($request->all());
-        Log::info('I am trying to debug the data to store - ORDER!');
-        Log::debug($data);
-        $data['address'] = "jaki adres";
         
+        
+        // Get the name of the correct address based on the id from $request->address
+        $address = CompanyAddress::findOrFail($request->address);
+        $data['address'] = $address->name;
+        
+        // Assign the original email to the order and change emails status to assigned;
+        $newEmailAssigned = new Email2OrderService($request->email_id);
+
+        $orderCode = (new OrderService())->generateCode();
+
+        Log::info('Generated code BELOW');
+        Log::debug($orderCode);
+
+        $data['code'] = $orderCode;
+        $data['title'] = $data['title'] .'..'. $orderCode;
+
+        Log::info('I am trying to debug the FINAL data to store - ORDER!');
+        Log::debug($data);
+        //here we create the new order; 
         $newOrder = Order::create($data);
-// To wywalic do funkcji bo powtórka
+
+        $status = 'assigned';
+        $newEmailAssigned->changeEmailStatus($status);
+        $newEmailAssigned->addEmail2Order($newOrder->id, Auth::user()->id, $data['order_notes']);
+
+        //get the attachments for this email
+        $attachments = Media::where('collection_name', 'file#email#' . $request->email_id)->get();
+
+        //add default comment to each of the files
+        foreach ($attachments as $file) {
+
         $email = Email::findOrFail($request->email_id);
-        $email['emailstatus'] = 'assigned';
-        $email->update([$email['emailstatus']=> 'assigned']);
-        Log::info("Email status updated");
 
-        //add notification set as a static function in OrderNotificat (string $type, string $content, int $subjectId, int $orderId )
-        OrderNotificationController::createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
+        $commentData = "Plik przesłany w emailu: " . '"' . $email->subject . '"' . " o numerze id: " . $email->id;
+        $fileComment = new FilesService();
+        $fileComment->addFileComment($commentData, $file, $newOrder);
 
+        }
 
+        (new OrderNotificationsService)->createNotification('order_created', 'Zgłoszenie zostało utworzone!', $newOrder->id, $newOrder->id);
 
+        //Sent email notification on creating the order
 
-        // return view('pages.orders.orders-service', compact('data', 'title', 'breadcrumb'));
+        $emailNotifications = new EmailNotificationService();
+        //Send email notification to all relevant persons
+        $assignedEmail = Email::findOrFail($newOrder->email_id);
+        // $theOrder = Order::findOrFail($newOrder->id);
+        //provide all necessary details in the message;
+        $messageToClient = [
+            'content' =>    '<h3 style="color: red">Utworzono zgłoszenie na podstawie Twojego emaila.</h3>
+                            <h2>Tytuł emaila: </h2><h4>"' . $assignedEmail->subject . '" </h4> <h3> Dodany do zgłoszenia z kodem nr: </h3>
+                            <h1 style="color: rgb(255, 81, 0)">"' . $newOrder->code . '"</h1> <p>Żeby usprawnić komunikację, prosmy pamiętać aby umieścić powyższy kod w tytule każdego emaila dotyczacego tego zgłoszenia. Dziękujemy!</p>',
+            'subject' => 'Zgłoszenie utworzone! :: ' . $newOrder->code,
+            'order_id' => $newOrder->id,
+            'from' => env('ADMIN_EMAIL')
+        ];
 
+        $emailNotifications->sendEmailNotification($messageToClient, $data['email_id']);
+        
         return redirect(route('service.orders'));
     }
 
@@ -212,40 +282,93 @@ Log::debug($email);
         public function createFromEmail($id) {
             $title = "Dodawanie zamówienia z emaila";
             $breadcrumb = "Dodawanie nowego zamówienia z emaila";
+            //get the email data
             $email = Email::findOrFail($id);
 
             $contacts = Contact::select('id','company_id', 'email', 'name', 'surname')->get();
-            foreach ($contacts as $contact) {
 
-                if($contact->email == $email->from_address) {
-                Log::info('This is the company which sent this email!');
-                    $company  =  Company::where('id', $contact->company_id)->firstOrFail();
-                // $contact = Contact::where('id', $contact->id);
-                    Log::info("Below is 1 company and 2 contact!!!!!!!!!!!!!!!!!!!");
-                    Log::debug($company);
-                    Log::debug($contact);
-                    
-                    break;
-                }
+
+            $contactPerson = 0;
+
+
+        # I need to use break after the contact is found and matched otherwise it will check other contacts and give NO MATCH. Once the Match is found it has to stop!
+        foreach ($contacts as $contact) {
+            Log::info('All contacts no condition');
+            Log::debug($contact);
+            if ($contact->email !== $email->from_address) {
+                Log::info('NIE Mamy contact MATCH!');
+                Log::debug($contact);
+                $contactPerson = 0;
+                $company = Company::all();
+            } else {
+                Log::info('JEST! Mamy contact MATCH!');
+                $contactPerson = 1;
+                $company  =  Company::where('id', $contact->company_id)->firstOrFail();
+                break;
             }
+        }
 
         $emailPlain = \Soundasleep\Html2Text::convert($email->text_html);
-
-            Log::info('This is the final contact out of scope!');
-            // Log::debug($contact);
-            // Log::debug($company);
-            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'emailPlain'));
-        }
-
-// ponizej do zrobienia potem:: czyli wyświetlanie wszysktich emaili do danego orderu
-        public function displayAssignedEmails($id){
-            $emails = Email::where('id', $id)->get();
-            Log::debug($emails);
-            return view('pages.orders.order-emails', compact('emails'));
-        }
-
-        public function addEmailAttachments(){
             
+            return view('pages.orders.order-email-create', compact('title', 'breadcrumb', 'email', 'company', 'contact', 'contactPerson','emailPlain'));
         }
+
+        // display all emails which belong to the order;
+        public function displayAssignedEmails($id){
+            $order = Order::find($id);
+            $title = 'Emails assigned';
+            $breadcrumb = "Emails assigned";
+        
+
+            $emailsAssigned = EmailsToOrder::where('order_id', $id)->get('email_id');
+
+            $emailsIds = [];
+
+            foreach($emailsAssigned as $singleEmail) {
+                array_push($emailsIds, $singleEmail->email_id);
+            };
+            Log::debug($emailsIds);
+
+            //find the emails assigned and get the commetnt for this email;
+            $emails = Email::findMany($emailsIds);
+
+            $emailComments = EmailsToOrder::where('order_id', $order->id)->get();
+
+            return view('pages.orders.order-emails', compact('emails', 'breadcrumb', 'title', 'order', 'emailComments'));
+        }
+
+
+        public function emailCommentEdit($id) {
+            
+            $emailComment = EmailsToOrder::findOrFail($id);
+
+            return view ('pages.orders.order-email-comment-edit', compact('emailComment'));
+        }
+
+        public function emailCommentUpdate(Request $request, $id) {
+
+            Log::info('This is EMAIL COMMENT is being updated and below is the Request data!');
+            $emailComment = EmailsToOrder::findOrFail($id);
+
+            $data = $request->all(); 
+
+            Log::debug($data);
+
+            $emailComment->update($data);
+
+            Alert::alert('Gratulacje!', 'Notatka emaila została zaktualizowana!', 'success');
+
+            return redirect(route('display.assigned.emails', $emailComment->order_id));
+        }
+
+
+    public function showScanReport()
+    {
+        // get all newly assigned emails
+        //get all modified orders
+        //
+    }
+
+
 
 }

@@ -12,15 +12,17 @@ class _wCardFour extends Component
      * @var string
      */
     public $title;
+    public $outstandingUserOrders;
     
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($title)
+    public function __construct($title, $outstandingUserOrders)
     {
         $this->title = $title;
+        $this->outstandingUserOrders = $outstandingUserOrders;
     }
 
     /**

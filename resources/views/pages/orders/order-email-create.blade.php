@@ -79,8 +79,13 @@
                                     <label for="company_id" class="form-label">Firma</label>
                                         <select id="company_id" class="form-select company" name="company_id">
                                             {{-- <option selected="">FIrma Jeden</option> --}}
-                                       <option value="{{$company->id}}">{{$company->name}}</option>
-                                
+                                        @if($contactPerson ==  false)
+                                        @foreach($company as $company)
+                                            <option value="{{$company->id}}">{{$company->name}}</option>
+                                        @endforeach
+                                        @else
+                                            <option value="{{$company->id}}">{{$company->name}}</option>
+                                        @endif
                                         </select>
                                 </div>
 

@@ -42,10 +42,12 @@
     <!-- /BREADCRUMB -->
 <div id="tabsSimple" class="col-xl-12 col-12 layout-spacing">
     <div class="statbox widget box box-shadow">
+        
                 <div class="widget-header">
                     <div class="row">
-                        <div class="col-xl-12 col-md-12 col-sm-12 col-12 p-2 d-flex">
+                        <div class="col-xl-12 col-md-12 col-sm-12 col-12 p-2 d-flex justify-content-between">
                             <h4 class="p-2 me-5">{{$company->name}}</h4>
+                            <div class="d-flex">
                             <a class="me-5" href="{{route('company.list')}}"><button class="btn btn-success">Wróć</button></a>
 
                             <a href="{{route('company.edit', $company->id)}}"><button class="btn btn-warning">Edytuj</button></a>
@@ -57,6 +59,7 @@
                                 {{method_field('DELETE')}} 
                                 <button class="btn btn-danger" onclick="return confirm('Are you sure?')">Usuń Firmę</button>
                             </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,7 +69,7 @@
 
             <div class="vertical-pill">
                         
-                <div class="d-flex align-items-start">
+                <div class="d-flex align-items-start ms-2">
                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Dane</button>
                         <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Adresy</button>
@@ -76,54 +79,110 @@
                     </div>
 
 
-                    <div class="tab-content" id="v-pills-tabContent">
+<div class="tab-content" id="v-pills-tabContent">
+{{-- <div class="tab-pane fade show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0"> --}}
+<div class="tab-pane fade show active w-100" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                            {{-- <h4 class=" ">Dane firmy "<span>{{$company->name}}</span>"</h4> --}}
+                            {{-- the pills nav doesn't align properly. it depends on the pill content. TODO: go throu all the content and make it look the same --}}
+                                <div  class="card p-2 mt-2 ms-5 mb-5  col-9">
 
-                        <div class="tab-pane fade show active " id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-                            <h5 class="mb-2  ">Dane firmy</h5>
-                            <div class="company-card p-5 mt-2">
-                            <h4>Nazwa: <span>{{$company->name}}</span></h4>
-                            <h4>Telefon: <span>{{$company->phone}}</span></h4>
-                            <h4>email: <span>{{$company->email}}</span></h4>
-                            <h4>Strona www: <span>{{$company->www}}</span></h4>
+<table  class="table">
+  <tbody>
+    <tr>
+      <th style="min-width:150px">Nazwa Firmy</th>
+      <td class="border-bottom border-danger" >{{$company->name}}</td>
 
-                            </div>
-                            {{-- <h4>Notatki: <span>{{$company->notes}}</span></h4> --}}
-                        </div>
+    </tr>
+    <tr>
+      <th>Telefon główny</th>
+      <td>{{$company->phone}}</td>
+
+    </tr>
+    <tr>
+      <th>Email główny</th>
+      <td>{{$company->email}}</td>
+
+    </tr>
+    <tr>
+      <th>strona www</th>
+      <td>{{$company->www}}</td>
+
+    </tr>
+
+    <tr>
+      <th>Notatki</th>
+      <td class="text-wrap">{{$company->notes}} fskjdf sdjk sdkj sdkj sd k kdf jdfgkhsdkjhs kfjgklf gdl sfjldlfdjgsldfk Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea quos in tempora a corrupti esse nulla praesentium laboriosam, distinctio vel.</td>
+
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
 
 
-                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
+<div class="tab-pane fade w-100" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab" tabindex="0">
 
-                                    @if(!$addresses->isNotEmpty()) 
-                                        <h5>Adresy:</h5>
-                                        <h4>Adres nie został dodany do firmy. </h4>
-                            {{-- TODO tu mozna zrobic jako modal - > form --}}
-                                        <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
-                                    
-                                    @else 
+                        @if(!$addresses->isNotEmpty()) 
+                            <h5>Adresy:</h5>
+                            <h4>Adres nie został dodany do firmy. </h4>
+                {{-- TODO tu mozna zrobic jako modal - > form --}}
+                            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+                        
+                        @else 
 
-                                    <h5>Adresy:</h5>
+                        <h5>Adresy:</h5>
 
-                                    {{-- TODO tu mozna zrobic jako modal - > form --}}
-                                        <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
-                                    
-                                    @foreach ($addresses as $address)
-                                    <div class="card p-5 mt-2 address-card">
-                                        <h4>Nazwa: <span>{{$address->name}}</span></h4>
-                                        <h4>Miasto: <span>{{$address->city}}</span></h4>
-                                        <h4>Ulica: <span>{{$address->street}}</span></h4>
-                                        <h4>Kod pocztowy: <span>{{$address->postal_code}}</span></h4>
-                                        <h4>województwo: <span>{{$address->province}}</span></h4>
-                                        
-                                        <h4>Notatki: <span>{{$address->notes}}</span></h4>
-                                    </div>
-                                    @endforeach
-                                        
-                                    @endif
+                        {{-- TODO tu mozna zrobic jako modal - > form --}}
+                            <a href="{{route('addess.add.inCompany')}}"><button class="btn btn-info">Dodaj nowy adres do firmy</button></a>
+                        
+                        @foreach ($addresses as $address)
+                        <div class="card p-2 mt-2 ms-5 mb-5 address-card">
 
-                        </div>
+        <table class="table">
+        <tbody>
+            <tr>
+            <th>Nazwa Adresu</th>
+            <td class="border-bottom border-danger" >{{$address->name}}</td>
 
-                        <div class="tab-pane fade" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">
-                            {{-- export the below as a component TODO --}}
+            </tr>
+            <tr>
+            <th>Ulica</th>
+            <td>{{$address->street}}</td>
+
+            </tr>
+            <tr>
+            <th>Miasto</th>
+            <td>{{$address->city}}</td>
+
+            </tr>
+            <tr>
+            <th>Kod Pocztowy</th>
+            <td>{{$address->postal_code}}</td>
+
+            </tr>
+            <tr>
+            <th>Województwo</th>
+            <td>{{$address->province}}</td>
+
+            </tr>
+
+            <tr>
+            <th>Notatki</th>
+            <td class="text-wrap">{{$address->notes}}</td>
+
+            </tr>
+        </tbody>
+        </table>
+        </div>
+        @endforeach
+            
+@endif
+
+</div>
+
+                        <div class="tab-pane fade w-100" id="v-pills-disabled" role="tabpanel" aria-labelledby="v-pills-disabled-tab" tabindex="0">
+                            {{-- export the below as a component TODO and possibly in the controller make a service during the refactoring--}}
                             <div class=" widget box box-shadow" style="width:60vw">
                                 <div class="" >
 
@@ -139,7 +198,6 @@
 
                                                 <th>Typ</th>
                                                 <th>Termin</th>
-                                                <th>Email</th>
                                                 <th class="text-center">Status</th>
                                                 <th class="text-center dt-no-sorting">Action</th>
                                             </tr>
@@ -153,7 +211,7 @@
 
                                                 <td>inne</td>
                                                 <td>{{$order->deadline}}</td>
-                                                <td>p.opechowski@loopus.pl</td>
+                                                
                                                 <td>
                                                     <span>{{$order->status}}</span>
                                                 </td>
@@ -167,7 +225,6 @@
                                                     <th>Tytuł</th>
                                                     <th>Typ</th>
                                                     <th>Termin</th>
-                                                    <th>Email</th>
                                                     <th class="text-center">Status</th>
                                                     <th class="text-center dt-no-sorting">Action</th>
                                                 </tr>
@@ -191,17 +248,73 @@
                             @else 
                             <h5>Kontakty:</h5>
                             <a href="{{route('contact.add')}}"><button class="btn btn-info">Dodaj nowy kontakt do firmy</button></a>
-                            <div class="d-flex flex-row flex-wrap">
+                            <div class="row">
                             @foreach ($contacts as $contact )
-                            <div class="card p-5 mt-2 ms-2 contact-card">
+
+
+
+
+
+
+
+                            {{-- <div class="card p-5 mt-2 ms-2 contact-card">
                                 <h4>Imię: <span>{{$contact->name}}</span></h4>
                                 <h4>Nazwisko: <span>{{$contact->surname}}</span></h4>
                                 <h4>Pozycja: <span>{{$contact->position}}</span></h4>
                                 <h4>email: <span>{{$contact->email}}</span></h4>
                                 <h4>Telefon: <span>{{$contact->phone}}</span></h4>
                                 <h4>Telefon 2: <span>{{$contact->phone_business}}</span></h4>
-                                {{-- <h4>Notatki: <span>{{$contacts[0]->notes}}</span></h4> --}}
-                            </div>
+                                <h4>Notatki: <span>{{$contact->notes}}</span></h4>
+                            </div> --}}
+
+
+
+
+                            <div class="border border-custom border-info rounded p-5 ms-5 mt-2 col-xxl-8 col-xl-10 col-lg-10 col-md-10 col-sm-10 ">
+                            <a href="{{route('single.contact', $contact->id)}}">
+                                <table class="table">
+                                <tbody>
+                                    <tr>
+                                    <th>Imię</th>
+                                    <td class="border-bottom border-danger font-weight-bold" >{{$contact->name}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Nazwisko</th>
+                                    <td class="border-bottom border-danger ">{{$contact->surname}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Pozycja</th>
+                                    <td>{{$contact->position}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>email</th>
+                                    <td>{{$contact->email}}</td>
+
+                                    </tr>
+                                    <tr>
+                                    <th>Telefon</th>
+                                    <td>{{$contact->phone}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Telefon 2</th>
+                                    <td>{{$contact->phone_business}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                    <th>Notatki</th>
+                                    <td class="text-wrap">{{$contact->notes}}</td>
+
+                                    </tr>
+                                </tbody>
+                                </table>
+                                </a>
+                                </div>
                             @endforeach  
                             </div>                                             
                             
@@ -214,6 +327,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
     

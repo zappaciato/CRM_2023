@@ -27,17 +27,16 @@
     </div>
     <!-- /BREADCRUMB -->
 
-
-
     <div class="seperator-header">
         <h4 class="">Osoby kontaktowe</h4>
+        <a href="{{route('contact.add')}}"><button class="btn btn-danger mb-2">Dodaj nowy kontakt</button></a>
     </div>
     
 
+    
 
-<div class="d-flex flex-direction-row justify-content-end">
-    <a href="{{route('contact.add')}}"><button class="btn btn-success mb-2">Dodaj nowy kontakt</button></a>
-</div>
+
+
 
 
 <div class="row">

@@ -29,6 +29,13 @@
 <div id="mailCollapseThree" class="p-5" aria-labelledby="mailHeadingThree" data-bs-parent="#mailbox-inbox">
                                     <div class="mail-content-container mailInbox" data-mailfrom="info@mail.com" data-mailto="linda@mail.com" data-mailcc="">
 
+      
+            @if($contactPerson == false)
+<div style="background-color: pink" class="card p-2 d-flex"><h3>Uwaga!</h3><h5>Kontakt poza bazą danych!</h5><h6>Upewnij się, że kontakt istnieje w bazie zanim utworzysz zgłoszenie.</h6>
+    <a href="{{route('contact.add')}}"><button class="btn btn-success">Dodaj kontakt</button></a>
+</div>
+        @endif
+     
                                         <div class="d-flex justify-content-between">
 
                                             <div class="d-flex user-info">
@@ -71,7 +78,7 @@
 
                                         <div class="email-content-display-wrapper">
                                             <div class="">
-                                        <h1 
+                                        <h1 style="overflow: hidden;"
                                             class="email-content-display" 
                                             data-mailTitle="{{$email->subject}}" 
                                             data-maildescription='{"ops":[{"insert":"{{$email->text_plain}}"}]}'> 
@@ -80,45 +87,62 @@
 
                                         </h1>
                                         </div>
+                                        {{-- $eflag == false if there is a match of email if with email_id in emailsToOrders --}}
+                                        @if($eFlag !== 1) 
+                                            <div class="d-flex flex-column ">
 
+                                            <h5>Email już przydzielony do zgłoszenia.</h5>
+                                            </div>
+                                        @else
                                             <div class="d-flex flex-column">
                                                 <a href=""><button class="btn btn-danger custom-btn">Skasuj email</button></a>
                                                 <a href=""><button class="btn btn-warning mt-2 custom-btn">Przenieś do SPAMU</button></a>
-                                                <a href="{{route('create.order.email', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
-                                                <a href="{{route('add.to.order', $email->id)}}"><button class="btn btn-success mt-4 custom-btn">Dodaj do istniejacego zgłoszenia</button></a>
-                                            </div>
+                                                @if($contactPerson == false)
+                                                
+                                                <a aria-disabled="true" ><button class="btn btn-dark text-dark mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                <p>Przycisk niedostępny! </p>
 
+                                                @else
+                                                <a href="{{route('create.order.email', $email->id)}}" ><button class="btn btn-success mt-4 custom-btn">NOWE zgłoszenie z emaila</button></a>
+                                                @endif
+                                                {{-- this triggers modal "addtoorder" --}}
+
+                                                <button class="btn btn-success mt-4 custom-btn" data-bs-toggle="modal" data-bs-target="#modaladd2order">Dodaj do istniejacego zgłoszenia</button>
+                                            </div>
+                                        @endif
                                         </div>
+                                        {{-- This assigns email to order --}}
+                                        @include('partials.emailpartials.email-single-modal-add2order')
 
 
 
                                         <div class="attachments d-flex flex-column p-5 ms-5">
                                             <h6 class="attachments-section-title">Załączniki</h6>
 
+                                            @if($attachmentFlag == 1)
+
+                                            @foreach($emailAttachments as $attachment)
+                                       
+                                            @if($attachment->collection_name === 'file#email#'.$email->id)
                                             <div class="attachment file-pdf">
                                                 <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Confirm File.txt</p>
-                                                        <p class="file-size">450kb</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                    
 
-                                            <div class="attachment file-folder">
-                                                <div class="media">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                    <div class="media-body">
-                                                        <p class="file-name">Important Docs.xml</p>
-                                                        <p class="file-size">2.1MB</p>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                <div class="media-body">
+                                                                <a href="{{$attachment->getUrl()}}" target="_blank"><p class="file-name">{{$attachment->name}}</p></a>
+                                                                <p class="file-size">Size: {{$attachment->size}}</p>                                                       
                                                     </div>
                                                 </div>
                                             </div>
+                                            @endif
+                                            @endforeach
+                                            @elseif ($attachmentFlag == 0)
+                                                <h5 class="text-primary">Brak załączników</h5 class="text-primary">
+                                            @endif
+                                                        
 
                                         </div>
-
-
-
                                     </div>
                                 </div>
 

@@ -13,19 +13,16 @@ class AddressController extends Controller
 {
 
     public function index () {
-        
-        Log::info('I am showing all the addresses.');
+
         $addresses = CompanyAddress::all();
         $title = "Addresses";
         $breadcrumb = "Addresses list";
         return view('companies.list', compact('title', 'breadcrumb', 'addresses'));
+
     }
 
-    protected function validator($data)
-    {
-        Log::info('I am validating the the address data.');
-        Log::debug($data);
-        
+    protected function validator($data) {
+
         $validated =  Validator::make($data, [
             'company_id' => 'required',
             'name' => 'required',
@@ -37,22 +34,19 @@ class AddressController extends Controller
             'notes' => 'required',
         ])->validate();
 
-        Log::info('Address has been validated??');
+        Log::info('Address has been validated!!');
 
         return $validated;
     }
 
     public function create() {
-        Log::info('I am creating the view form for a new address');
+
         $title = 'Dodaj adres firmy';
         $breadcrumb = 'Dodawanie adresu';
-        // $company = Company::where('id', $id)->get();
         return view('pages.addresses.address-add', compact('title', 'breadcrumb'));
     }
 
     public function createWithinCompany() {
-        
-        Log::info('I am in createaddres within company');
 
         $title = 'Dodaj adres firmy';
         $breadcrumb = 'Dodawanie adresu';
@@ -61,18 +55,12 @@ class AddressController extends Controller
     }
 
     public function store(Request $request) {
-        Log::info('I am trying to store the new address!');
 
         $data = $this->validator($request->all());
-
-        Log::info('This is COMPANY data after validation and creation');
-        // Log::debug($data);
 
         $address = CompanyAddress::create($data);
 
         $company = Company::findOrFail($address->company_id);
-
-        Log::debug($address);
 
         Alert::alert('Gratulacje!', 'Nowy firma: ' . $company->name . ' ' . $company->nip . ' została dodana do bazy! Adres firmy o nazwie:' . ' ' . $address->name . ' dodano!' , 'success');
 

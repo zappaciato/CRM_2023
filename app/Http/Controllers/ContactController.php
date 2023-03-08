@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\CompanyAddress;
 use App\Models\Contact;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -16,19 +17,16 @@ class ContactController extends Controller
 
         $title = "Contacts";
         $breadcrumb = "New Contacts";
-        $contacts = Contact::all();
 
+        $contacts = Contact::all();
         $companies = Company::select('id','name')->get();
-        Log::debug($companies);
-        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies'));
+
+        return view('pages.contacts.contacts-list', compact('title', 'breadcrumb', 'contacts', 'companies', ));
     }
 
 
-    protected function validator($data)
-    {
-        Log::info('I am validating the contact record.');
-        Log::debug($data);
-        
+    protected function validator($data) {
+
         $validated =  Validator::make($data, [
             'name' => 'required|min:3',
             'surname' => 'required|min:3',
@@ -42,9 +40,6 @@ class ContactController extends Controller
 
 
         Log::info('Contact Record has been validated!!');
-
-        // $validated = Arr::add($validated, 'published', 0);
-        // $validated = Arr::add($validated, 'premium', 0);
 
         return $validated;
     }
@@ -62,10 +57,6 @@ class ContactController extends Controller
 
         $companies = Company::select('id', 'name')->get();
 
-
-        // foreach($companies as $company) {
-        //     Log::info($company->id);
-        // }
         return view('pages.contacts.contact-add', compact('title', 'breadcrumb', 'companies'));
      }
 
@@ -78,10 +69,6 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $data = $this->validator($request->all());
-
-        Log::info('This is contact data after validation');
-        Log::debug($data);
-
         $contact = Contact::create($data);
 
         Alert::alert('Gratulacje!', 'Nowy kontakt: ' . $contact->name . ' ' . $contact->surname . ' został dodany do bazy!', 'success');
@@ -90,39 +77,23 @@ class ContactController extends Controller
     }
 
 
-
-
-
-
-
-
-    public function show($id)
-    {
-
-        $singleContact = Contact::where('id', $id)->firstOrFail();
-
-        $company = Company::where('id', $singleContact->company_id)->firstOrFail();
-
-        $companyAddress = CompanyAddress::where('company_id', $company['id'])->firstOrFail();
-
-        Log::debug($singleContact);
-        Log::debug($company);
-        Log::debug($companyAddress);
+    public function show($id) {
 
         $title = "Osoba kontaktowa";
         $breadcrumb = "Kontakt:  ";
 
-        
-        // dd($company);
-        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress'));
+        $singleContact = Contact::where('id', $id)->firstOrFail();
+        $company = Company::where('id', $singleContact->company_id)->firstOrFail();
+        $companyAddress = CompanyAddress::where('company_id', $company['id'])->firstOrFail();
+        $contactOrders = Order::where('contact_person', $singleContact->id)->get();
+
+        return view('pages.contacts.contact', compact('title', 'breadcrumb', 'singleContact', 'company', 'companyAddress', 'contactOrders'));
     }
 
 
-    public function edit($id)
-    {
-        Log::info('I am editing the record.-> Contact');
+    public function edit($id) {
+
         $contact = Contact::findOrFail($id);
-        
 
         $title = 'Edycja kontaktu';
         $breadcrumb = 'Eduycja kontaktu ' . $contact->name . '' . $contact->surname;
@@ -131,20 +102,14 @@ class ContactController extends Controller
     }
 
 
-    public function update(Request $request, $id)
-    {
-Log::info('I am in update contact method');
+    public function update(Request $request, $id) {
+
         $contact = Contact::findOrFail($id);
-
-
-
         $data = $this->validator($request->all());
 
-
         $contact->update($data);
-        Log::info('I am updating the record.');
 
-Alert::alert('Gratulacje!', 'Kontakt: ' . $contact->name . ' ' . $contact->surname . ' został zaktualizowany!', 'success');
+        Alert::alert('Gratulacje!', 'Kontakt: ' . $contact->name . ' ' . $contact->surname . ' został zaktualizowany!', 'success');
         
         return redirect(route('contact.list'));
     }

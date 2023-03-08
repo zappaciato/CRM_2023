@@ -25,14 +25,12 @@
     </x-slot> --}}
     
     <!-- BREADCRUMB -->
-    <div class="page-meta d-flex justify-content-between">
-        <nav class="breadcrumb-style-one" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Zgłoszenie</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Nowe zgłoszenie</li>
-            </ol>
-        </nav>
+    <div class="page-meta justify-content-between">
         
+            <div class="seperator-header d-flex flex-column">
+        <h4 style="width: 240px;" class="">Nowe Zgłoszenie Serwisowe</h4>
+        <a href="{{route('service.orders')}}"><button class="btn btn-success mt-2">Wróć do listy zgłoszeń</button></a>
+    </div>
         
     </div>
     <!-- /BREADCRUMB -->
@@ -46,9 +44,7 @@
         </div>
     </div> --}}
 
-    <div class="d-flex flex-direction-row justify-content-end">
-    <a href="{{route('service.orders')}}"><button class="btn btn-success">Wróć do listy zgłoszeń</button></a>
-</div>
+ 
     
     <div class="row d-flex justify-content-center layout-top-spacing">
 
@@ -89,6 +85,7 @@
 
                                 </div>
 
+                                {{-- zgłoszenie tworzone ręcznie będzie miało email_id === 0; czyli false; --}}
 
                                 <input type="hidden" name="email_id" value="1">
 

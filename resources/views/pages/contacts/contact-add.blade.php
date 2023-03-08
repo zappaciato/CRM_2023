@@ -215,6 +215,65 @@
     <x-slot:footerFiles>
         <script type="module" src="{{asset('plugins/editors/quill/quill.js')}}"></script>
         <script type="module" src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script>
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#company_id').change(function() {
+        $.ajax({
+            url: "{{ route('fetch.contacts') }}?company_id=" + $(this).val(),
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX fetching contacts on company change');
+                $('#contact_person').html(data.html);
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('fetch.addresses') }}?company_id=" + $(this).val(),
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#address').html(data.html);
+            }
+        });
+
+
+    });
+
+    $.ajax({
+            url: "{{ route('fetch.users') }}",
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#lead_person').html(data.html);
+            }
+        });
+
+    $.ajax({
+            url: "{{ route('fetch.users') }}",
+            methods: 'GET',
+            success: function(data) {
+                console.log(data);
+                console.log('It is working you bloody AJAX');
+                $('#involved_person').html(data.html);
+            }
+        });
+
+})
+</script>
+
+
+
+
+
+
+
+
 <script>
     window.addEventListener('load', function() {
 // Fetch all the forms we want to apply custom Bootstrap validation styles to

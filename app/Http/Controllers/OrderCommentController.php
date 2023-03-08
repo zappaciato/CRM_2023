@@ -21,10 +21,8 @@ class OrderCommentController extends Controller
 
         OrderComment::create(Arr::add($data, 'user_id', $request->user()->id));
 
-        Log::info('Below is the comment data after validation and upload to db.');
-        Log::debug($data);
+        Alert::alert('Gratulacje!', 'Komentarz został dodany!', 'success');
         
-Alert::alert('Gratulacje!', 'Komentarz został dodany!', 'success');
         return back()->with('messsage', 'Your comment has been added!');
     }
 }

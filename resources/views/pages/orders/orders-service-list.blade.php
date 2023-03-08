@@ -50,7 +50,7 @@
                                 <th>Typ</th>
                                 <th>Termin</th>
                                 <th>Uwagi</th>
-                                <th>Prowadzący</th>
+                                <th>Os. Odpowiedzialna</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center dt-no-sorting">Action</th>
                             </tr>

@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderChanged;
 use App\Models\Company;
 use App\Models\CompanyAddress;
+use App\Models\Email;
+use App\Models\EmailsToOrder;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -15,25 +18,26 @@ use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use SebastianBergmann\CodeUnit\FunctionUnit;
 
+use App\Http\Controllers\ServiceOrderController;
+
 class CompanyController extends Controller
 {
     public function index() {
-        Log::info('I am showing all the records.');
+
         $title = "Companies";
         $breadcrumb = "Companies list";
-
-
-
         $companies = Company::all();
+        Log::info('Jest pred startem scanningu');
+        //for testing starting point for scannig email titles
+
+        // ServiceOrderController::scanEmails();
 
         return view('pages.companies.company-list', compact('title', 'breadcrumb', 'companies'));
     }
 
 
-    protected function validator($data)
-    {
-        Log::info('I am validating the record.');
-        Log::debug($data);
+    protected function validator($data) {
+
         $validated =  Validator::make($data, [
             'name' => 'required',
             'phone' => 'required',
@@ -44,7 +48,7 @@ class CompanyController extends Controller
             'email' => 'required',
         ])->validate();
 
-        Log::info('Record has been validated??');
+        Log::info('Record has been validated!!');
 
         return $validated;
     }
@@ -67,48 +71,34 @@ class CompanyController extends Controller
         
         $data = $this->validator($request->all());
 
-        Log::info('This is COMPANY data after validation and creation');
-        // Log::debug($data);
-
         $company = Company::create($data);
         
         $title = 'Dodaj nowy adress';
         $breadcrumb = 'Nowy Adress';
 
-        //SEND EMAIL TO ADMIN
-        // Mail::to(env('ADMIN_EMAIL'))->send(new OrderChanged());
-        // return redirect(route('address.add', $company->id));
-        // return redirect()->route('address.add')->with('company', $company);
         return view('pages.addresses.address-add', compact('company', 'title', 'breadcrumb'));
     }
 
 
 
-    public function show($id)
-    {
-        Log::info('I am showing the record of a single Company and blow is the ID value');
-        // $address = CompanyAddress::where('company_id', $id)->get();
+    public function show($id) {
 
         $title = "Firma";
         $breadcrumb = "Wybrana firma";
 
         $company = Company::where('id', $id)->firstOrFail();
-        
         $addresses = $company->addresses; //tak mozemy zapisac ze wzgledu na realcje ustawiona w Modelu; Bardzo ważne zeby tak robic TTR
         $contacts = $company->contacts;
-        // $orders = Order::where('company_id', $id)->get(); zamiast tak poprzez relacje mozemy wyciagnac dane w ten sposob; Problem w tym, ze czasem w tinkerze to nie dziala;
-        $orders = $company->orders;
-
+        $orders = $company->orders; 
+ 
         return view('pages.companies.company', compact('title', 'breadcrumb', 'company', 'addresses', 'contacts', 'orders'));
     }
 
 
 
     public function edit($id) {
-        Log::info('I am editing the record.');
-        $company = Company::findOrFail($id);
 
-        
+        $company = Company::findOrFail($id);
         $title = 'Edycja firmy';
         $breadcrumb = 'Eduycja firmy '.$company->name;
 
@@ -118,14 +108,10 @@ class CompanyController extends Controller
 
     public function update(Request $request, $id)
     {
-        Log::info('I am beginning to update the record.');
+
         $company = Company::findOrFail($id);
 
-        // $oldImage = $post->image;
-
         $data = $this->validator($request->all());
-
-
         $company->update($data);
 
         Alert::alert('Gratulacje!', 'Dane firmy zostały zaktualizowane!', 'success');
@@ -138,40 +124,15 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //mozna zrobic tak: 
+    public function destroy($id) {
 
         $company = Company::findOrFail($id);
 
         $company->delete();
-
-        //caly czas mamy dostep do instancji $post; 
-
-        // Storage::delete($company->image);//do wykasowanie palików ze storage;
-
-        //przekierowujemy na strone główną
 
         Alert::alert('Gratulacje!', 'Dane firmy zostały usnięte!', 'success');
 
         return redirect(route('company.list'));
     }
 
-
-    // public function addresses()
-    // {
-    //     return $this->hasMany('App\FirmsAddress', 'firm_id');
-    // }
-
-    // public function persons()
-    // {
-    //     return $this->hasMany('App\Persons', 'firms_id')->orderBy('created_at', 'desc');
-    // }
-
-
-    // // for the RESTful API test
-    // public function showAllCompanies()
-    // {
-    //     return CompaniesResource::collection(Company::all());
-    // }
 }

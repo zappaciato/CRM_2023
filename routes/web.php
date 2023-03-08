@@ -12,10 +12,13 @@ use App\Http\Controllers\OrderFileController;
 use App\Http\Controllers\ServiceOrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailController;
+use App\Http\Controllers\XSendEmailController;
 use App\Models\Email;
 use App\Models\MessageToClient;
+use App\Models\Order;
 use App\Models\User;
 use GuzzleHttp\Middleware;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -52,7 +55,21 @@ use Laravel\Fortify\Http\Controllers\VerifyEmailController;
 */
 
 Route::get('/', function () {
-    return view('pages.dashboard.analytics', ['title' => 'This is Title', 'breadcrumb' => 'This Breadcrumb']);
+    $userId = Auth::user()->id;
+    $outstandingUserOrders = Order::where([['lead_person', $userId], ['involved_person', $userId], ['status', ['open', 'new', 'closed']],])->get();
+
+    $outstandingUserOrders = Order::where(
+        function ($query) use ($userId) {
+                return $query
+                    ->where('lead_person', $userId)
+                    ->orWhere('involved_person', $userId);
+                }
+            )->where('status', '!=', 'closed')->get();
+
+    // $outstandingUserOrders = 5;
+    $title = 'This is analytics';
+    $breadcrumb = 'This is analytics';
+    return view('pages.dashboard.analytics', compact('title', 'breadcrumb', 'outstandingUserOrders'));
 })->middleware('auth')->name('analytics');
 
 Route::get('/welcome', function () {
@@ -184,10 +201,21 @@ foreach ($prefixRouters as $prefixRouter) {
         Route::get('orders/create-order-email/{id}', [EmailController::class, 'createFromEmail'])->middleware('auth')->name('create.order.email');
         Route::post('orders/create-order-email/{id}', [EmailController::class, 'store'])->middleware('auth');
         
-        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('displayAssignedEmails');
-        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('displayAssignedFiles');
+        Route::get('orders/emails/{id}', [EmailController::class, 'displayAssignedEmails'])->middleware('auth')->name('display.assigned.emails');
+        Route::get('order/email/comment/{id}', [EmailController::class, 'emailCommentEdit'])->middleware('auth')->name('email.comment.edit');
+        Route::put('order/email/comment/{id}', [EmailController::class, 'emailCommentUpdate'])->middleware('auth');
+
+        Route::get('scan/emails', [ServiceOrderController::class, 'scanEmails'])->middleware('auth')->name('scan.emails');
+
+//associated files
+        Route::get('orders/files/{id}', [ServiceOrderController::class, 'displayAssignedFiles'])->middleware('auth')->name('display.assigned.files');
+        Route::get('orders/files/edit/{id}', [ServiceOrderController::class, 'editAssignedFile'])->middleware('auth')->name('edit.assigned.file');
+        Route::put('orders/files/edit/{id}', [ServiceOrderController::class, 'updateFileComment'])->middleware('auth');
 
 
+        // send dummy email
+        Route::get('sendemail', [XSendEmailController::class, 'create'])->name('create.email');
+        Route::post('sendemail', [XSendEmailController::class, 'sendEmail']);
 
 
 

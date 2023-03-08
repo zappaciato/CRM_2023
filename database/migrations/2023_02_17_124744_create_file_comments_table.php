@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_files', function (Blueprint $table) {
+        Schema::create('file_comments', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('path')->nullable();
-
+            $table->foreignId('media_id')->constrained()->onDelete('cascade');
+            $table->integer('order_id');
+            $table->text('file_comment');
             $table->timestamps();
-
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_files');
+        Schema::dropIfExists('file_comments');
     }
 };

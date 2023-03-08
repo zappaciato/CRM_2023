@@ -8,7 +8,7 @@
                 <div class="info-box-3-content-wrapper hover-to-bright">
                     <h3 class="info-box-3-title">Podmioty powiązane:</h3>
                     <div class="">
-                        <table>
+                        <table class="custom-table">
                             <tr>
                                 <th>Os. Odpowiedzialna</th>
                                 <th>Os. zaangażowana</th>
@@ -42,13 +42,13 @@
                             <tr>
                                 <th>Data otrzymania: </th>
                                 <th>Termin wykonania: </th>
-                                <th>Aktualny status: </th>
+
                                 <th>Typ zgłoszenia: </th>
                             </tr>
                             <tr>
                                 <td>{{$singleOrder->created_at}}</td>
                                 <td>{{$singleOrder->deadline }}</td>
-                                <td>{{$singleOrder->status }}</td>
+
                                 <td>rotacje</td>
                             </tr>
                     </table>
