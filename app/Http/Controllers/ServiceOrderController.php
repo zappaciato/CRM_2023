@@ -56,6 +56,8 @@ class ServiceOrderController extends Controller
         //Show orders only for the loggegd in user; 
         // Sorting orders does not work as it shows datatable which automatically orders them according to id.. 
         $orders = Order::where(['involved_person' => $loggedUser->id])->orWhere(['lead_person' => $loggedUser->id])->lazyByIdDesc();
+        Log::info('ORDER LIST FOR each user NOT ADMIN');
+        Log::debug($orders);
         $companies = Company::select('id', 'name')->get();
 
         return view('pages.orders.orders-user-service-list', compact('title', 'breadcrumb', 'orders', 'companies', 'users', 'loggedUser'));

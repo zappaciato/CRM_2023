@@ -24,7 +24,7 @@
 </div>
 
 
-<table class="mt-2">
+<table  style="min-width: 1435px" class="mt-2">
     <tr>
         <th>Nr</th>
         <th>Tytuł emaila</th>
